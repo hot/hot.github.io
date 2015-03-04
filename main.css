@@ -46,7 +46,7 @@ body{padding:0;margin:0}
 .entry table tbody tr:last-child td,.entry table tbody tr:last-child th{padding-bottom:6px}
 .entry table td,.entry table th{padding:8px 16px 7px;border:1px solid #ddd}
 .entry iframe{vertical-align:text-bottom}
-.entry a{padding-bottom:.025em;color:#E93071;text-decoration:none}
+.entry a{padding-bottom:.025em;color:#666;text-decoration:none}
 .entry a[href^="javascript:"],.entry a[onclick]{margin:0 .25em;padding:.25em .5em;font-size:.8571428571428571em;color:#fff;background-color:#96b3d3;-webkit-border-radius:.25em;-moz-border-radius:.25em;-ms-border-radius:.25em;-o-border-radius:.25em;border-radius:.25em;border-bottom:none}
 .entry a[href^="javascript:"]:visited,.entry a[onclick]:visited{color:#fff}
 .entry a:focus{outline:thin dotted}
@@ -100,23 +100,23 @@ pre.line-numbers>code{position:relative}
 body{margin:0;font-family:Georgia,serif}
 .main{margin:0 auto;width:600px;position:relative}
 #disqus_thread{padding:16px}
-.wrap-header h1{width:100%;height:40px;color:#E93071;padding:20px 0 10px;border-bottom:2px dashed #888;margin:0 0 10px;font-family:"Comic Sans MS",cursive,sans-serif}
+.wrap-header h1{width:100%;height:40px;color:#666;padding:20px 0 10px;border-bottom:2px dashed #888;margin:0 0 10px;font-family:"Comic Sans MS",cursive,sans-serif}
 #title:hover{border:0}
 .header{margin:70px 0 0 -210px;width:140px;float:left;text-align:right;font-family:Verdana,Geneva,sans-serif}
 .header li{list-style:none;text-transform:uppercase;margin:30px 0}
 .header a{color:#000}
 a{text-decoration:none;color:#666}
-a:hover{border-bottom:1px solid #E93071}
+a:hover{border-bottom:1px solid #666}
 .selected{color:#000}
 .item{margin:10px 0;padding:1px 0}
 .little{float:left;margin-right:10px;width:3px;height:30px;border-radius:4px;background:#C5C5BD}
 .date{float:left;color:#C5C5BD;font-size:17px;text-transform:uppercase;font-weight:700;width:140px;padding:16px 0 0}
 .title{padding:0;margin:0 0 0 140px}
-.title a:hover{padding-bottom:2px;border-bottom:1px solid #E93071}
+.title a:hover{padding-bottom:2px;border-bottom:1px solid #666}
 .title h2{font-size:17px;line-height:25px}
 .footer{border-top:1px dotted #888;margin-top:20px;text-align:center;color:#555}
 .pages{text-align:center;margin:25px 25px 35px;font-family:"Lucida Sans Unicode","Lucida Grande",sans-serif}
-.pages a:hover{border:1px solid #E93071;border-radius:4px}
+.pages a:hover{border:1px solid #666;border-radius:4px}
 .pages>li{margin:0 4px;display:inline}
 .pages>li>a,.pages>li>span{padding:3px 10px;border:1px solid #eee;border-radius:4px}
 .tag{color:#888}
