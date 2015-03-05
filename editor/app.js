@@ -127,12 +127,13 @@ $(document).ready(function() {
                       curry(errShow, this.err));
         },
         init: function() {
-            this.user.val("");
+            this.user.val("hot");
             this.pass.val("");
             $("#loading").hide();
             this.err.hide();
         }
     });
+    //sub class of spine
     var Mains = Spine.Controller.sub({
         el: $("#main"),
         elements: {
