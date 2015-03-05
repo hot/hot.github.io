@@ -103,8 +103,9 @@ body {
 .entry h1 {
     font-size: 28px;
     line-height: 48px;
-    text-align: center;
+    text-align: left;
     font-weight: 700;
+    
 }
 
 .entry h2 {
@@ -691,7 +692,13 @@ a:hover {
 .pages {
     text-align: center;
     margin: 25px 25px 35px;
-    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    #font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-family: "freight-text-pro",Georgia,Cambria,"Times New Roman",Times,serif;
+    letter-spacing: .01rem;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 1.5;
 }
 
 .pages a:hover {
