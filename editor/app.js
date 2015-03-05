@@ -317,8 +317,8 @@ $(document).ready(function() {
                         var now = {"title": $("#posttitle").val(),
                                    "date": $("#postdate").val(),
                                    "tags": $("#posttags").val(),
-                                   "path": $("#posttitle").val()};   //modified by windclose
-                                   //"path": "testPath.html"};   //modified by windclose
+                                   //"path": $("#posttitle").val() + ".html"};   //modified by windclose
+                                   "path": (window.Base64.encode($("#posttitle").val())) + ".html"};   //modified by windclose
                         console.log("KyStartLog@@@@@@!!!!!");
                         console.log(window.Base64.encode($("#posttitle").val()));
                         console.log("KyEndLog@@@@@!!!!!");
