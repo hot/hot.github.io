@@ -1,0 +1,405 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+# 欢迎使用马克飞象
+
+@(示例笔记本)[马克飞象|帮助|Markdown]
+
+**马克飞象**是一款专为印象笔记（Evernote）打造的Markdown编辑器，通过精心的设计与技术实现，配合印象笔记强大的存储和同步功能，带来前所未有的书写体验。特点概述：
+ 
+- **功能丰富** ：支持高亮代码块、*LaTex* 公式、流程图，本地图片上传甚至截图粘贴，工作学习好帮手；
+- **得心应手** ：简洁高效的编辑器，提供桌面[离线客户端][1]，支持移动端 Web；
+- **深度整合** ：支持选择笔记本和添加标签，支持从印象笔记跳转编辑，轻松管理。
+
+-------------------
+
+[TOC]
+
+## Markdown简介
+
+> Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。    —— [维基百科](https://zh.wikipedia.org/wiki/Markdown)
+
+正如您在阅读的这份文档，它使用简单的符号标识不同的标题，将某些文字标记为**粗体**或者*斜体*，创建一个[链接](http://www.example.com)或一个脚注[^demo]。下面列举了几个高级功能，更多语法请按`Ctrl + /`查看帮助。 
+
+### 代码块
+``` python
+@requires_authorization
+def somefunc(param1='', param2=0):
+    '''A docstring'''
+    if param1 > param2: # interesting
+        print 'Greater'
+    return (param2 - param1 + 1) or None
+class SomeClass:
+    pass
+>>> message = '''interpreter
+... prompt'''
+```
+### LaTex 公式
+
+可以创建行内公式，例如 $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$。或者块级公式：
+
+$$	x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
+
+### 表格
+| Item      |    Value | Qty  |
+| :-------- | --------:| :--: |
+| Computer  | 1600 USD |  5   |
+| Phone     |   12 USD |  12  |
+| Pipe      |    1 USD | 234  |
+
+### 流程图
+```flow
+st=>start: Start
+e=>end
+op=>operation: My Operation
+cond=>condition: Yes or No?
+
+st->op->cond
+cond(yes)->e
+cond(no)->op
+```
+
+以及时序图:
+
+```sequence
+Alice->Bob: Hello Bob, how are you?
+Note right of Bob: Bob thinks
+Bob-->Alice: I am good thanks!
+```
+
+> **提示：**想了解更多，请查看**流程图**[语法][2]以及**时序图**[语法][3]。
+
+### 复选框
+
+使用 `- [ ]` 和 `- [x]` 语法可以创建复选框，实现 todo-list 等功能。例如：
+
+- [x] 已完成事项
+- [ ] 待办事项1
+- [ ] 待办事项2
+
+> **注意：**目前支持尚不完全，在印象笔记中勾选复选框是无效、不能同步的，所以必须在**马克飞象**中修改 Markdown 原文才可生效。下个版本将会全面支持。
+
+
+## 印象笔记相关
+
+### 笔记本和标签
+**马克飞象**增加了`@(笔记本)[标签A|标签B]`语法, 以选择笔记本和添加标签。 **绑定账号后**， 输入`(`自动会出现笔记本列表，请从中选择。
+
+### 笔记标题
+**马克飞象**会自动使用文档内出现的第一个标题作为笔记标题。例如本文，就是第一行的 `欢迎使用马克飞象`。
+
+### 快捷编辑
+保存在印象笔记中的笔记，右上角会有一个红色的编辑按钮，点击后会回到**马克飞象**中打开并编辑该笔记。
+>**注意：**目前用户在印象笔记中单方面做的任何修改，马克飞象是无法自动感知和更新的。所以请务必回到马克飞象编辑。
+
+### 数据同步
+**马克飞象**通过**将Markdown原文以隐藏内容保存在笔记中**的精妙设计，实现了对Markdown的存储和再次编辑。既解决了其他产品只是单向导出HTML的单薄，又规避了服务端存储Markdown带来的隐私安全问题。这样，服务端仅作为对印象笔记 API调用和数据转换之用。
+
+ >**隐私声明：用户所有的笔记数据，均保存在印象笔记中。马克飞象不存储用户的任何笔记数据。**
+
+### 离线存储
+**马克飞象**使用浏览器离线存储将内容实时保存在本地，不必担心网络断掉或浏览器崩溃。为了节省空间和避免冲突，已同步至印象笔记并且不再修改的笔记将删除部分本地缓存，不过依然可以随时通过`文档管理`打开。
+
+> **注意：**虽然浏览器存储大部分时候都比较可靠，但印象笔记作为专业云存储，更值得信赖。以防万一，**请务必经常及时同步到印象笔记**。
+
+## 编辑器相关
+### 设置
+右侧系统菜单（快捷键`Ctrl + M`）的`设置`中，提供了界面字体、字号、自定义CSS、vim/emacs 键盘模式等高级选项。
+
+### 快捷键
+
+帮助    `Ctrl + /`
+同步文档    `Ctrl + S`
+创建文档    `Ctrl + Alt + N`
+最大化编辑器    `Ctrl + Enter`
+预览文档 `Ctrl + Alt + Enter`
+文档管理    `Ctrl + O`
+系统菜单    `Ctrl + M` 
+
+加粗    `Ctrl + B`
+插入图片    `Ctrl + G`
+插入链接    `Ctrl + L`
+提升标题    `Ctrl + H`
+
+## 关于收费
+
+**马克飞象**为新用户提供 10 天的试用期，试用期过后需要[续费](maxiang.info/vip.html)才能继续使用。未购买或者未及时续费，将不能同步新的笔记。之前保存过的笔记依然可以编辑。
+
+
+## 反馈与建议
+- 微博：[@马克飞象](http://weibo.com/u/2788354117)，[@GGock](http://weibo.com/ggock "开发者个人账号")
+- 邮箱：<hustgock@gmail.com>
+
+---------
+感谢阅读这份帮助文档。请点击右上角，绑定印象笔记账号，开启全新的记录与分享体验吧。
+
+
+
+
+[^demo]: 这是一个示例脚注。请查阅 [MultiMarkdown 文档](https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide#footnotes) 关于脚注的说明。 **限制：** 印象笔记的笔记内容使用 [ENML][4] 格式，基于 HTML，但是不支持某些标签和属性，例如id，这就导致`脚注`和`TOC`无法正常点击。
+
+
+  [1]: https://chrome.google.com/webstore/detail/kidnkfckhbdkfgbicccmdggmpgogehop
+  [2]: http://adrai.github.io/flowchart.js/
+  [3]: http://bramp.github.io/js-sequence-diagrams/
+  [4]: https://dev.yinxiang.com/doc/articles/enml.php
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="">欢迎使用马克飞象</h1>
+
+<p>@(示例笔记本)[马克飞象|帮助|Markdown]</p>
+
+<p><strong>马克飞象</strong>是一款专为印象笔记（Evernote）打造的Markdown编辑器，通过精心的设计与技术实现，配合印象笔记强大的存储和同步功能，带来前所未有的书写体验。特点概述：</p>
+
+<ul>
+<li><strong>功能丰富</strong> ：支持高亮代码块、<em>LaTex</em> 公式、流程图，本地图片上传甚至截图粘贴，工作学习好帮手；</li>
+<li><strong>得心应手</strong> ：简洁高效的编辑器，提供桌面<a href="https://chrome.google.com/webstore/detail/kidnkfckhbdkfgbicccmdggmpgogehop">离线客户端</a>，支持移动端 Web；</li>
+<li><strong>深度整合</strong> ：支持选择笔记本和添加标签，支持从印象笔记跳转编辑，轻松管理。</li>
+</ul>
+
+<hr>
+
+<p>[TOC]</p>
+
+<h2 id="markdown">Markdown简介</h2>
+
+<blockquote>
+  <p>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。    —— <a href="https://zh.wikipedia.org/wiki/Markdown">维基百科</a></p>
+</blockquote>
+
+<p>正如您在阅读的这份文档，它使用简单的符号标识不同的标题，将某些文字标记为<strong>粗体</strong>或者<em>斜体</em>，创建一个<a href="http://www.example.com">链接</a>或一个脚注[^demo]。下面列举了几个高级功能，更多语法请按<code>Ctrl + /</code>查看帮助。 </p>
+
+<h3 id="">代码块</h3>
+
+<pre><code class=" python">@requires_authorization
+def somefunc(param1='', param2=0):
+    '''A docstring'''
+    if param1 &gt; param2: # interesting
+        print 'Greater'
+    return (param2 - param1 + 1) or None
+class SomeClass:
+    pass
+&gt;&gt;&gt; message = '''interpreter
+... prompt'''
+</code></pre>
+
+<h3 id="latex">LaTex 公式</h3>
+
+<p>可以创建行内公式，例如 $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$。或者块级公式：</p>
+
+<p><span class="MathJax_Preview" style="color: inherit;"></span><div class="MathJax_Display" style="text-align: center;"><span class="MathJax" id="MathJax-Element-1-Frame"><nobr><span class="math" id="MathJax-Span-1" role="math" style="width: 10.877em; display: inline-block;"><span style="display: inline-block; position: relative; width: 8.844em; height: 0px; font-size: 123%;"><span style="position: absolute; clip: rect(2.34em 1000.003em 4.881em -999.997em); top: -4.012em; left: 0.003em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: STIXGeneral-Italic;">x<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mo" id="MathJax-Span-4" style="font-family: STIXGeneral-Regular; padding-left: 0.307em;">=</span><span class="mstyle" id="MathJax-Span-5" style="padding-left: 0.307em;"><span class="mrow" id="MathJax-Span-6"><span class="mfrac" id="MathJax-Span-7"><span style="display: inline-block; position: relative; width: 6.862em; height: 0px; margin-right: 0.104em; margin-left: 0.104em;"><span style="position: absolute; clip: rect(3.001em 1000.003em 4.271em -999.997em); top: -4.672em; left: 50%; margin-left: -3.351em;"><span class="mrow" id="MathJax-Span-8"><span class="mo" id="MathJax-Span-9" style="font-family: STIXGeneral-Regular;">−</span><span class="mi" id="MathJax-Span-10" style="font-family: STIXGeneral-Italic;">b</span><span class="mo" id="MathJax-Span-11" style="font-family: STIXGeneral-Regular; padding-left: 0.257em;">±</span><span class="msqrt" id="MathJax-Span-12" style="padding-left: 0.257em;"><span style="display: inline-block; position: relative; width: 4.322em; height: 0px;"><span style="position: absolute; clip: rect(3.102em 1000.003em 4.169em -999.997em); top: -4.012em; left: 0.765em;"><span class="mrow" id="MathJax-Span-13"><span class="msubsup" id="MathJax-Span-14"><span style="display: inline-block; position: relative; width: 0.917em; height: 0px;"><span style="position: absolute; clip: rect(3.204em 1000.003em 4.169em -999.997em); top: -4.012em; left: 0.003em;"><span class="mi" id="MathJax-Span-15" style="font-family: STIXGeneral-Italic;">b</span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="position: absolute; top: -4.317em; left: 0.511em;"><span class="mn" id="MathJax-Span-16" style="font-size: 70.7%; font-family: STIXGeneral-Regular;">2</span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span></span></span><span class="mo" id="MathJax-Span-17" style="font-family: STIXGeneral-Regular; padding-left: 0.257em;">−</span><span class="mn" id="MathJax-Span-18" style="font-family: STIXGeneral-Regular; padding-left: 0.257em;">4</span><span class="mi" id="MathJax-Span-19" style="font-family: STIXGeneral-Italic;">a</span><span class="mi" id="MathJax-Span-20" style="font-family: STIXGeneral-Italic;">c</span></span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="position: absolute; clip: rect(3.051em 1000.003em 3.407em -999.997em); top: -4.063em; left: 0.765em;"><span style="display: inline-block; position: relative; width: 3.61em; height: 0px;"><span style="position: absolute; font-family: STIXGeneral-Regular; top: -4.012em; left: 0.003em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="position: absolute; font-family: STIXGeneral-Regular; top: -4.012em; left: 3.102em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="font-family: STIXGeneral-Regular; position: absolute; top: -4.012em; left: 0.409em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="font-family: STIXGeneral-Regular; position: absolute; top: -4.012em; left: 0.866em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="font-family: STIXGeneral-Regular; position: absolute; top: -4.012em; left: 1.324em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="font-family: STIXGeneral-Regular; position: absolute; top: -4.012em; left: 1.781em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="font-family: STIXGeneral-Regular; position: absolute; top: -4.012em; left: 2.188em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="font-family: STIXGeneral-Regular; position: absolute; top: -4.012em; left: 2.645em;">‾<span style="display: inline-block; width: 0px; height: 4.017em;"></span></span></span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="position: absolute; clip: rect(2.899em 1000.003em 4.169em -999.997em); top: -3.961em; left: 0.003em;"><span style="font-family: STIXVariants;">√</span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="position: absolute; clip: rect(3.204em 1000.003em 4.169em -999.997em); top: -3.351em; left: 50%; margin-left: -0.506em;"><span class="mrow" id="MathJax-Span-21"><span class="mn" id="MathJax-Span-22" style="font-family: STIXGeneral-Regular;">2</span><span class="mi" id="MathJax-Span-23" style="font-family: STIXGeneral-Italic;">a</span></span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span><span style="position: absolute; clip: rect(0.866em 1000.003em 1.222em -999.997em); top: -1.268em; left: 0.003em;"><span style="border-left-width: 6.862em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.25px; vertical-align: 0.003em;"></span><span style="display: inline-block; width: 0px; height: 1.07em;"></span></span></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 4.017em;"></span></span></span><span style="border-left-width: 0.003em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 2.878em; vertical-align: -0.934em;"></span></span></nobr></span></div><script type="math/tex; mode=display" id="MathJax-Element-1">    x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} </script></p>
+
+<h3 id="">表格</h3>
+
+<p>| Item      |    Value | Qty  |
+| :-------- | --------:| :--: |
+| Computer  | 1600 USD |  5   |
+| Phone     |   12 USD |  12  |
+| Pipe      |    1 USD | 234  |</p>
+
+<h3 id="">流程图</h3>
+
+<pre><code class="flow">st=&gt;start: Start
+e=&gt;end
+op=&gt;operation: My Operation
+cond=&gt;condition: Yes or No?
+
+st-&gt;op-&gt;cond
+cond(yes)-&gt;e
+cond(no)-&gt;op
+</code></pre>
+
+<p>以及时序图:</p>
+
+<pre><code class="sequence">Alice-&gt;Bob: Hello Bob, how are you?
+Note right of Bob: Bob thinks
+Bob--&gt;Alice: I am good thanks!
+</code></pre>
+
+<blockquote>
+  <p><strong>提示：</strong>想了解更多，请查看<strong>流程图</strong><a href="http://adrai.github.io/flowchart.js/">语法</a>以及<strong>时序图</strong><a href="http://bramp.github.io/js-sequence-diagrams/">语法</a>。</p>
+</blockquote>
+
+<h3 id="">复选框</h3>
+
+<p>使用 <code>- [ ]</code> 和 <code>- [x]</code> 语法可以创建复选框，实现 todo-list 等功能。例如：</p>
+
+<ul>
+<li>[x] 已完成事项</li>
+<li>[ ] 待办事项1</li>
+<li>[ ] 待办事项2</li>
+</ul>
+
+<blockquote>
+  <p><strong>注意：</strong>目前支持尚不完全，在印象笔记中勾选复选框是无效、不能同步的，所以必须在<strong>马克飞象</strong>中修改 Markdown 原文才可生效。下个版本将会全面支持。</p>
+</blockquote>
+
+<h2 id="">印象笔记相关</h2>
+
+<h3 id="">笔记本和标签</h3>
+
+<p><strong>马克飞象</strong>增加了<code>@(笔记本)[标签A|标签B]</code>语法, 以选择笔记本和添加标签。 <strong>绑定账号后</strong>， 输入<code>(</code>自动会出现笔记本列表，请从中选择。</p>
+
+<h3 id="">笔记标题</h3>
+
+<p><strong>马克飞象</strong>会自动使用文档内出现的第一个标题作为笔记标题。例如本文，就是第一行的 <code>欢迎使用马克飞象</code>。</p>
+
+<h3 id="">快捷编辑</h3>
+
+<p>保存在印象笔记中的笔记，右上角会有一个红色的编辑按钮，点击后会回到<strong>马克飞象</strong>中打开并编辑该笔记。</p>
+
+<blockquote>
+  <p><strong>注意：</strong>目前用户在印象笔记中单方面做的任何修改，马克飞象是无法自动感知和更新的。所以请务必回到马克飞象编辑。</p>
+</blockquote>
+
+<h3 id="">数据同步</h3>
+
+<p><strong>马克飞象</strong>通过<strong>将Markdown原文以隐藏内容保存在笔记中</strong>的精妙设计，实现了对Markdown的存储和再次编辑。既解决了其他产品只是单向导出HTML的单薄，又规避了服务端存储Markdown带来的隐私安全问题。这样，服务端仅作为对印象笔记 API调用和数据转换之用。</p>
+
+<blockquote>
+  <p><strong>隐私声明：用户所有的笔记数据，均保存在印象笔记中。马克飞象不存储用户的任何笔记数据。</strong></p>
+</blockquote>
+
+<h3 id="">离线存储</h3>
+
+<p><strong>马克飞象</strong>使用浏览器离线存储将内容实时保存在本地，不必担心网络断掉或浏览器崩溃。为了节省空间和避免冲突，已同步至印象笔记并且不再修改的笔记将删除部分本地缓存，不过依然可以随时通过<code>文档管理</code>打开。</p>
+
+<blockquote>
+  <p><strong>注意：</strong>虽然浏览器存储大部分时候都比较可靠，但印象笔记作为专业云存储，更值得信赖。以防万一，<strong>请务必经常及时同步到印象笔记</strong>。</p>
+</blockquote>
+
+<h2 id="">编辑器相关</h2>
+
+<h3 id="">设置</h3>
+
+<p>右侧系统菜单（快捷键<code>Ctrl + M</code>）的<code>设置</code>中，提供了界面字体、字号、自定义CSS、vim/emacs 键盘模式等高级选项。</p>
+
+<h3 id="">快捷键</h3>
+
+<p>帮助    <code>Ctrl + /</code>
+同步文档    <code>Ctrl + S</code>
+创建文档    <code>Ctrl + Alt + N</code>
+最大化编辑器    <code>Ctrl + Enter</code>
+预览文档 <code>Ctrl + Alt + Enter</code>
+文档管理    <code>Ctrl + O</code>
+系统菜单    <code>Ctrl + M</code> </p>
+
+<p>加粗    <code>Ctrl + B</code>
+插入图片    <code>Ctrl + G</code>
+插入链接    <code>Ctrl + L</code>
+提升标题    <code>Ctrl + H</code></p>
+
+<h2 id="">关于收费</h2>
+
+<p><strong>马克飞象</strong>为新用户提供 10 天的试用期，试用期过后需要<a href="maxiang.info/vip.html">续费</a>才能继续使用。未购买或者未及时续费，将不能同步新的笔记。之前保存过的笔记依然可以编辑。</p>
+
+<h2 id="">反馈与建议</h2>
+
+<ul>
+<li>微博：<a href="http://weibo.com/u/2788354117">@马克飞象</a>，<a href="http://weibo.com/ggock" title="开发者个人账号">@GGock</a></li>
+<li>邮箱：<a href="mailto:hustgock@gmail.com">hustgock@gmail.com</a></li>
+</ul>
+
+<hr>
+
+<p>感谢阅读这份帮助文档。请点击右上角，绑定印象笔记账号，开启全新的记录与分享体验吧。</p>
+
+<p>[^demo]: 这是一个示例脚注。请查阅 <a href="https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide#footnotes">MultiMarkdown 文档</a> 关于脚注的说明。 <strong>限制：</strong> 印象笔记的笔记内容使用 <a href="https://dev.yinxiang.com/doc/articles/enml.php">ENML</a> 格式，基于 HTML，但是不支持某些标签和属性，例如id，这就导致<code>脚注</code>和<code>TOC</code>无法正常点击。</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "bWtF.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
