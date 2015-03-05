@@ -1,7 +1,14 @@
 body {
     padding: 0;
     margin: 0;
+    min-height:100%;
 }
+
+#pages :hover {
+    #color: green;
+    background:#999;
+}
+
 
 .entry {
     margin-top: 0;
@@ -569,16 +576,26 @@ pre.line-numbers>code {
     padding-right: .8em;
     text-align: right;
 }
-
+#html,
 body {
     margin: 0;
+    padding:0;
     font-family: Georgia,serif;
+    height:100%;
 }
 
 .main {
+    #padding:10px;
     margin: 0 auto;
     width: 600px;
-    position: relative;
+    height:100%;
+    #position: relative;
+    padding-bottom:60px;
+}
+.innermain {
+    padding:10px;
+    min-height:100%;
+    #padding-bottom:80px;
 }
 
 #disqus_thread {
@@ -632,11 +649,21 @@ body {
 a {
     text-decoration: none;
     color: #000;
+    width:100px;
+    transition:width 2s;
+    -moz-transition:width 2s; /* Firefox 4 */
+    -webkit-transition:width 2s; /* Safari and Chrome */
+    -o-transition:width 2s; /* Opera */
+    #background:#999;
+    transform:rotateX(80deg);
 
 }
 
 a:hover {
-    border-bottom: 1px solid #E93071;
+    width:3000px;
+    
+    
+    #border-bottom: 1px solid #E93071;
 }
 
 .selected {
@@ -684,7 +711,12 @@ a:hover {
 
 .footer {
     border-top: 1px dotted #888;
-    margin-top: 20px;
+    #margin-top: 20px;
+    width:600px;
+    height:50px;
+    position:absolute;
+    bottom:0;
+ 
     text-align: center;
     color: #555;
 }
