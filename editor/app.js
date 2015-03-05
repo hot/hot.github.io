@@ -144,6 +144,7 @@ $(document).ready(function() {
             "click #init": "initRepo",
             "click #go": "go",
         },
+        //init bt call back
         initRepo: function(e) {
             e.preventDefault();
             var error = curry(errShow, this.err);
@@ -267,6 +268,7 @@ $(document).ready(function() {
                     var type = param.type;
                     var num = Math.floor(param.num);
                     var temp = this;
+                    //delete
                     if (type.slice(0, 6) == "delete") {
                         $("#loading").show();
                         var posts = [];
@@ -298,6 +300,7 @@ $(document).ready(function() {
                         temp.posts.active();
                     }
                 },
+                //save new post
                 "/posts/:type": function(param) {
                     var type = param.type;
                     var temp = this;
