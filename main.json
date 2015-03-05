@@ -1,1 +1,1 @@
-{"name":"Mr.HelloWorld","number_of_posts_per_page":7,"disqus_shortname":"","posts":[{"title":"test","date":"2015-03-04","tags":"","path":"test.html","num":0,"type":"post","active":false}],"pages":[{"title":"testPage","date":"2015-03-05","tags":"pageTag","path":"testPage.html"}]}
+{"name":"Mr.HelloWorld","number_of_posts_per_page":7,"disqus_shortname":"","posts":[{"title":"test","date":"2015-03-04","tags":"","path":"test.html"}],"pages":[{"title":"testPage","date":"2015-03-05","tags":"pageTag","path":"testPage.html","num":0,"type":"page","active":false}]}
