@@ -340,7 +340,7 @@ $(document).ready(function() {
                                 data = data.replace(contentpattern, "<!-- content -->\n"+content+"\n<!-- content end -->\n");
                                 data = data.replace("//path//", now.path);
                                 data = data.replace(mdpattern, "<!-- markdown -->\n"+md+"\n<!-- markdown end -->\n");
-                                repo.write("master", now.path, data, "save", function(err) {
+                                repo.write("master", now.path, data, now.title, function(err) {
                                     repo.write("master", "main.json", JSON.stringify(gconfig), "save", function(err) {
                                         if (!errShow($("saveerror", err))) {
                                             temp.posts.init(param);
