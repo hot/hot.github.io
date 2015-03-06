@@ -88,11 +88,12 @@
     </li>
     {{/pages}}
 </script>
+<!--tag page is below-->
 <script id="tagsTemplate" type="text/mustache">
     <ul style="list-style: none">
         {{#tags}}
         <li style="display:inline; margin: 15px;">
-            <a href="{{path}}" style="font-size: {{size}}%">{{name}}</a>
+            <a id="tagInTagPage" href="{{path}}" style="font-size: {{size}}%">{{name}}</a>
         </li>
         {{/tags}}
     </ul>

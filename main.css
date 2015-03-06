@@ -9,6 +9,10 @@ body {
     background:#999;
 }
 
+#tagInTagPage
+{
+    background:#DDD;
+}
 
 .entry {
     margin-top: 0;
@@ -594,7 +598,7 @@ body {
 }
 .innermain {
     padding:10px;
-    min-height:100%;
+    min-height:300px;
     #padding-bottom:80px;
 }
 
@@ -713,7 +717,7 @@ a:hover {
     #margin-top: 20px;
     width:600px;
     height:50px;
-    position:absolute;
+    #position:absolute;
     bottom:0;
  
     text-align: center;
