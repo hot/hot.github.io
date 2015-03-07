@@ -5,6 +5,7 @@ var editor = null;
 var contentpattern = /<!-- content -->\n([\s\S]*)\n<!-- content end -->\n/m;
 var pathpattern = /\/\/path\nvar path=\"(.*)\";\n\/\/path end\n/m;
 var mdpattern = /<!-- markdown -->\n([\s\S]*)\n<!-- markdown end -->\n/m;
+var duoshuopattern = /<!-- duoshuo -->\n([\s\S]*)\n<!-- duoshuo end -->\n/m;
 Date.prototype.yyyymmdd = function() {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth()+1).toString();
@@ -318,7 +319,9 @@ $(document).ready(function() {
                                    "date": $("#postdate").val(),
                                    "tags": $("#posttags").val(),
                                    //"path": $("#posttitle").val() + ".html"};   //modified by windclose
-                                   "path": (window.Base64.encode($("#posttitle").val())) + ".html"};   //modified by windclose
+                                   "path": (window.Base64.encode($("#posttitle").val())) + ".html",
+								   "duoshuo": "<div class=\"ds-thread\" data-thread-key=\""+(window.Base64.encode($("#posttitle").val()))+"\" data-title=\"" + $("#posttitle").val() + "\" data-url=hot.github.io\""+(window.Base64.encode($("#posttitle").val())) + ".html" + "\"></div>"
+								};   //modified by windclose
                         console.log("KyStartLog@@@@@@!!!!!");
                         console.log(window.Base64.encode($("#posttitle").val()));
                         console.log("KyEndLog@@@@@!!!!!");
@@ -338,6 +341,7 @@ $(document).ready(function() {
                             success: function(data) {
                                 $("#saveerror").hide();
                                 data = data.replace(contentpattern, "<!-- content -->\n"+content+"\n<!-- content end -->\n");
+                                data = data.replace(duoshuopattern, "<!-- duoshuo -->\n"+now.duoshuo+"\n<!-- duoshuo end -->\n");
                                 data = data.replace("//path//", now.path);
                                 data = data.replace(mdpattern, "<!-- markdown -->\n"+md+"\n<!-- markdown end -->\n");
                                 repo.write("master", now.path, data, now.title, function(err) {
