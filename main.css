@@ -659,7 +659,6 @@ a {
     -webkit-transition:width 2s; /* Safari and Chrome */
     -o-transition:width 2s; /* Opera */
     #background:#999;
-    transform:rotateX(80deg);
 
 }
 
