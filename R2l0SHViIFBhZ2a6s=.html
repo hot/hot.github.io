@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Mr.Hot</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+##初衷
+很久之前就有打算写博客来记录一些东西，不管是工作上的还是生活上的。
+
+这个blog主要还是以技术为主，记录一些我感觉到有趣的东西，或者是作为备忘，同时也能分享给大家。希望以后自己来看的时候，也会感觉到很有成就感。
+
+这算是我的blog的开篇吧~ ~
+
+之前有在博客园和csdn上尝试写过blog，但是感觉那些blog的定制性很低，而且编辑器功能不是很完善，不能满足我的需求。
+
+无意间看到github上可以新建github page， 而这是一个可以完全自定义的静态网站，这意味着我们可以完全自定义想要的内容。而且我还测试了一下，墙内的访问速度也是相当快的。
+
+##最初的尝试vim+vimwiki
+[vimwiki](https://github.com/vimwiki/vimwiki)是vim的一个插件，可以通过简单的语法生成静态html。
+在大学的时间中做的笔记基本上都是使用vimwiki做的，所以对其还是有一番了解。
+但是由于vimwiki的主要功能是保存.wiki文件，而不是生成html。而经过一番搜索，要定制其生成的网页模板其实还挺复杂的，涉及到修改其源代码，会对以后的更新造成障碍。
+
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h2 id="">初衷</h2>
+
+<p>很久之前就有打算写博客来记录一些东西，不管是工作上的还是生活上的。</p>
+
+<p>这个blog主要还是以技术为主，记录一些我感觉到有趣的东西，或者是作为备忘，同时也能分享给大家。希望以后自己来看的时候，也会感觉到很有成就感。</p>
+
+<p>这算是我的blog的开篇吧~ ~</p>
+
+<p>之前有在博客园和csdn上尝试写过blog，但是感觉那些blog的定制性很低，而且编辑器功能不是很完善，不能满足我的需求。</p>
+
+<p>无意间看到github上可以新建github page， 而这是一个可以完全自定义的静态网站，这意味着我们可以完全自定义想要的内容。而且我还测试了一下，墙内的访问速度也是相当快的。</p>
+
+<h2 id="vimvimwiki">最初的尝试vim+vimwiki</h2>
+
+<p><a href="https://github.com/vimwiki/vimwiki">vimwiki</a>是vim的一个插件，可以通过简单的语法生成静态html。
+在大学的时间中做的笔记基本上都是使用vimwiki做的，所以对其还是有一番了解。
+但是由于vimwiki的主要功能是保存.wiki文件，而不是生成html。而经过一番搜索，要定制其生成的网页模板其实还挺复杂的，涉及到修改其源代码，会对以后的更新造成障碍。</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+<!-- duoshuo -->
+<div class="ds-thread" data-thread-key="R2l0SHViIFBhZ2a6s=" data-title="GitHub Page博客搭建过程" data-url=hot.github.io"R2l0SHViIFBhZ2a6s=.html"></div>
+<!-- duoshuo end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hotgithub"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
+<script src="main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "R2l0SHViIFBhZ2a6s=.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
