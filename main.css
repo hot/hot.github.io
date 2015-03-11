@@ -621,7 +621,8 @@ body {
     padding: 20px 0 10px;
     #border-bottom: 16px groove #FF0000;
     margin: 0 0 10px;
-    font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+    /*font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;*/
+    font-family:"Microsoft JhengHei";
     letter-spacing: -0.02em;
     font-weight: 700;
     font-style: normal;
