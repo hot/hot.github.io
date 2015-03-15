@@ -26,14 +26,38 @@
 <div id="md" style="display: none;">
 <!-- markdown -->
 ##由3d电影开始
-电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了。当然在不带眼镜的时候看上去就有点模糊了。
+电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了:P。当然在不带眼镜的时候看上去就有点模糊了。具体原理参考[wiki](http://zh.wikipedia.org/wiki/3D%E9%9B%BB%E5%BD%B1)
+
+##如何在Unity3d中实现类似效果
+* 首先必须要有两个摄像机
+* 然后将每个摄像机上的图像渲染到texture
+* 然后合并两张texture
+###`这里介绍一下Unity中的一个重要功能`[Render Texture](http://docs.unity3d.com/Manual/class-RenderTexture.html)
+使用这个功能我们就能将摄像机所捕捉的画面绘制到Texture上,而我们只需要将两张texture按一定的方式合并即可。
+
+下面附上简单的shader代码：
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
 <h2 id="3d">由3d电影开始</h2>
 
-<p>电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了。当然在不带眼镜的时候看上去就有点模糊了。</p>
+<p>电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了:P。当然在不带眼镜的时候看上去就有点模糊了。具体原理参考<a href="http://zh.wikipedia.org/wiki/3D%E9%9B%BB%E5%BD%B1">wiki</a></p>
+
+<h2 id="unity3d">如何在Unity3d中实现类似效果</h2>
+
+<ul>
+<li>首先必须要有两个摄像机</li>
+<li>然后将每个摄像机上的图像渲染到texture</li>
+<li>然后合并两张texture</li>
+</ul>
+
+<h3 id="unityrendertexturehttpdocsunity3dcommanualclassrendertexturehtml"><code>这里介绍一下Unity中的一个重要功能</code><a href="http://docs.unity3d.com/Manual/class-RenderTexture.html">Render Texture</a></h3>
+
+<p>使用这个功能我们就能将摄像机所捕捉的画面绘制到Texture上,而我们只需要将两张texture按一定的方式合并即可。</p>
+
+<p>下面附上简单的shader代码：</p>
 <!-- content end -->
 </div>
 <br>
