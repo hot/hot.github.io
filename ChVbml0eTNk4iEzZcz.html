@@ -69,13 +69,17 @@ Shader "Custom/combine" {
 			half4 c = tex2D (_MainTex, IN.uv_MainTex);
 			half4 c2 = tex2D (_Tex2, IN.uv_MainTex);
 			
-			o.Albedo = (c.rgb + c2.rgb)/2;
+			half3 g1 = half3(0.3*c.x + 0.59*c.y + 0.11*c.z, 0, 0);
+			half3 g2 = half3(0, 0, 0.3*c2.x + 0.59*c2.y + 0.11*c2.z);
+			
+			o.Albedo = (g1.rgb + g2.rgb)/2;
 			o.Alpha = c.a;
 		}
 		ENDCG
 	} 
 	FallBack "Diffuse"
 }
+
 
 ~~~~
 
@@ -132,13 +136,17 @@ Shader "Custom/combine" {
             half4 c <span class="token operator">=</span> tex2D <span class="token punctuation">(</span>_MainTex<span class="token punctuation">,</span> IN<span class="token punctuation">.</span>uv_MainTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
             half4 c2 <span class="token operator">=</span> tex2D <span class="token punctuation">(</span>_Tex2<span class="token punctuation">,</span> IN<span class="token punctuation">.</span>uv_MainTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-            o<span class="token punctuation">.</span>Albedo <span class="token operator">=</span> <span class="token punctuation">(</span>c<span class="token punctuation">.</span>rgb <span class="token operator">+</span> c2<span class="token punctuation">.</span>rgb<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span>
+            half3 g1 <span class="token operator">=</span> <span class="token function">half3<span class="token punctuation">(</span></span><span class="token number">0.3</span><span class="token operator">*</span>c<span class="token punctuation">.</span>x <span class="token operator">+</span> <span class="token number">0.59</span><span class="token operator">*</span>c<span class="token punctuation">.</span>y <span class="token operator">+</span> <span class="token number">0.11</span><span class="token operator">*</span>c<span class="token punctuation">.</span>z<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            half3 g2 <span class="token operator">=</span> <span class="token function">half3<span class="token punctuation">(</span></span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0.3</span><span class="token operator">*</span>c2<span class="token punctuation">.</span>x <span class="token operator">+</span> <span class="token number">0.59</span><span class="token operator">*</span>c2<span class="token punctuation">.</span>y <span class="token operator">+</span> <span class="token number">0.11</span><span class="token operator">*</span>c2<span class="token punctuation">.</span>z<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            o<span class="token punctuation">.</span>Albedo <span class="token operator">=</span> <span class="token punctuation">(</span>g1<span class="token punctuation">.</span>rgb <span class="token operator">+</span> g2<span class="token punctuation">.</span>rgb<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span>
             o<span class="token punctuation">.</span>Alpha <span class="token operator">=</span> c<span class="token punctuation">.</span>a<span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
         ENDCG
     <span class="token punctuation">}</span> 
     FallBack <span class="token string">"Diffuse"</span>
 <span class="token punctuation">}</span>
+
 
 </code></pre>
 <!-- content end -->
