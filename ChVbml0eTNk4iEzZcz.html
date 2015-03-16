@@ -59,8 +59,9 @@ Shader "Custom/combine" {
 		void surf (Input IN, inout SurfaceOutput o) {
 			half4 c = tex2D (_MainTex, IN.uv_MainTex);
 			half4 c2 = tex2D (_Tex2, IN.uv_MainTex);
-			
-			o.Albedo = (c.rgb + c2.rgb)/2;    //这里直接去了两张texture的颜色平均值，仅作实验使用
+
+			//这里直取了了两张texture的颜色平均值，仅作实验使用
+			o.Albedo = (c.rgb + c2.rgb)/2;    
 			o.Alpha = c.a;
 		}
 		ENDCG
@@ -114,7 +115,8 @@ Shader "Custom/combine" {
         half4 c = tex2D (_MainTex, IN.uv_MainTex);
         half4 c2 = tex2D (_Tex2, IN.uv_MainTex);
 
-        o.Albedo = (c.rgb + c2.rgb)/2;    //这里直接去了两张texture的颜色平均值，仅作实验使用
+        //这里直取了了两张texture的颜色平均值，仅作实验使用
+        o.Albedo = (c.rgb + c2.rgb)/2;    
         o.Alpha = c.a;
     }
     ENDCG
