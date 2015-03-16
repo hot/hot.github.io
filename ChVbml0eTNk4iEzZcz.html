@@ -32,10 +32,23 @@
 * 首先必须要有两个摄像机
 * 然后将每个摄像机上的图像渲染到texture
 * 然后合并两张texture
-###这里介绍一下Unity中的一个重要功能[Render Texture](http://docs.unity3d.com/Manual/class-RenderTexture.html)
+###这里介绍一下Unity中的一个重要功能Render Texture
+[Render Texture的官方文档](http://docs.unity3d.com/Manual/class-RenderTexture.html)
+
+RenderTexture是一张Texture（贴图），但是它的内容是由摄像机动态捕获的。
+
+
+猜测原理上应该是通过将OpenGL中的Frame Buffer绑定到一张贴图上实现的
+。参考[Render to texture](http://blog.angusforbes.com/openglglsl-render-to-texture/)
+
 使用这个功能我们就能将摄像机所捕捉的画面绘制到Texture上,而我们只需要将两张texture按一定的方式合并即可。
 
 下面附上简单的shader代码
+
+~~~~{c}
+
+
+~~~~
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -52,11 +65,22 @@
 <li>然后合并两张texture</li>
 </ul>
 
-<h3 id="unityrendertexturehttpdocsunity3dcommanualclassrendertexturehtml">这里介绍一下Unity中的一个重要功能<a href="http://docs.unity3d.com/Manual/class-RenderTexture.html">Render Texture</a></h3>
+<h3 id="unityrendertexture">这里介绍一下Unity中的一个重要功能Render Texture</h3>
+
+<p><a href="http://docs.unity3d.com/Manual/class-RenderTexture.html">Render Texture的官方文档</a></p>
+
+<p>RenderTexture是一张Texture（贴图），但是它的内容是由摄像机动态捕获的。</p>
+
+<p>猜测原理上应该是通过将OpenGL中的Frame Buffer绑定到一张贴图上实现的
+。参考<a href="http://blog.angusforbes.com/openglglsl-render-to-texture/">Render to texture</a></p>
 
 <p>使用这个功能我们就能将摄像机所捕捉的画面绘制到Texture上,而我们只需要将两张texture按一定的方式合并即可。</p>
 
 <p>下面附上简单的shader代码</p>
+
+<p>~~~~{c}</p>
+
+<p>~~~~</p>
 <!-- content end -->
 </div>
 <br>
