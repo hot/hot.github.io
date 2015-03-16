@@ -26,7 +26,7 @@
 <div id="md" style="display: none;">
 <!-- markdown -->
 ##由3d电影开始
-电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了:P。当然在不带眼镜的时候看上去就有点模糊了。具体原理参考[wiki](http://zh.wikipedia.org/wiki/3D%E9%9B%BB%E5%BD%B1)
+电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了:P。当然在不带眼镜的时候看上去就有点模糊了。具体原理参考[wiki](http://en.wikipedia.org/wiki/Anaglyph_3D)
 
 ##如何在Unity3d中实现类似效果
 * 首先必须要有两个摄像机
@@ -69,14 +69,13 @@ Shader "Custom/combine" {
 }
 
 ~~~~
-
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
 <h2 id="3d">由3d电影开始</h2>
 
-<p>电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了:P。当然在不带眼镜的时候看上去就有点模糊了。具体原理参考<a href="http://zh.wikipedia.org/wiki/3D%E9%9B%BB%E5%BD%B1">wiki</a></p>
+<p>电影院中的3d电影常常被大家各种吐槽，但不得不承认，带上眼镜之后字幕好像确实变成了立体的了:P。当然在不带眼镜的时候看上去就有点模糊了。具体原理参考<a href="http://en.wikipedia.org/wiki/Anaglyph_3D">wiki</a></p>
 
 <h2 id="unity3d">如何在Unity3d中实现类似效果</h2>
 
@@ -90,40 +89,42 @@ Shader "Custom/combine" {
 
 <p>使用这个功能我们就能将摄像机所捕捉的画面绘制到Texture上,而我们只需要将两张texture按一定的方式合并即可。</p>
 
-<p>下面附上简单的shader代码：</p>
+<p>下面附上简单的shader代码：
+~~~~{c}
+Shader "Custom/combine" {
+    Properties {
+        _MainTex ("Base (RGB)", 2D) = "white" {}
+        _Tex2 ("Base (RGB)", 2D) = "white" {}
+    }
+    SubShader {
+        Tags { "RenderType"="Opaque" }
+        LOD 200</p>
 
-<pre class=" language-c"><code class=" language-c">Shader <span class="token string">"Custom/combine"</span> <span class="token punctuation">{</span>
-    Properties <span class="token punctuation">{</span>
-        _MainTex <span class="token punctuation">(</span><span class="token string">"Base (RGB)"</span><span class="token punctuation">,</span> 2D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-        _Tex2 <span class="token punctuation">(</span><span class="token string">"Base (RGB)"</span><span class="token punctuation">,</span> 2D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    SubShader <span class="token punctuation">{</span>
-        Tags <span class="token punctuation">{</span> <span class="token string">"RenderType"</span><span class="token operator">=</span><span class="token string">"Opaque"</span> <span class="token punctuation">}</span>
-        LOD <span class="token number">200</span>
+<pre><code>    CGPROGRAM
+    #pragma surface surf Lambert
 
-        CGPROGRAM
-        <span class="token property">#pragma surface surf Lambert</span>
+    sampler2D _MainTex;
+    sampler2D _Tex2;
 
-        sampler2D _MainTex<span class="token punctuation">;</span>
-        sampler2D _Tex2<span class="token punctuation">;</span>
+    struct Input {
+        float2 uv_MainTex;
+    };
 
-        <span class="token keyword">struct</span> Input <span class="token punctuation">{</span>
-            float2 uv_MainTex<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    void surf (Input IN, inout SurfaceOutput o) {
+        half4 c = tex2D (_MainTex, IN.uv_MainTex);
+        half4 c2 = tex2D (_Tex2, IN.uv_MainTex);
 
-        <span class="token keyword">void</span> surf <span class="token punctuation">(</span>Input IN<span class="token punctuation">,</span> inout SurfaceOutput o<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            half4 c <span class="token operator">=</span> tex2D <span class="token punctuation">(</span>_MainTex<span class="token punctuation">,</span> IN<span class="token punctuation">.</span>uv_MainTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            half4 c2 <span class="token operator">=</span> tex2D <span class="token punctuation">(</span>_Tex2<span class="token punctuation">,</span> IN<span class="token punctuation">.</span>uv_MainTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            o<span class="token punctuation">.</span>Albedo <span class="token operator">=</span> <span class="token punctuation">(</span>c<span class="token punctuation">.</span>rgb <span class="token operator">+</span> c2<span class="token punctuation">.</span>rgb<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true"> //这里直接去了两张texture的颜色平均值，仅作实验使用
-</span>            o<span class="token punctuation">.</span>Alpha <span class="token operator">=</span> c<span class="token punctuation">.</span>a<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        ENDCG
-    <span class="token punctuation">}</span> 
-    FallBack <span class="token string">"Diffuse"</span>
-<span class="token punctuation">}</span>
-
+        o.Albedo = (c.rgb + c2.rgb)/2;    //这里直接去了两张texture的颜色平均值，仅作实验使用
+        o.Alpha = c.a;
+    }
+    ENDCG
+} 
+FallBack "Diffuse"
 </code></pre>
+
+<p>}</p>
+
+<p>~~~~</p>
 <!-- content end -->
 </div>
 <br>
