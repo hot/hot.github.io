@@ -46,9 +46,40 @@ RenderTexture是一张Texture（贴图），但是它的内容是由摄像机动
 下面附上简单的shader代码
 
 ~~~~{c}
+Shader "Custom/combine" {
+	Properties {
+		_MainTex ("Base (RGB)", 2D) = "white" {}
+		_Tex2 ("Base (RGB)", 2D) = "white" {}
+	}
+	SubShader {
+		Tags { "RenderType"="Opaque" }
+		LOD 200
+		
+		CGPROGRAM
+		#pragma surface surf Lambert
 
+		sampler2D _MainTex;
+		sampler2D _Tex2;
+
+		struct Input {
+			float2 uv_MainTex;
+		};
+
+		void surf (Input IN, inout SurfaceOutput o) {
+			half4 c = tex2D (_MainTex, IN.uv_MainTex);
+			half4 c2 = tex2D (_Tex2, IN.uv_MainTex);
+			
+			o.Albedo = (c.rgb + c2.rgb)/2;
+			o.Alpha = c.a;
+		}
+		ENDCG
+	} 
+	FallBack "Diffuse"
+}
 
 ~~~~
+
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -78,9 +109,38 @@ RenderTexture是一张Texture（贴图），但是它的内容是由摄像机动
 
 <p>下面附上简单的shader代码</p>
 
-<p>~~~~{c}</p>
+<pre class=" language-c"><code class=" language-c">Shader <span class="token string">"Custom/combine"</span> <span class="token punctuation">{</span>
+    Properties <span class="token punctuation">{</span>
+        _MainTex <span class="token punctuation">(</span><span class="token string">"Base (RGB)"</span><span class="token punctuation">,</span> 2D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        _Tex2 <span class="token punctuation">(</span><span class="token string">"Base (RGB)"</span><span class="token punctuation">,</span> 2D<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token string">"white"</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    SubShader <span class="token punctuation">{</span>
+        Tags <span class="token punctuation">{</span> <span class="token string">"RenderType"</span><span class="token operator">=</span><span class="token string">"Opaque"</span> <span class="token punctuation">}</span>
+        LOD <span class="token number">200</span>
 
-<p>~~~~</p>
+        CGPROGRAM
+        <span class="token property">#pragma surface surf Lambert</span>
+
+        sampler2D _MainTex<span class="token punctuation">;</span>
+        sampler2D _Tex2<span class="token punctuation">;</span>
+
+        <span class="token keyword">struct</span> Input <span class="token punctuation">{</span>
+            float2 uv_MainTex<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">void</span> surf <span class="token punctuation">(</span>Input IN<span class="token punctuation">,</span> inout SurfaceOutput o<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            half4 c <span class="token operator">=</span> tex2D <span class="token punctuation">(</span>_MainTex<span class="token punctuation">,</span> IN<span class="token punctuation">.</span>uv_MainTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            half4 c2 <span class="token operator">=</span> tex2D <span class="token punctuation">(</span>_Tex2<span class="token punctuation">,</span> IN<span class="token punctuation">.</span>uv_MainTex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            o<span class="token punctuation">.</span>Albedo <span class="token operator">=</span> <span class="token punctuation">(</span>c<span class="token punctuation">.</span>rgb <span class="token operator">+</span> c2<span class="token punctuation">.</span>rgb<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">;</span>
+            o<span class="token punctuation">.</span>Alpha <span class="token operator">=</span> c<span class="token punctuation">.</span>a<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        ENDCG
+    <span class="token punctuation">}</span> 
+    FallBack <span class="token string">"Diffuse"</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
 <!-- content end -->
 </div>
 <br>
