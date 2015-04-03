@@ -37,13 +37,13 @@ Ambient occlusion能够在外界的间接光照（indirrect lighting）照射到
 
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg)
 
-举例来说，你能通过ambient occlusion来帮助提升砖墙上的不同砖块的视觉上的区分，而在没有ambient occlusion的情况下，他们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。
+举例来说，通过ambient occlusion能帮助提升砖墙上的不同砖块的视觉上的区分。在没有ambient occlusion的情况下，它们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。
 
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Rays_zpsocmlm0la.jpg)
 
-当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上特殊的ambient occlusion shader来计算的。渲染完成后，为了达到更好的后期处理操作性性和效果，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。
+当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上的ambient occlusion shader来计算的。渲染完成后，为了做后期处理，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。
 
-因为ambient occlusion是通过投射射线来检测周围物体（来达到模拟效果）的，因此任何使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过对周围物体是否会阻挡光线进行采样来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。
+Ambient occlusion是通过射线来检测周围物体（来达到模拟效果）的，使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过周围物体对光线的阻挡情况来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。
 
 当全局光照太亮的时候，ambient occlusion能很好地柔化它。不需要添加额外的光照，因为ambinet occlusion并不像光源那样向外投射光线。ambient occlusion能展现出光照的细微变化来帮助你的眼睛看到表面上一些原本模糊，微不可查的细节。它也能让一个没有贴图的模型展现出良好的视觉效果。
 
@@ -75,13 +75,13 @@ Ambient occlusion能让你的场景看上去更专业，更真实。想要了解
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg" alt="alt text" title=""></p>
 
-<p>举例来说，你能通过ambient occlusion来帮助提升砖墙上的不同砖块的视觉上的区分，而在没有ambient occlusion的情况下，他们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。</p>
+<p>举例来说，通过ambient occlusion能帮助提升砖墙上的不同砖块的视觉上的区分。在没有ambient occlusion的情况下，它们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。</p>
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Rays_zpsocmlm0la.jpg" alt="alt text" title=""></p>
 
-<p>当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上特殊的ambient occlusion shader来计算的。渲染完成后，为了达到更好的后期处理操作性性和效果，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。</p>
+<p>当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上的ambient occlusion shader来计算的。渲染完成后，为了做后期处理，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。</p>
 
-<p>因为ambient occlusion是通过投射射线来检测周围物体（来达到模拟效果）的，因此任何使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过对周围物体是否会阻挡光线进行采样来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。</p>
+<p>Ambient occlusion是通过射线来检测周围物体（来达到模拟效果）的，使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过周围物体对光线的阻挡情况来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。</p>
 
 <p>当全局光照太亮的时候，ambient occlusion能很好地柔化它。不需要添加额外的光照，因为ambinet occlusion并不像光源那样向外投射光线。ambient occlusion能展现出光照的细微变化来帮助你的眼睛看到表面上一些原本模糊，微不可查的细节。它也能让一个没有贴图的模型展现出良好的视觉效果。</p>
 
