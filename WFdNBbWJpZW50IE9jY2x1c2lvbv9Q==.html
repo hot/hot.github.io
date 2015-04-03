@@ -29,53 +29,58 @@
 
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/523_MASTER_zpsc4likmq3.jpg "")
 
+
+
 Ambient occlusion能够在外界的间接光照（indirrect lighting）照射到你的场景中的时候模拟3D物体上的裂缝产生的柔和阴影(soft shadow)。通过Ambient occlusion产生的柔和阴影能帮助区别场景中的物体，并能给你的渲染结果增加另外一层的真实性。
 
+```
 Ambient occlusion allows you to simulate the soft shadows that occur in the cracks and crevices of your 3D objects when indirect lighting is cast out onto your scene. The soft shadows that are created from ambient occlusion can help to define the separation between objects in your scene and add another level of realism to your render.
+```
+
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg)
 
 举例来说，你能通过ambient occlusion来帮助提升砖墙上的不同砖块的视觉上的区分，而在没有ambient occlusion的情况下，他们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。
-
+```
 For example, you could use ambient occlusion to help enhance the visible separation between individual bricks on a brick wall that might otherwise seem to run together. Ambient occlusion shading aren’t the same as shadows you’d get from direct lighting, but they’re are actually fake indirect shadows that are added into the render by rays that get cast out from each surface on your geometry.
-
+```
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Rays_zpsocmlm0la.jpg)
 
 当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上特殊的ambient occlusion shader来计算的。渲染完成后，为了达到更好的后期处理操作性性和效果，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。
-
+```
 If these rays come into contact with another surface, that area will become darker. If it doesn’t find another surface it will stay brighter.  In most 3D applications, ambient occlusion is calculated using a special ambient occlusion shader that is applied to your geometry. Once rendered, the ambient occlusion pass is typically something added onto the final render in a photo compositing software, like Photoshop, where further manipulating and fine tuning of the ambient occlusion can be achieved.
-
+```
 因为ambient occlusion是通过投射射线来检测周围物体（来达到模拟效果）的，因此任何使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过对周围物体是否会阻挡光线进行采样来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。
-
+```
 Since ambient occlusion is simulated by casting out rays to sample nearby geometry, any object with a transparency map applied to it won’t get calculated. That’s because ambient occlusion doesn’t look at the texture maps applied to geometry, but instead works by sampling nearby geometry that blocks or occludes light, given that light passes through a transparent object.
-
+```
 当全局光照太亮的时候，ambient occlusion能很好地柔化它。不需要添加额外的光照，因为ambinet occlusion并不像光源那样向外投射光线。ambient occlusion能展现出光照的细微变化来帮助你的眼睛看到表面上一些原本模糊，微不可查的细节。它也能让一个没有贴图的模型展现出良好的视觉效果。
-
+```
 Ambient occlusion is great for softening the overall lighting in your scene if it is too bright. There is no need to add additional lights because ambient occlusion does not work in the same way as something like final gather where a light source must be used to cast out rays. Ambient occlusion also shows subtle variations in lighting to help your eyes detect surface details that would otherwise be washed out or unnoticeable. It’s also great for visualizing a model that hasn’t even been textured yet.
-
+```
 ##一些帮助你设置Ambient Occlusion的小贴士
 
 烘焙出ambient occlusion能极快得提升渲染时间。这在渲染动画的时候特别明显。因为动画的每帧渲染都会重新计算ambient occlusion，这会增加大量渲染时间。
-
+```
 A great way to speed up render time when incorporating ambient occlusion is to bake out the ambient occlusion pass. This is especially important when rendering an animation, because with every frame rendered the computer will need to recalculate the ambient occlusion pass which can greatly increase the render time.
-
+```
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Distance_zpsudmsbza1.jpg)
 当ambient occlusion渲染出的效果不理想时，比如说阴影太宽或太窄，你可以在ambient occlusion的设置中调整最大距离(max distance)。这个选项决定了射线所能投射的距离。当射线投射得越远，则阴影越宽，同时会增加场景中的阴影量。当射线投射的越近，则阴影越少。在通常应用在物体之间靠得非常近的时候。随意调整这些设定来达到你想要的效果吧。
-
+```
 If you are getting undesirable results from your ambient occlusion pass, like shadows that are much too wide or to shallow, you can adjust the max distance in the ambient occlusion settings. When this is adjusted it determines how far the rays travel in order to find geometry, The further these rays travel the wider the shadow will be. Increasing the distance will increase the amount of shadows cast onto your scene. If you decrease this distance the rays don’t travel as far, creating a much tighter level of shadows that only appear when other geometry is very close to the surface. Play with these settings in order to achieve the look you want.
-
+```
 ![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Directional_Occlusion_zpsgyanzst7.jpg)
 在大多数的渲染应用中，利用方向性的环境遮蔽(directional ambient occlusion)能让环境遮蔽渲染的真实性提升一个台阶。这项技术能通过灯光在场景中的位置来给ambient occlusion增加更多的方向性。而它并不完全基于周围的几何体，根据光设置的不同，这往往会的不同而导致场景中出现不真实的阴影。
-
+```
 A great way to add another level of realism to your ambient occlusion pass is to utilize a directional ambient occlusion pass found in most rendering applications. This allows you to use the light’s position in the scene to add more directionality to the ambient occlusion, and not have it completely based off of surrounding geometry, which can often result in unrealistic shadows depending on the light setup in your scene.
-
+```
 在某些情况下，你并不需要分离渲染ambient occlusion，因为ambient occlusion已经直接集成到了特定的材质中了。在大多数的3d应用中，比如3ds max， Maya或者Softimage，它们已经将ambient occlusion内置到架构和设计材质中了。因此当你在开始Ambient occlusion渲染过程之前，先看看你的材质是否已经集成了它。
-
+```
 In some cases you may not even need to render out a separate ambient occlusion pass because you can find ambient occlusion integrated straight into certain materials. In most 3D applications like, 3ds Max, Maya or Softimage they have ambient occlusion settings built into architectural and design materials. So before you start setting up a separate render pass, first see if your materials have ambient occlusion settings integrated in.
-
+```
 Ambient occlusion能让你的场景看上去更专业，更真实。想要了解更多关于Ambient occlusion以及其他渲染技术的朋友，请查阅我们大受欢迎的[CG101: Rendering tutorial](http://www.digitaltutors.com/tutorial/718)或更多[3D lighting tutorials](http://www.digitaltutors.com/subject/3d-lighting-tutorials).
-
+```
 Ambient Occlusion can do wonders to make your renders look professional and more realistic. Find out more about Ambient Occlusion and other rendering techniques with our popular CG101: Rendering tutorial or more 3D lighting tutorials.
-
+```
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -86,50 +91,61 @@ Ambient Occlusion can do wonders to make your renders look professional and more
 
 <p>Ambient occlusion能够在外界的间接光照（indirrect lighting）照射到你的场景中的时候模拟3D物体上的裂缝产生的柔和阴影(soft shadow)。通过Ambient occlusion产生的柔和阴影能帮助区别场景中的物体，并能给你的渲染结果增加另外一层的真实性。</p>
 
-<p>Ambient occlusion allows you to simulate the soft shadows that occur in the cracks and crevices of your 3D objects when indirect lighting is cast out onto your scene. The soft shadows that are created from ambient occlusion can help to define the separation between objects in your scene and add another level of realism to your render.
-<img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg" alt="alt text" title=""></p>
+<pre><code>Ambient occlusion allows you to simulate the soft shadows that occur in the cracks and crevices of your 3D objects when indirect lighting is cast out onto your scene. The soft shadows that are created from ambient occlusion can help to define the separation between objects in your scene and add another level of realism to your render.
+</code></pre>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg" alt="alt text" title=""></p>
 
 <p>举例来说，你能通过ambient occlusion来帮助提升砖墙上的不同砖块的视觉上的区分，而在没有ambient occlusion的情况下，他们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。</p>
 
-<p>For example, you could use ambient occlusion to help enhance the visible separation between individual bricks on a brick wall that might otherwise seem to run together. Ambient occlusion shading aren’t the same as shadows you’d get from direct lighting, but they’re are actually fake indirect shadows that are added into the render by rays that get cast out from each surface on your geometry.</p>
+<pre><code>For example, you could use ambient occlusion to help enhance the visible separation between individual bricks on a brick wall that might otherwise seem to run together. Ambient occlusion shading aren’t the same as shadows you’d get from direct lighting, but they’re are actually fake indirect shadows that are added into the render by rays that get cast out from each surface on your geometry.
+</code></pre>
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Rays_zpsocmlm0la.jpg" alt="alt text" title=""></p>
 
 <p>当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上特殊的ambient occlusion shader来计算的。渲染完成后，为了达到更好的后期处理操作性性和效果，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。</p>
 
-<p>If these rays come into contact with another surface, that area will become darker. If it doesn’t find another surface it will stay brighter.  In most 3D applications, ambient occlusion is calculated using a special ambient occlusion shader that is applied to your geometry. Once rendered, the ambient occlusion pass is typically something added onto the final render in a photo compositing software, like Photoshop, where further manipulating and fine tuning of the ambient occlusion can be achieved.</p>
+<pre><code>If these rays come into contact with another surface, that area will become darker. If it doesn’t find another surface it will stay brighter.  In most 3D applications, ambient occlusion is calculated using a special ambient occlusion shader that is applied to your geometry. Once rendered, the ambient occlusion pass is typically something added onto the final render in a photo compositing software, like Photoshop, where further manipulating and fine tuning of the ambient occlusion can be achieved.
+</code></pre>
 
 <p>因为ambient occlusion是通过投射射线来检测周围物体（来达到模拟效果）的，因此任何使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过对周围物体是否会阻挡光线进行采样来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。</p>
 
-<p>Since ambient occlusion is simulated by casting out rays to sample nearby geometry, any object with a transparency map applied to it won’t get calculated. That’s because ambient occlusion doesn’t look at the texture maps applied to geometry, but instead works by sampling nearby geometry that blocks or occludes light, given that light passes through a transparent object.</p>
+<pre><code>Since ambient occlusion is simulated by casting out rays to sample nearby geometry, any object with a transparency map applied to it won’t get calculated. That’s because ambient occlusion doesn’t look at the texture maps applied to geometry, but instead works by sampling nearby geometry that blocks or occludes light, given that light passes through a transparent object.
+</code></pre>
 
 <p>当全局光照太亮的时候，ambient occlusion能很好地柔化它。不需要添加额外的光照，因为ambinet occlusion并不像光源那样向外投射光线。ambient occlusion能展现出光照的细微变化来帮助你的眼睛看到表面上一些原本模糊，微不可查的细节。它也能让一个没有贴图的模型展现出良好的视觉效果。</p>
 
-<p>Ambient occlusion is great for softening the overall lighting in your scene if it is too bright. There is no need to add additional lights because ambient occlusion does not work in the same way as something like final gather where a light source must be used to cast out rays. Ambient occlusion also shows subtle variations in lighting to help your eyes detect surface details that would otherwise be washed out or unnoticeable. It’s also great for visualizing a model that hasn’t even been textured yet.</p>
+<pre><code>Ambient occlusion is great for softening the overall lighting in your scene if it is too bright. There is no need to add additional lights because ambient occlusion does not work in the same way as something like final gather where a light source must be used to cast out rays. Ambient occlusion also shows subtle variations in lighting to help your eyes detect surface details that would otherwise be washed out or unnoticeable. It’s also great for visualizing a model that hasn’t even been textured yet.
+</code></pre>
 
 <h2 id="ambientocclusion">一些帮助你设置Ambient Occlusion的小贴士</h2>
 
 <p>烘焙出ambient occlusion能极快得提升渲染时间。这在渲染动画的时候特别明显。因为动画的每帧渲染都会重新计算ambient occlusion，这会增加大量渲染时间。</p>
 
-<p>A great way to speed up render time when incorporating ambient occlusion is to bake out the ambient occlusion pass. This is especially important when rendering an animation, because with every frame rendered the computer will need to recalculate the ambient occlusion pass which can greatly increase the render time.</p>
+<pre><code>A great way to speed up render time when incorporating ambient occlusion is to bake out the ambient occlusion pass. This is especially important when rendering an animation, because with every frame rendered the computer will need to recalculate the ambient occlusion pass which can greatly increase the render time.
+</code></pre>
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Distance_zpsudmsbza1.jpg" alt="alt text" title="">
 当ambient occlusion渲染出的效果不理想时，比如说阴影太宽或太窄，你可以在ambient occlusion的设置中调整最大距离(max distance)。这个选项决定了射线所能投射的距离。当射线投射得越远，则阴影越宽，同时会增加场景中的阴影量。当射线投射的越近，则阴影越少。在通常应用在物体之间靠得非常近的时候。随意调整这些设定来达到你想要的效果吧。</p>
 
-<p>If you are getting undesirable results from your ambient occlusion pass, like shadows that are much too wide or to shallow, you can adjust the max distance in the ambient occlusion settings. When this is adjusted it determines how far the rays travel in order to find geometry, The further these rays travel the wider the shadow will be. Increasing the distance will increase the amount of shadows cast onto your scene. If you decrease this distance the rays don’t travel as far, creating a much tighter level of shadows that only appear when other geometry is very close to the surface. Play with these settings in order to achieve the look you want.</p>
+<pre><code>If you are getting undesirable results from your ambient occlusion pass, like shadows that are much too wide or to shallow, you can adjust the max distance in the ambient occlusion settings. When this is adjusted it determines how far the rays travel in order to find geometry, The further these rays travel the wider the shadow will be. Increasing the distance will increase the amount of shadows cast onto your scene. If you decrease this distance the rays don’t travel as far, creating a much tighter level of shadows that only appear when other geometry is very close to the surface. Play with these settings in order to achieve the look you want.
+</code></pre>
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Directional_Occlusion_zpsgyanzst7.jpg" alt="alt text" title="">
 在大多数的渲染应用中，利用方向性的环境遮蔽(directional ambient occlusion)能让环境遮蔽渲染的真实性提升一个台阶。这项技术能通过灯光在场景中的位置来给ambient occlusion增加更多的方向性。而它并不完全基于周围的几何体，根据光设置的不同，这往往会的不同而导致场景中出现不真实的阴影。</p>
 
-<p>A great way to add another level of realism to your ambient occlusion pass is to utilize a directional ambient occlusion pass found in most rendering applications. This allows you to use the light’s position in the scene to add more directionality to the ambient occlusion, and not have it completely based off of surrounding geometry, which can often result in unrealistic shadows depending on the light setup in your scene.</p>
+<pre><code>A great way to add another level of realism to your ambient occlusion pass is to utilize a directional ambient occlusion pass found in most rendering applications. This allows you to use the light’s position in the scene to add more directionality to the ambient occlusion, and not have it completely based off of surrounding geometry, which can often result in unrealistic shadows depending on the light setup in your scene.
+</code></pre>
 
 <p>在某些情况下，你并不需要分离渲染ambient occlusion，因为ambient occlusion已经直接集成到了特定的材质中了。在大多数的3d应用中，比如3ds max， Maya或者Softimage，它们已经将ambient occlusion内置到架构和设计材质中了。因此当你在开始Ambient occlusion渲染过程之前，先看看你的材质是否已经集成了它。</p>
 
-<p>In some cases you may not even need to render out a separate ambient occlusion pass because you can find ambient occlusion integrated straight into certain materials. In most 3D applications like, 3ds Max, Maya or Softimage they have ambient occlusion settings built into architectural and design materials. So before you start setting up a separate render pass, first see if your materials have ambient occlusion settings integrated in.</p>
+<pre><code>In some cases you may not even need to render out a separate ambient occlusion pass because you can find ambient occlusion integrated straight into certain materials. In most 3D applications like, 3ds Max, Maya or Softimage they have ambient occlusion settings built into architectural and design materials. So before you start setting up a separate render pass, first see if your materials have ambient occlusion settings integrated in.
+</code></pre>
 
 <p>Ambient occlusion能让你的场景看上去更专业，更真实。想要了解更多关于Ambient occlusion以及其他渲染技术的朋友，请查阅我们大受欢迎的<a href="http://www.digitaltutors.com/tutorial/718">CG101: Rendering tutorial</a>或更多<a href="http://www.digitaltutors.com/subject/3d-lighting-tutorials">3D lighting tutorials</a>.</p>
 
-<p>Ambient Occlusion can do wonders to make your renders look professional and more realistic. Find out more about Ambient Occlusion and other rendering techniques with our popular CG101: Rendering tutorial or more 3D lighting tutorials.</p>
+<pre><code>Ambient Occlusion can do wonders to make your renders look professional and more realistic. Find out more about Ambient Occlusion and other rendering techniques with our popular CG101: Rendering tutorial or more 3D lighting tutorials.
+</code></pre>
 <!-- content end -->
 </div>
 <br>
