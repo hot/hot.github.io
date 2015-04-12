@@ -40,11 +40,11 @@ public void SetReplacementShader(Shader shader, string replacementTag);
 ~~~~
 
 ##替换过程：
-* 若replacementTag为空，则所有物体都会使用替换的shader来渲染
+* 若replacementTag为空，则`所有物体`都会使用替换的shader来渲染
 * 若replacementTag不为空
      * 实际渲染使用的shader是根据tag查找的
-     * 若当前shader不存在该tag，则物体不会被渲染
-     * 若用来替换的shader中不包含该tag则物体也不会被渲染
+     * 若当前shader不存在该tag，则物体`不会`被渲染
+     * 若用来替换的shader中不包含该tag则物体也`不会`被渲染
      * 只有两者都有相应tag的shader的时候才能渲染
 
 
@@ -149,11 +149,11 @@ public <span class="token keyword">void</span> <span class="token function">SetR
 <h2 id="">替换过程：</h2>
 
 <ul>
-<li>若replacementTag为空，则所有物体都会使用替换的shader来渲染</li>
+<li>若replacementTag为空，则<code>所有物体</code>都会使用替换的shader来渲染</li>
 <li>若replacementTag不为空
 <ul><li>实际渲染使用的shader是根据tag查找的</li>
-<li>若当前shader不存在该tag，则物体不会被渲染</li>
-<li>若用来替换的shader中不包含该tag则物体也不会被渲染</li>
+<li>若当前shader不存在该tag，则物体<code>不会</code>被渲染</li>
+<li>若用来替换的shader中不包含该tag则物体也<code>不会</code>被渲染</li>
 <li>只有两者都有相应tag的shader的时候才能渲染</li></ul></li>
 </ul>
 
