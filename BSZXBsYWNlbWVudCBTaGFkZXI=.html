@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Mr.Hot</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+偶然之间发现了Unity中存在Replacement shader这个东西。让我们来看看它到底有什么用吧。
+##用处：
+* 用于在运行时根据Tag替换相应的shader
+* 可用于debug和某些特效
+
+##食用方法：
+主要通过调用 [Camera.RenderWithShader](http://docs.unity3d.com/ScriptReference/Camera.RenderWithShader.html)或[Camera.SetReplacementShader](http://docs.unity3d.com/ScriptReference/Camera.SetReplacementShader.html) 来实现替换
+
+函数原型：
+```{c}public void RenderWithShader(Shader shader, string replacementTag);
+public void SetReplacementShader(Shader shader, string replacementTag);
+```
+##替换过程：
+* 若replacementTag为空，则所有物体都会使用替换的shader来渲染
+* 若replacementTag不为空
+     * 实际渲染使用的shader是根据tag查找的
+     * 若当前shader不存在该tag，则物体不会被渲染
+     * 若用来替换的shader中不包含该tag则物体也不会被渲染
+     * 只有两者都有相应tag的shader的时候才能渲染
+
+
+##测试过程：
+###原shader（单纯渲染白色）：
+```{c}
+Shader "Custom/RenderWhite" {
+    SubShader {
+        Tags { "RenderType"="Opaque" "MyTag" = "RenderWhite”}//注意这里指定了MyTag
+        
+        Pass{
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+        
+            float4 vert(float4 v:POSITION) : SV_POSITION{
+                 return mul(UNITY_MATRIX_MVP, v);
+            }
+              
+                fixed4 frag() : COLOR{
+                 return fixed4(1,1,1,1);
+             }
+            ENDCG
+        }
+    } 
+    FallBack "Diffuse"
+}
+```
+###替换用的shader（单纯渲染绿色）：
+```{c}
+Shader "Custom/ReplacementShader" {
+    SubShader {
+        Tags { "RenderType"="Opaque" "MyTag" = "RenderWhite"}//注意这里指了定相同的MyTag
+        
+        Pass{
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+        
+            float4 vert(float4 v:POSITION) : SV_POSITION{
+                 return mul(UNITY_MATRIX_MVP, v);
+            }
+              
+                fixed4 frag() : COLOR{
+                 return fixed4(0,1,0,1);
+             }
+            ENDCG
+        }
+    } 
+    FallBack "Diffuse"
+}
+```
+替换脚本：
+```{c}
+using UnityEngine;
+using System.Collections;
+
+public class testReplacementShader : MonoBehaviour {
+    public Shader rs;
+
+    void Start () {
+        Camera.main.SetReplacementShader(rs, "MyTag”);//这里指定了需要替换掉的Tag
+    
+    }
+
+    void Update () {
+        if(Input.GetKey(KeyCode.Space))
+        {
+            Camera.main.ResetReplacementShader();
+        }
+    
+    }
+}
+```
+[参考网页](http://forum.unity3d.com/threads/can-render-the-one-object-which-need-to-add-image-effect-in-post-render.142195/#post-973878)
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p>偶然之间发现了Unity中存在Replacement shader这个东西。让我们来看看它到底有什么用吧。</p>
+
+<h2 id="">用处：</h2>
+
+<ul>
+<li>用于在运行时根据Tag替换相应的shader</li>
+<li>可用于debug和某些特效</li>
+</ul>
+
+<h2 id="">食用方法：</h2>
+
+<p>主要通过调用 <a href="http://docs.unity3d.com/ScriptReference/Camera.RenderWithShader.html">Camera.RenderWithShader</a>或<a href="http://docs.unity3d.com/ScriptReference/Camera.SetReplacementShader.html">Camera.SetReplacementShader</a> 来实现替换</p>
+
+<p>函数原型：</p>
+
+<pre><code class="{c}public void RenderWithShader(Shader shader, string replacementTag);">public void SetReplacementShader(Shader shader, string replacementTag);
+</code></pre>
+
+<h2 id="">替换过程：</h2>
+
+<ul>
+<li>若replacementTag为空，则所有物体都会使用替换的shader来渲染</li>
+<li>若replacementTag不为空
+<ul><li>实际渲染使用的shader是根据tag查找的</li>
+<li>若当前shader不存在该tag，则物体不会被渲染</li>
+<li>若用来替换的shader中不包含该tag则物体也不会被渲染</li>
+<li>只有两者都有相应tag的shader的时候才能渲染</li></ul></li>
+</ul>
+
+<h2 id="">测试过程：</h2>
+
+<h3 id="shader">原shader（单纯渲染白色）：</h3>
+
+<pre><code class="{c}">Shader "Custom/RenderWhite" {
+    SubShader {
+        Tags { "RenderType"="Opaque" "MyTag" = "RenderWhite”}//注意这里指定了MyTag
+
+        Pass{
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            float4 vert(float4 v:POSITION) : SV_POSITION{
+                 return mul(UNITY_MATRIX_MVP, v);
+            }
+
+                fixed4 frag() : COLOR{
+                 return fixed4(1,1,1,1);
+             }
+            ENDCG
+        }
+    } 
+    FallBack "Diffuse"
+}
+</code></pre>
+
+<h3 id="shader">替换用的shader（单纯渲染绿色）：</h3>
+
+<pre><code class="{c}">Shader "Custom/ReplacementShader" {
+    SubShader {
+        Tags { "RenderType"="Opaque" "MyTag" = "RenderWhite"}//注意这里指了定相同的MyTag
+
+        Pass{
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            float4 vert(float4 v:POSITION) : SV_POSITION{
+                 return mul(UNITY_MATRIX_MVP, v);
+            }
+
+                fixed4 frag() : COLOR{
+                 return fixed4(0,1,0,1);
+             }
+            ENDCG
+        }
+    } 
+    FallBack "Diffuse"
+}
+</code></pre>
+
+<p>替换脚本：</p>
+
+<pre><code class="{c}">using UnityEngine;
+using System.Collections;
+
+public class testReplacementShader : MonoBehaviour {
+    public Shader rs;
+
+    void Start () {
+        Camera.main.SetReplacementShader(rs, "MyTag”);//这里指定了需要替换掉的Tag
+
+    }
+
+    void Update () {
+        if(Input.GetKey(KeyCode.Space))
+        {
+            Camera.main.ResetReplacementShader();
+        }
+
+    }
+}
+</code></pre>
+
+<p><a href="http://forum.unity3d.com/threads/can-render-the-one-object-which-need-to-add-image-effect-in-post-render.142195/#post-973878">参考网页</a></p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+<!-- duoshuo -->
+<div class="ds-thread" data-thread-key="BSZXBsYWNlbWVudCBTaGFkZXI=" data-title="解析Replacement Shader" data-url=hot.github.io"BSZXBsYWNlbWVudCBTaGFkZXI=.html"></div>
+<!-- duoshuo end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hotgithub"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
+<script src="main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "BSZXBsYWNlbWVudCBTaGFkZXI=.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
