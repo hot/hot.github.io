@@ -40,9 +40,9 @@ http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）
 * crypt.py    806byte
 
 
-##hello
 
-```{python}
+
+~~~~{python}
 #!/usr/bin/python
 
 from struct import pack
@@ -84,7 +84,10 @@ def main():
 
 if __name__ == "__main__":
     main()    
-```
+
+
+~~~~
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -108,49 +111,49 @@ if __name__ == "__main__":
 <li>crypt.py    806byte</li>
 </ul>
 
-<h2 id="hello">hello</h2>
+<pre class=" language-python"><code class=" language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python
+</span>
+<span class="token keyword">from</span> struct <span class="token keyword">import</span> pack
+<span class="token keyword">from</span> struct <span class="token keyword">import</span> unpack
 
-<pre><code class="{python}">#!/usr/bin/python
+state <span class="token operator">=</span> <span class="token number">0</span>
 
-from struct import pack
-from struct import unpack
+<span class="token keyword">def</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">global</span> state
+    state <span class="token operator">=</span> <span class="token punctuation">(</span>state <span class="token operator">*</span> <span class="token number">1103515425</span> <span class="token operator">+</span> <span class="token number">54321</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>amp<span class="token punctuation">;</span> <span class="token number">0x3fffffff</span>
+    <span class="token keyword">return</span> state
 
-state = 0
+<span class="token keyword">def</span> srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">global</span> state
+    state <span class="token operator">=</span> seed
 
-def rand():
-    global state
-    state = (state * 1103515425 + 54321) &amp; 0x3fffffff
-    return state
+<span class="token keyword">def</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    cipher <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> <span class="token number">c</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span>
+        cipher <span class="token operator">+</span><span class="token operator">=</span> pack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span><span class="token punctuation">(</span>ord<span class="token punctuation">(</span><span class="token number">c</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">&lt;</span><span class="token number">22</span><span class="token punctuation">)</span> <span class="token operator">+</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> cipher
 
-def srand(seed):
-    global state
-    state = seed
+<span class="token keyword">def</span> decrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    plain <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> plain
 
-def encrypt(data,key):
-    srand(key)
-    cipher = ""
-    for c in data:
-        cipher += pack("i",(ord(c)&lt;&lt;22) + rand())
-    return cipher
+<span class="token keyword">def</span> main<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token number">f1</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"plaintext"</span><span class="token punctuation">,</span><span class="token string">"rb"</span><span class="token punctuation">)</span>
+    <span class="token number">f2</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"ciphertext"</span><span class="token punctuation">,</span><span class="token string">"wb"</span><span class="token punctuation">)</span>
+    data <span class="token operator">=</span> <span class="token number">f1</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">from</span> secretfile <span class="token keyword">import</span> secretkey
+    data <span class="token operator">=</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>secretkey<span class="token punctuation">)</span>
+    <span class="token number">f2</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
 
-def decrypt(data,key):
-    srand(key)
-    plain = ""
-    for i in range(0,len(data),4):
-        temp = unpack("i",data[i:i+4])[0] - rand()
-        plain += chr(temp &gt;&gt; 22)
-    return plain
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span>    
 
-def main():
-    f1 = open("plaintext","rb")
-    f2 = open("ciphertext","wb")
-    data = f1.read()
-    from secretfile import secretkey
-    data = encrypt(data,secretkey)
-    f2.write(data)
 
-if __name__ == "__main__":
-    main()    
 </code></pre>
 <!-- content end -->
 </div>
