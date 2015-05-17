@@ -39,6 +39,50 @@ http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）
 * ciphertext 9.8MB
 * crypt.py    806byte
 
+
+~~~~{python}
+#!/usr/bin/python
+
+from struct import pack
+from struct import unpack
+
+state = 0
+
+def rand():
+    global state
+    state = (state * 1103515425 + 54321) & 0x3fffffff
+    return state
+    
+def srand(seed):
+    global state
+    state = seed
+    
+def encrypt(data,key):
+    srand(key)
+    cipher = ""
+    for c in data:
+        cipher += pack("i",(ord(c)<<22) + rand())
+    return cipher
+
+def decrypt(data,key):
+    srand(key)
+    plain = ""
+    for i in range(0,len(data),4):
+        temp = unpack("i",data[i:i+4])[0] - rand()
+        plain += chr(temp >> 22)
+    return plain
+
+def main():
+    f1 = open("plaintext","rb")
+    f2 = open("ciphertext","wb")
+    data = f1.read()
+    from secretfile import secretkey
+    data = encrypt(data,secretkey)
+    f2.write(data)
+
+if __name__ == "__main__":
+    main()    
+~~~~
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -61,6 +105,51 @@ http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）
 <li>ciphertext 9.8MB</li>
 <li>crypt.py    806byte</li>
 </ul>
+
+<p>~~~~{python}</p>
+
+<h1 id="usrbinpython">!/usr/bin/python</h1>
+
+<p>from struct import pack
+from struct import unpack</p>
+
+<p>state = 0</p>
+
+<p>def rand():
+    global state
+    state = (state * 1103515425 + 54321) &amp; 0x3fffffff
+    return state</p>
+
+<p>def srand(seed):
+    global state
+    state = seed</p>
+
+<p>def encrypt(data,key):
+    srand(key)
+    cipher = ""
+    for c in data:
+        cipher += pack("i",(ord(c)&lt;&lt;22) + rand())
+    return cipher</p>
+
+<p>def decrypt(data,key):
+    srand(key)
+    plain = ""
+    for i in range(0,len(data),4):
+        temp = unpack("i",data[i:i+4])[0] - rand()
+        plain += chr(temp &gt;&gt; 22)
+    return plain</p>
+
+<p>def main():
+    f1 = open("plaintext","rb")
+    f2 = open("ciphertext","wb")
+    data = f1.read()
+    from secretfile import secretkey
+    data = encrypt(data,secretkey)
+    f2.write(data)</p>
+
+<p>if <strong>name</strong> == "<strong>main</strong>":
+    main() <br>
+~~~~</p>
 <!-- content end -->
 </div>
 <br>
