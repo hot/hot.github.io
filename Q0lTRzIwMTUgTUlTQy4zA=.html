@@ -84,10 +84,45 @@ def main():
 
 if __name__ == "__main__":
     main()    
-
-
 ~~~~
 
+##思路
+* 首先看看ciphertext里面到底有什么，然而是一对乱码>...<
+* 让我们来分析一下crypt.py吧
+
+###crypt.py分析
+首先是main函数
+~~~~{python}
+def main():
+    f1 = open("plaintext","rb") #打开明文
+    f2 = open("ciphertext","wb") #打开密文文件准备写入
+    data = f1.read() #从明文中读入数据
+    #不知从那里拿来了一个secretkey，这并不重要，后面会详细分析
+    from secretfile import secretkey 
+    data = encrypt(data,secretkey) #调用加密函数来加密data
+    f2.write(data) #将密文写入到密文文件
+~~~~
+然后是加密解密函数
+~~~~{python}
+def encrypt(data,key):
+    srand(key)
+    cipher = ""
+    for c in data:
+        cipher += pack("i",(ord(c)<<22) + rand())
+    return cipher
+
+def decrypt(data,key):
+    srand(key)
+    plain = ""
+    for i in range(0,len(data),4):
+        temp = unpack("i",data[i:i+4])[0] - rand()
+        plain += chr(temp >> 22)
+    return plain
+~~~~
+
+##各种曲折
+
+未完待续
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -152,9 +187,47 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span>    
-
-
 </code></pre>
+
+<h2 id="">思路</h2>
+
+<ul>
+<li>首先看看ciphertext里面到底有什么，然而是一对乱码&gt;...&lt;</li>
+<li>让我们来分析一下crypt.py吧</li>
+</ul>
+
+<h3 id="cryptpy">crypt.py分析</h3>
+
+<p>首先是main函数</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> main<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token number">f1</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"plaintext"</span><span class="token punctuation">,</span><span class="token string">"rb"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#打开明文
+</span>    <span class="token number">f2</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"ciphertext"</span><span class="token punctuation">,</span><span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#打开密文文件准备写入
+</span>    data <span class="token operator">=</span> <span class="token number">f1</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#从明文中读入数据
+</span>    <span class="token comment" spellcheck="true">#不知从那里拿来了一个secretkey，这并不重要，后面会详细分析
+</span>    <span class="token keyword">from</span> secretfile <span class="token keyword">import</span> secretkey 
+    data <span class="token operator">=</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>secretkey<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#调用加密函数来加密data
+</span>    <span class="token number">f2</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#将密文写入到密文文件
+</span></code></pre>然后是加密解密函数
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    cipher <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> <span class="token number">c</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span>
+        cipher <span class="token operator">+</span><span class="token operator">=</span> pack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span><span class="token punctuation">(</span>ord<span class="token punctuation">(</span><span class="token number">c</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">&lt;</span><span class="token number">22</span><span class="token punctuation">)</span> <span class="token operator">+</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> cipher
+
+<span class="token keyword">def</span> decrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    plain <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> plain
+</code></pre>
+
+<h2 id="">各种曲折</h2>
+
+<p>未完待续</p>
 <!-- content end -->
 </div>
 <br>
