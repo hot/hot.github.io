@@ -40,7 +40,9 @@ http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）
 * crypt.py    806byte
 
 
-~~~~{python}
+##hello
+
+```{python}
 #!/usr/bin/python
 
 from struct import pack
@@ -82,7 +84,7 @@ def main():
 
 if __name__ == "__main__":
     main()    
-~~~~
+```
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -106,50 +108,50 @@ if __name__ == "__main__":
 <li>crypt.py    806byte</li>
 </ul>
 
-<p>~~~~{python}</p>
+<h2 id="hello">hello</h2>
 
-<h1 id="usrbinpython">!/usr/bin/python</h1>
+<pre><code class="{python}">#!/usr/bin/python
 
-<p>from struct import pack
-from struct import unpack</p>
+from struct import pack
+from struct import unpack
 
-<p>state = 0</p>
+state = 0
 
-<p>def rand():
+def rand():
     global state
     state = (state * 1103515425 + 54321) &amp; 0x3fffffff
-    return state</p>
+    return state
 
-<p>def srand(seed):
+def srand(seed):
     global state
-    state = seed</p>
+    state = seed
 
-<p>def encrypt(data,key):
+def encrypt(data,key):
     srand(key)
     cipher = ""
     for c in data:
         cipher += pack("i",(ord(c)&lt;&lt;22) + rand())
-    return cipher</p>
+    return cipher
 
-<p>def decrypt(data,key):
+def decrypt(data,key):
     srand(key)
     plain = ""
     for i in range(0,len(data),4):
         temp = unpack("i",data[i:i+4])[0] - rand()
         plain += chr(temp &gt;&gt; 22)
-    return plain</p>
+    return plain
 
-<p>def main():
+def main():
     f1 = open("plaintext","rb")
     f2 = open("ciphertext","wb")
     data = f1.read()
     from secretfile import secretkey
     data = encrypt(data,secretkey)
-    f2.write(data)</p>
+    f2.write(data)
 
-<p>if <strong>name</strong> == "<strong>main</strong>":
-    main() <br>
-~~~~</p>
+if __name__ == "__main__":
+    main()    
+</code></pre>
 <!-- content end -->
 </div>
 <br>
