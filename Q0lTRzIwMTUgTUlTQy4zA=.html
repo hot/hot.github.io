@@ -227,7 +227,31 @@ def decrypt(data):
     print(plain)
 ~~~~
 
-诶，又要拼人品吗？
+运行完后得到flag
+```
+('get min i:', 2572260)
++
+...省略n个字符
+XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is hidden in the above data It is a picture and you should base64decode it.
+```
+
+前两句是我的debug输出内容，表明了是从第2572260个密文开始解密的。
+最初开始解密的明文字符是'+'
+
+`flag is hidden in the above data It is a picture and you should base64decode it.`
+
+然后flag说我不是flag，flag在我上面。。。然后它是一张图片而且还是被Base64加密了图片。
+
+##现在问题来了，我们是从一半开始解密的，明文只有一半，直接用Base64解密肯定是不行的
+
+这里有两条线索：
+
+* flag是一张图片
+* flag是被Base64加密过的
+
+是图片就好办了，因为图片一般都是有固定格式的，而常见的图片格式也就那么几种。只要猜到是哪种格式的图片就好办了。
+
+诶，又要拼人品吗？哈哈，我喜欢。
 
 常见的图片格式文件头分析：
 
@@ -502,7 +526,33 @@ state <span class="token operator">=</span> <span class="token number">0</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span>plain<span class="token punctuation">)</span>
 </code></pre>
 
-<p>诶，又要拼人品吗？</p>
+<p>运行完后得到flag</p>
+
+<pre><code>('get min i:', 2572260)
++
+...省略n个字符
+XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is hidden in the above data It is a picture and you should base64decode it.
+</code></pre>
+
+<p>前两句是我的debug输出内容，表明了是从第2572260个密文开始解密的。
+最初开始解密的明文字符是'+'</p>
+
+<p><code>flag is hidden in the above data It is a picture and you should base64decode it.</code></p>
+
+<p>然后flag说我不是flag，flag在我上面。。。然后它是一张图片而且还是被Base64加密了图片。</p>
+
+<h2 id="base64">现在问题来了，我们是从一半开始解密的，明文只有一半，直接用Base64解密肯定是不行的</h2>
+
+<p>这里有两条线索：</p>
+
+<ul>
+<li>flag是一张图片</li>
+<li>flag是被Base64加密过的</li>
+</ul>
+
+<p>是图片就好办了，因为图片一般都是有固定格式的，而常见的图片格式也就那么几种。只要猜到是哪种格式的图片就好办了。</p>
+
+<p>诶，又要拼人品吗？哈哈，我喜欢。</p>
 
 <p>常见的图片格式文件头分析：</p>
 
