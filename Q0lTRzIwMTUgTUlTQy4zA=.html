@@ -185,6 +185,37 @@ state = 0 #保存随机数状态的值
 
 
 
+诶，又要拼人品吗？
+
+常见的图片格式文件头分析：
+
+* `FFD8FF` jpg
+* `89504E47` png
+* `47494638` gif
+* `424D` bmp
+
+首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（[参考](http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html)） ,然而我们并没有见到。
+然后尝试png，根据0x89来逆推随机数
+~~~~{python}
+seed = 密文的第一个整数 - (0x89 << 22)
+~~~~
+
+然后人品爆发，一击即中。。
+
+于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。
+
+这个过程如果不熟悉Base64编码的话可能会遇到麻烦，经我多次尝试，发现
+
+
+
+Base64解密代码：
+~~~~{python}
+state = 0 #保存随机数状态的值
+
+~~~~
+
+
+
 ##各种曲折
 ###再不相信大力出奇迹了
 
@@ -386,6 +417,35 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 </code></pre>
 
 <p>排序已经出来了，拼人品的时候终于到了，我好激动&gt;..&lt;</p>
+
+<p>诶，又要拼人品吗？</p>
+
+<p>常见的图片格式文件头分析：</p>
+
+<ul>
+<li><code>FFD8FF</code> jpg</li>
+<li><code>89504E47</code> png</li>
+<li><code>47494638</code> gif</li>
+<li><code>424D</code> bmp</li>
+</ul>
+
+<p>首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。
+然后尝试png，根据0x89来逆推随机数</p>
+
+<pre class=" language-python"><code class=" language-python">seed <span class="token operator">=</span> 密文的第一个整数 <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">0x89</span> <span class="token operator">&lt;</span><span class="token operator">&lt;</span> <span class="token number">22</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>然后人品爆发，一击即中。。</p>
+
+<p>于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。</p>
+
+<p>这个过程如果不熟悉Base64编码的话可能会遇到麻烦，经我多次尝试，发现</p>
+
+<p>Base64解密代码：</p>
+
+<pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">#保存随机数状态的值
+</span>
+</code></pre>
 
 <h2 id="">各种曲折</h2>
 
