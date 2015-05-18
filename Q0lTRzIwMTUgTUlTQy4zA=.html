@@ -102,6 +102,7 @@ def main():
     data = encrypt(data,secretkey) #调用加密函数来加密data
     f2.write(data) #将密文写入到密文文件
 ~~~~
+
 然后是加密解密函数
 ~~~~{python}
 #加密函数
@@ -127,9 +128,8 @@ def decrypt(data,key):
         plain += chr(temp >> 22)
     return plain
 ~~~~
-最后就是随机数生成函数了，这个随机数生成算法并不同于常见的
 
-[线性同余算法](http://en.wikipedia.org/wiki/Linear_congruential_generator)
+最后就是随机数生成函数了，这个随机数生成算法并不同于常见的[线性同余算法](http://en.wikipedia.org/wiki/Linear_congruential_generator)，它最后使用了按位与的操作，将随机数`限定在了[0,0x3fffffff]之间`。
 ~~~~{python}
 state = 0
 
@@ -231,7 +231,10 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 </span>    <span class="token keyword">from</span> secretfile <span class="token keyword">import</span> secretkey 
     data <span class="token operator">=</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>secretkey<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#调用加密函数来加密data
 </span>    <span class="token number">f2</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#将密文写入到密文文件
-</span></code></pre>然后是加密解密函数
+</span></code></pre>
+
+<p>然后是加密解密函数</p>
+
 <pre class=" language-python"><code class=" language-python"><span class="token comment" spellcheck="true">#加密函数
 </span><span class="token keyword">def</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
     srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#用key设置随机数种子
@@ -254,9 +257,10 @@ state <span class="token operator">=</span> <span class="token number">0</span>
         <span class="token comment" spellcheck="true">#然后右移22位，并将之转化为字符
 </span>        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> plain
-</code></pre>最后就是随机数生成函数了，这个随机数生成算法并不同于常见的
+</code></pre>
 
-[线性同余算法](http://en.wikipedia.org/wiki/Linear_congruential_generator)
+<p>最后就是随机数生成函数了，这个随机数生成算法并不同于常见的<a href="http://en.wikipedia.org/wiki/Linear_congruential_generator">线性同余算法</a>，它最后使用了按位与的操作，将随机数<code>限定在了[0,0x3fffffff]之间</code>。</p>
+
 <pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span>
 
 <span class="token keyword">def</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
