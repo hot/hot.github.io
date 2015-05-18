@@ -260,6 +260,13 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 * `47494638` gif
 * `424D` bmp
 
+之前抱着死马当活马医的态度用Base64将半个flag解密了下，果然没有一个图片软件能打开。。
+顺便用xxd看了下它的16进制表示：
+```
+014acf0: adfd 23c8 5060 0000 0004 9454 e44a e426  ..#.P`.....T.J.&
+014ad00: 0820   
+```
+
 首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（[参考](http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html)） ,然而我们并没有见到。
 然后尝试png，根据0x89来逆推随机数
 ~~~~{python}
@@ -562,6 +569,13 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 <li><code>47494638</code> gif</li>
 <li><code>424D</code> bmp</li>
 </ul>
+
+<p>之前抱着死马当活马医的态度用Base64将半个flag解密了下，果然没有一个图片软件能打开。。
+顺便用xxd看了下它的16进制表示：</p>
+
+<pre><code>014acf0: adfd 23c8 5060 0000 0004 9454 e44a e426  ..#.P`.....T.J.&amp;
+014ad00: 0820   
+</code></pre>
 
 <p>首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。
 然后尝试png，根据0x89来逆推随机数</p>
