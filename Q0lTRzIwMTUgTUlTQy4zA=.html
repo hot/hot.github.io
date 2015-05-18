@@ -97,7 +97,7 @@ def main():
     f1 = open("plaintext","rb") #打开明文
     f2 = open("ciphertext","wb") #打开密文文件准备写入
     data = f1.read() #从明文中读入数据
-    #不知从那里拿来了一个secretkey，这并不重要，后面会详细分析
+    #不知从哪里拿来了一个secretkey，这并不重要，后面会详细分析
     from secretfile import secretkey 
     data = encrypt(data,secretkey) #调用加密函数来加密data
     f2.write(data) #将密文写入到密文文件
@@ -145,6 +145,15 @@ def srand(seed):
     global state
     state = seed
 ~~~~
+
+好了代码分析已经差不多了。
+
+##加密的弱点分析：
+重要线索：
+
+* 随机数肯定在[0,0x3fffffff]之间
+* 加密过程是先将字符值左移22位
+* 使用了ord来取字符值，那么被加密的字符应该都是ascii字符，也就是说字符值的范围限定在了[0,ff]之间
 
 ##各种曲折
 
@@ -230,7 +239,7 @@ state <span class="token operator">=</span> <span class="token number">0</span>
     <span class="token number">f1</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"plaintext"</span><span class="token punctuation">,</span><span class="token string">"rb"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#打开明文
 </span>    <span class="token number">f2</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"ciphertext"</span><span class="token punctuation">,</span><span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#打开密文文件准备写入
 </span>    data <span class="token operator">=</span> <span class="token number">f1</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#从明文中读入数据
-</span>    <span class="token comment" spellcheck="true">#不知从那里拿来了一个secretkey，这并不重要，后面会详细分析
+</span>    <span class="token comment" spellcheck="true">#不知从哪里拿来了一个secretkey，这并不重要，后面会详细分析
 </span>    <span class="token keyword">from</span> secretfile <span class="token keyword">import</span> secretkey 
     data <span class="token operator">=</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>secretkey<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#调用加密函数来加密data
 </span>    <span class="token number">f2</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#将密文写入到密文文件
@@ -278,6 +287,18 @@ state <span class="token operator">=</span> <span class="token number">0</span>
     <span class="token keyword">global</span> state
     state <span class="token operator">=</span> seed
 </code></pre>
+
+<p>好了代码分析已经差不多了。</p>
+
+<h2 id="">加密的弱点分析：</h2>
+
+<p>重要线索：</p>
+
+<ul>
+<li>随机数肯定在[0,0x3fffffff]之间</li>
+<li>加密过程是先将字符值左移22位</li>
+<li>使用了ord来取字符值，那么被加密的字符应该都是ascii字符，也就是说字符值的范围限定在了[0,ff]之间</li>
+</ul>
 
 <h2 id="">各种曲折</h2>
 
