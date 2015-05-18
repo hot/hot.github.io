@@ -131,13 +131,16 @@ def decrypt(data,key):
 
 最后就是随机数生成函数了，这个随机数生成算法并不同于常见的[线性同余算法](http://en.wikipedia.org/wiki/Linear_congruential_generator)，它最后使用了按位与的操作，将随机数`限定在了[0,0x3fffffff]之间`。
 ~~~~{python}
-state = 0
+state = 0 #保存随机数状态的值
 
+#随机数生成函数
 def rand():
-    global state
+    global state #注明state是全局变量
+    #每个随机数都是由上一个随机数计算得来的，这点很重要
     state = (state * 1103515425 + 54321) & 0x3fffffff
     return state
-    
+
+#设置随机数种子，就是直接设置了state的值    
 def srand(seed):
     global state
     state = seed
@@ -261,14 +264,17 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 
 <p>最后就是随机数生成函数了，这个随机数生成算法并不同于常见的<a href="http://en.wikipedia.org/wiki/Linear_congruential_generator">线性同余算法</a>，它最后使用了按位与的操作，将随机数<code>限定在了[0,0x3fffffff]之间</code>。</p>
 
-<pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span>
-
-<span class="token keyword">def</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">global</span> state
-    state <span class="token operator">=</span> <span class="token punctuation">(</span>state <span class="token operator">*</span> <span class="token number">1103515425</span> <span class="token operator">+</span> <span class="token number">54321</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>amp<span class="token punctuation">;</span> <span class="token number">0x3fffffff</span>
+<pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">#保存随机数状态的值
+</span>
+<span class="token comment" spellcheck="true">#随机数生成函数
+</span><span class="token keyword">def</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">global</span> state <span class="token comment" spellcheck="true">#注明state是全局变量
+</span>    <span class="token comment" spellcheck="true">#每个随机数都是由上一个随机数计算得来的，这点很重要
+</span>    state <span class="token operator">=</span> <span class="token punctuation">(</span>state <span class="token operator">*</span> <span class="token number">1103515425</span> <span class="token operator">+</span> <span class="token number">54321</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>amp<span class="token punctuation">;</span> <span class="token number">0x3fffffff</span>
     <span class="token keyword">return</span> state
 
-<span class="token keyword">def</span> srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token comment" spellcheck="true">#设置随机数种子，就是直接设置了state的值    
+</span><span class="token keyword">def</span> srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">global</span> state
     state <span class="token operator">=</span> seed
 </code></pre>
