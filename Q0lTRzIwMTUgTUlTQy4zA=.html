@@ -127,7 +127,9 @@ def decrypt(data,key):
         plain += chr(temp >> 22)
     return plain
 ~~~~
-最后就是随机数生成函数了
+最后就是随机数生成函数了，这个随机数生成算法并不同于常见的
+
+[线性同余算法](http://en.wikipedia.org/wiki/Linear_congruential_generator)
 ~~~~{python}
 state = 0
 
@@ -252,7 +254,9 @@ state <span class="token operator">=</span> <span class="token number">0</span>
         <span class="token comment" spellcheck="true">#然后右移22位，并将之转化为字符
 </span>        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> plain
-</code></pre>最后就是随机数生成函数了
+</code></pre>最后就是随机数生成函数了，这个随机数生成算法并不同于常见的
+
+[线性同余算法](http://en.wikipedia.org/wiki/Linear_congruential_generator)
 <pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span>
 
 <span class="token keyword">def</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
