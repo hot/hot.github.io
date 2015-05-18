@@ -204,8 +204,7 @@ seed = 密文的第一个整数 - (0x89 << 22)
 
 于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。
 
-这个过程如果不熟悉Base64编码的话可能会遇到麻烦，经我多次尝试，发现
-
+这个过程如果不熟悉[Base64编码](http://en.wikipedia.org/wiki/Base64)的话可能会遇到麻烦，经我多次尝试Σ( ° △ °|||)︴，发现在文件头直接添加一个‘i’即可。
 
 
 Base64解密代码：
@@ -214,7 +213,7 @@ state = 0 #保存随机数状态的值
 
 ~~~~
 
-
+最终拿到flag
 
 ##各种曲折
 ###再不相信大力出奇迹了
@@ -439,13 +438,15 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 
 <p>于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。</p>
 
-<p>这个过程如果不熟悉Base64编码的话可能会遇到麻烦，经我多次尝试，发现</p>
+<p>这个过程如果不熟悉<a href="http://en.wikipedia.org/wiki/Base64">Base64编码</a>的话可能会遇到麻烦，经我多次尝试Σ( ° △ °|||)︴，发现在文件头直接添加一个‘i’即可。</p>
 
 <p>Base64解密代码：</p>
 
 <pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">#保存随机数状态的值
 </span>
 </code></pre>
+
+<p>最终拿到flag</p>
 
 <h2 id="">各种曲折</h2>
 
