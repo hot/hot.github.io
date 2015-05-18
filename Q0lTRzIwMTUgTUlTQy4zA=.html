@@ -249,6 +249,9 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 * flag是一张图片
 * flag是被Base64加密过的
 
+如果不熟悉[Base64编码](http://en.wikipedia.org/wiki/Base64)的话可能会遇到麻烦。我已经被坑过了。。
+
+
 是图片就好办了，因为图片一般都是有固定格式的，而常见的图片格式也就那么几种。只要猜到是哪种格式的图片就好办了。
 
 诶，又要拼人品吗？哈哈，我喜欢。
@@ -299,25 +302,44 @@ def decryptSecond(data,key):
     return plain
 ~~~~
 
-调用decryptSecond()函数来解密
+
+然后尝试png，根据文件头的Base64码来逆推随机数
 ~~~~{python}
-
+import base64
+base64.b64encode(chr(0x89)+chr(0x50)+chr(0x4e)+chr(0x47))
 ~~~~
-然后尝试png，根据0x89来逆推随机数
-然后人品爆发，一击即中。。
 
-于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。
+获得密文：`iVBORw==`首字母为i。
 
-这个过程如果不熟悉[Base64编码](http://en.wikipedia.org/wiki/Base64)的话可能会遇到麻烦，经我多次尝试Σ( ° △ °|||)︴，发现在文件头直接添加一个‘i’即可。
+然后调用decryptSecond()函数来解密：
+~~~~{python}
+seed = getRandNum(0x52aaac6b, 'i')
+decryptSecond(data, seed)
+~~~~
 
+
+然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要将最后一句话去掉，然后在文件开头添加字符`i`。
+
+
+于是我们得到了整个图片被Base64加密过的密文。
 
 Base64解密代码：
 ~~~~{python}
-state = 0 #保存随机数状态的值
+import base64
+f = open("NEWFLAG")
+flagStr = f.read()
+f.close()
 
+a = base64.b64decode(flagStr)
+
+f = open("FLAG_PIC.png", "wb")
+f.write(a)
+f.close()
 ~~~~
 
 最终拿到flag
+
+
 
 ##各种曲折
 ###再不相信大力出奇迹了
@@ -350,6 +372,7 @@ state = 0 #保存随机数状态的值
 
 
 未完待续
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -588,6 +611,8 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 <li>flag是被Base64加密过的</li>
 </ul>
 
+<p>如果不熟悉<a href="http://en.wikipedia.org/wiki/Base64">Base64编码</a>的话可能会遇到麻烦。我已经被坑过了。。</p>
+
 <p>是图片就好办了，因为图片一般都是有固定格式的，而常见的图片格式也就那么几种。只要猜到是哪种格式的图片就好办了。</p>
 
 <p>诶，又要拼人品吗？哈哈，我喜欢。</p>
@@ -637,20 +662,36 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
     <span class="token keyword">return</span> plain
 </code></pre>
 
-<p>调用decryptSecond()函数来解密</p>
+<p>然后尝试png，根据文件头的Base64码来逆推随机数</p>
 
-<pre class=" language-python"><code class=" language-python">
-</code></pre>然后尝试png，根据0x89来逆推随机数
-然后人品爆发，一击即中。。
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">import</span> base64
+base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span>chr<span class="token punctuation">(</span><span class="token number">0x89</span><span class="token punctuation">)</span><span class="token operator">+</span>chr<span class="token punctuation">(</span><span class="token number">0x50</span><span class="token punctuation">)</span><span class="token operator">+</span>chr<span class="token punctuation">(</span><span class="token number">0x4e</span><span class="token punctuation">)</span><span class="token operator">+</span>chr<span class="token punctuation">(</span><span class="token number">0x47</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
 
-于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。
+<p>获得密文：<code>iVBORw==</code>首字母为i。</p>
 
-这个过程如果不熟悉[Base64编码](http://en.wikipedia.org/wiki/Base64)的话可能会遇到麻烦，经我多次尝试Σ( ° △ °|||)︴，发现在文件头直接添加一个‘i’即可。
+<p>然后调用decryptSecond()函数来解密：</p>
 
+<pre class=" language-python"><code class=" language-python">seed <span class="token operator">=</span> getRandNum<span class="token punctuation">(</span><span class="token number">0x52aaac6b</span><span class="token punctuation">,</span> <span class="token string">'i'</span><span class="token punctuation">)</span>
+decryptSecond<span class="token punctuation">(</span>data<span class="token punctuation">,</span> seed<span class="token punctuation">)</span>
+</code></pre>
 
-Base64解密代码：
-<pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">#保存随机数状态的值
-</span>
+<p>然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要将最后一句话去掉，然后在文件开头添加字符<code>i</code>。</p>
+
+<p>于是我们得到了整个图片被Base64加密过的密文。</p>
+
+<p>Base64解密代码：</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">import</span> base64
+<span class="token number">f</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"NEWFLAG"</span><span class="token punctuation">)</span>
+flagStr <span class="token operator">=</span> <span class="token number">f</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token number">f</span><span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token number">a</span> <span class="token operator">=</span> base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>flagStr<span class="token punctuation">)</span>
+
+<span class="token number">f</span> <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"FLAG_PIC.png"</span><span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span>
+<span class="token number">f</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">)</span>
+<span class="token number">f</span><span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
 
 <p>最终拿到flag</p>
