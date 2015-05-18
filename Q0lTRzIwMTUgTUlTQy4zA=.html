@@ -274,10 +274,10 @@ dden in the above data It is a picture and you should base64decode it.
 
 首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（[参考](http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html)） ,然而我们并没有见到。
 
-~~~~{python}
-seed = 密文的第一个整数 - (0x89 << 22)
-~~~~
-密文查看函数：
+##思路：
+* 因为每个随机数都是通过上一个随机数计算而来的，因此只要知道了第一个密文的随机数，我们就可以解密接下来的所有内容。
+
+密文查看函数，查看密文的前5个整数：
 ~~~~{python}
 def showData(data):
     for i in range(0,20,4):
@@ -639,8 +639,14 @@ dden in the above data It is a picture and you should base64decode it.
 
 <p>首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。</p>
 
-<pre class=" language-python"><code class=" language-python">seed <span class="token operator">=</span> 密文的第一个整数 <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">0x89</span> <span class="token operator">&lt;</span><span class="token operator">&lt;</span> <span class="token number">22</span><span class="token punctuation">)</span>
-</code></pre>密文查看函数：
+<h2 id="">思路：</h2>
+
+<ul>
+<li>因为每个随机数都是通过上一个随机数计算而来的，因此只要知道了第一个密文的随机数，我们就可以解密接下来的所有内容。</li>
+</ul>
+
+<p>密文查看函数，查看密文的前5个整数：</p>
+
 <pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> showData<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
         temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
