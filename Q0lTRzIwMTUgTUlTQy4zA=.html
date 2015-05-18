@@ -233,8 +233,8 @@ def decrypt(data):
 +
 ...省略n个字符
 XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRP
-oWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is hi
-dden in the above data It is a picture and you should base64decode it.
+oWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is 
+hidden in the above data It is a picture and you should base64decode it.
 ```
 
 前两句是我的debug输出内容，表明了是从第2572260个密文开始解密的。
@@ -291,21 +291,7 @@ def getRandNum(cNum, c):
     return cNum - (ord(c)<<22)
 ~~~~
 
-相应的解密函数
-~~~~{python}
-def decryptSecond(data,key):
-    srand(key)
-    plain = ""
-    for i in range(4,len(data),4):
-        temp = unpack("i",data[i:i+4])[0] - rand()
-        plain += chr(temp >> 22)
-
-    print(plain)
-    return plain
-~~~~
-
-
-然后尝试png，根据文件头的Base64码来逆推随机数
+接下来拼下人品，看看是不是png，根据png的文件头 `89504E47` 的Base64码来逆推随机数
 ~~~~{python}
 import base64
 base64.b64encode(chr(0x89)+chr(0x50)+chr(0x4e)+chr(0x47))
@@ -319,8 +305,24 @@ seed = getRandNum(0x52aaac6b, 'i')
 decryptSecond(data, seed)
 ~~~~
 
+相应的解密函数如下：
+~~~~{python}
+def decryptSecond(data,key):
+    srand(key)
+    plain = ""
+    for i in range(4,len(data),4):
+        temp = unpack("i",data[i:i+4])[0] - rand()
+        plain += chr(temp >> 22)
 
-然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要将最后一句话去掉，然后在文件开头添加字符`i`。
+    print(plain)
+    return plain
+~~~~
+
+
+
+
+
+然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要`将最后一句话去掉`，然后在`文件开头`添加字符`i`。
 
 
 于是我们得到了整个图片被Base64加密过的密文。
@@ -595,8 +597,8 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 +
 ...省略n个字符
 XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRP
-oWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is hi
-dden in the above data It is a picture and you should base64decode it.
+oWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is 
+hidden in the above data It is a picture and you should base64decode it.
 </code></pre>
 
 <p>前两句是我的debug输出内容，表明了是从第2572260个密文开始解密的。
@@ -659,20 +661,7 @@ dden in the above data It is a picture and you should base64decode it.
     <span class="token keyword">return</span> cNum <span class="token operator">-</span> <span class="token punctuation">(</span>ord<span class="token punctuation">(</span><span class="token number">c</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">&lt;</span><span class="token number">22</span><span class="token punctuation">)</span>
 </code></pre>
 
-<p>相应的解密函数</p>
-
-<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> decryptSecond<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
-    plain <span class="token operator">=</span> <span class="token string">""</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
-
-    <span class="token keyword">print</span><span class="token punctuation">(</span>plain<span class="token punctuation">)</span>
-    <span class="token keyword">return</span> plain
-</code></pre>
-
-<p>然后尝试png，根据文件头的Base64码来逆推随机数</p>
+<p>接下来拼下人品，看看是不是png，根据png的文件头 <code>89504E47</code> 的Base64码来逆推随机数</p>
 
 <pre class=" language-python"><code class=" language-python"><span class="token keyword">import</span> base64
 base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span>chr<span class="token punctuation">(</span><span class="token number">0x89</span><span class="token punctuation">)</span><span class="token operator">+</span>chr<span class="token punctuation">(</span><span class="token number">0x50</span><span class="token punctuation">)</span><span class="token operator">+</span>chr<span class="token punctuation">(</span><span class="token number">0x4e</span><span class="token punctuation">)</span><span class="token operator">+</span>chr<span class="token punctuation">(</span><span class="token number">0x47</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -686,7 +675,20 @@ base64<span class="token punctuation">.</span>b64encode<span class="token punctu
 decryptSecond<span class="token punctuation">(</span>data<span class="token punctuation">,</span> seed<span class="token punctuation">)</span>
 </code></pre>
 
-<p>然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要将最后一句话去掉，然后在文件开头添加字符<code>i</code>。</p>
+<p>相应的解密函数如下：</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> decryptSecond<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    plain <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span>plain<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> plain
+</code></pre>
+
+<p>然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要<code>将最后一句话去掉</code>，然后在<code>文件开头</code>添加字符<code>i</code>。</p>
 
 <p>于是我们得到了整个图片被Base64加密过的密文。</p>
 
