@@ -268,7 +268,7 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 ```
 
 首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（[参考](http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html)） ,然而我们并没有见到。
-然后尝试png，根据0x89来逆推随机数
+
 ~~~~{python}
 seed = 密文的第一个整数 - (0x89 << 22)
 ~~~~
@@ -280,6 +280,30 @@ def showData(data):
         print(hex(temp))
 ~~~~
 
+得到第一个密文是：`0x52aaac6b`，然后我们就可以根据这个密文来推测随机数了，函数如下：
+~~~~{python}
+def getRandNum(cNum, c):
+    return cNum - (ord(c)<<22)
+~~~~
+
+相应的解密函数
+~~~~{python}
+def decryptSecond(data,key):
+    srand(key)
+    plain = ""
+    for i in range(4,len(data),4):
+        temp = unpack("i",data[i:i+4])[0] - rand()
+        plain += chr(temp >> 22)
+
+    print(plain)
+    return plain
+~~~~
+
+调用decryptSecond()函数来解密
+~~~~{python}
+
+~~~~
+然后尝试png，根据0x89来逆推随机数
 然后人品爆发，一击即中。。
 
 于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。
@@ -584,8 +608,7 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 014ad00: 0820   
 </code></pre>
 
-<p>首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。
-然后尝试png，根据0x89来逆推随机数</p>
+<p>首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。</p>
 
 <pre class=" language-python"><code class=" language-python">seed <span class="token operator">=</span> 密文的第一个整数 <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">0x89</span> <span class="token operator">&lt;</span><span class="token operator">&lt;</span> <span class="token number">22</span><span class="token punctuation">)</span>
 </code></pre>密文查看函数：
@@ -595,14 +618,37 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
         <span class="token keyword">print</span><span class="token punctuation">(</span>hex<span class="token punctuation">(</span>temp<span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre>
 
-<p>然后人品爆发，一击即中。。</p>
+<p>得到第一个密文是：<code>0x52aaac6b</code>，然后我们就可以根据这个密文来推测随机数了，函数如下：</p>
 
-<p>于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。</p>
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> getRandNum<span class="token punctuation">(</span>cNum<span class="token punctuation">,</span> <span class="token number">c</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> cNum <span class="token operator">-</span> <span class="token punctuation">(</span>ord<span class="token punctuation">(</span><span class="token number">c</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">&lt;</span><span class="token number">22</span><span class="token punctuation">)</span>
+</code></pre>
 
-<p>这个过程如果不熟悉<a href="http://en.wikipedia.org/wiki/Base64">Base64编码</a>的话可能会遇到麻烦，经我多次尝试Σ( ° △ °|||)︴，发现在文件头直接添加一个‘i’即可。</p>
+<p>相应的解密函数</p>
 
-<p>Base64解密代码：</p>
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> decryptSecond<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    plain <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
 
+    <span class="token keyword">print</span><span class="token punctuation">(</span>plain<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> plain
+</code></pre>
+
+<p>调用decryptSecond()函数来解密</p>
+
+<pre class=" language-python"><code class=" language-python">
+</code></pre>然后尝试png，根据0x89来逆推随机数
+然后人品爆发，一击即中。。
+
+于是我们得到了整个图片被Base64加密过的密文，当然，除了首字节，0x89，我们需要手动将它添加上去，不然是没法解密的哦。
+
+这个过程如果不熟悉[Base64编码](http://en.wikipedia.org/wiki/Base64)的话可能会遇到麻烦，经我多次尝试Σ( ° △ °|||)︴，发现在文件头直接添加一个‘i’即可。
+
+
+Base64解密代码：
 <pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">#保存随机数状态的值
 </span>
 </code></pre>
