@@ -272,6 +272,13 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 ~~~~{python}
 seed = 密文的第一个整数 - (0x89 << 22)
 ~~~~
+密文查看函数：
+~~~~{python}
+def showData(data):
+    for i in range(0,20,4):
+        temp = unpack("i",data[i:i+4])[0]
+        print(hex(temp))
+~~~~
 
 然后人品爆发，一击即中。。
 
@@ -581,6 +588,11 @@ XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRPoWEs8glONXf1H+h
 然后尝试png，根据0x89来逆推随机数</p>
 
 <pre class=" language-python"><code class=" language-python">seed <span class="token operator">=</span> 密文的第一个整数 <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">0x89</span> <span class="token operator">&lt;</span><span class="token operator">&lt;</span> <span class="token number">22</span><span class="token punctuation">)</span>
+</code></pre>密文查看函数：
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> showData<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>hex<span class="token punctuation">(</span>temp<span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre>
 
 <p>然后人品爆发，一击即中。。</p>
