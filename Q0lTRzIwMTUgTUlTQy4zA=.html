@@ -174,16 +174,58 @@ def srand(seed):
 
 而这种事件出现的平均概率为0.0039062490723154033（0x3fffff/0x3fffffff）。
 
-但是很显然，我们有理由相信在较小的密文中这种事件出现的概率更大，so，让我们给密文排个序吧
+但是很显然，我们有理由相信在较小的密文中这种事件出现的概率更大，so，让我们给密文排个序吧。
 
 ~~~~{python}
-state = 0 #保存随机数状态的值
+def check22(num):
+    t = num >>22
+    return t in range(256)
 
+def order(data):
+    a = []
+    for i in range(0,len(data),4):
+        temp = unpack("i",data[i:i+4])[0]
+        if check22(temp):
+            a.append((temp, hex(temp), bin(temp)))
+
+    a.sort()
+    for i in a:
+        print(i)
 ~~~~
 
-排序已经出来了，拼人品的时候终于到了，我好激动>..<
+运行完order()函数，得到了排序完的数字
+~~~~{python}
+(180362139, '0xac01b9b', '0b1010110000000001101110011011')
+(180370932, '0xac03df4', '0b1010110000000011110111110100')
+(180372350, '0xac0437e', '0b1010110000000100001101111110')
+(180402993, '0xac0bb31', '0b1010110000001011101100110001')
+(180511464, '0xac262e8', '0b1010110000100110001011101000')
+...
+~~~~
 
+排序已经出来了，拼人品的时候终于到了，我好激动>...<
 
+尝试了第一个数字0xac01b96,在解密到一半的时候错误（）
+在尝试第二个数字0xac03df4的时候顺利解完，解密函数如下：
+
+~~~~{python}
+def decrypt(data):
+    plain = ""
+    bStartDecrypt = False
+    for i in range(0,len(data),4):
+        temp = unpack("i",data[i:i+4])[0]
+        if bStartDecrypt:
+            temp -= rand()
+            plain += chr(temp >> 22)
+            #print(plain)
+        elif temp == 0xac03df4:
+            print("get min i:", i)
+            print(chr((temp - 0x3df4)>>22))
+            srand(0x3df4)
+            bStartDecrypt = True
+
+    print(plain)
+~~~~
 
 诶，又要拼人品吗？
 
@@ -409,13 +451,56 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 
 <p>而这种事件出现的平均概率为0.0039062490723154033（0x3fffff/0x3fffffff）。</p>
 
-<p>但是很显然，我们有理由相信在较小的密文中这种事件出现的概率更大，so，让我们给密文排个序吧</p>
+<p>但是很显然，我们有理由相信在较小的密文中这种事件出现的概率更大，so，让我们给密文排个序吧。</p>
 
-<pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">#保存随机数状态的值
-</span>
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> check22<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    t <span class="token operator">=</span> num &gt;&gt;<span class="token number">22</span>
+    <span class="token keyword">return</span> t <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> order<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token number">a</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> check22<span class="token punctuation">(</span>temp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token number">a</span><span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>temp<span class="token punctuation">,</span> hex<span class="token punctuation">(</span>temp<span class="token punctuation">)</span><span class="token punctuation">,</span> bin<span class="token punctuation">(</span>temp<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token number">a</span><span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">a</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
 </code></pre>
 
-<p>排序已经出来了，拼人品的时候终于到了，我好激动&gt;..&lt;</p>
+<p>运行完order()函数，得到了排序完的数字</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token punctuation">(</span><span class="token number">180362139</span><span class="token punctuation">,</span> <span class="token string">'0xac01b9b'</span><span class="token punctuation">,</span> <span class="token string">'0b1010110000000001101110011011'</span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token number">180370932</span><span class="token punctuation">,</span> <span class="token string">'0xac03df4'</span><span class="token punctuation">,</span> <span class="token string">'0b1010110000000011110111110100'</span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token number">180372350</span><span class="token punctuation">,</span> <span class="token string">'0xac0437e'</span><span class="token punctuation">,</span> <span class="token string">'0b1010110000000100001101111110'</span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token number">180402993</span><span class="token punctuation">,</span> <span class="token string">'0xac0bb31'</span><span class="token punctuation">,</span> <span class="token string">'0b1010110000001011101100110001'</span><span class="token punctuation">)</span>
+<span class="token punctuation">(</span><span class="token number">180511464</span><span class="token punctuation">,</span> <span class="token string">'0xac262e8'</span><span class="token punctuation">,</span> <span class="token string">'0b1010110000100110001011101000'</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code></pre>
+
+<p>排序已经出来了，拼人品的时候终于到了，我好激动&gt;...&lt;</p>
+
+<p>尝试了第一个数字0xac01b96,在解密到一半的时候错误（）
+在尝试第二个数字0xac03df4的时候顺利解完，解密函数如下：</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> decrypt<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    plain <span class="token operator">=</span> <span class="token string">""</span>
+    bStartDecrypt <span class="token operator">=</span> <span class="token boolean">False</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> bStartDecrypt<span class="token punctuation">:</span>
+            temp <span class="token operator">-</span><span class="token operator">=</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true">#print(plain)
+</span>        <span class="token keyword">elif</span> temp <span class="token operator">==</span> <span class="token number">0xac03df4</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"get min i:"</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>chr<span class="token punctuation">(</span><span class="token punctuation">(</span>temp <span class="token operator">-</span> <span class="token number">0x3df4</span><span class="token punctuation">)</span>&gt;&gt;<span class="token number">22</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            srand<span class="token punctuation">(</span><span class="token number">0x3df4</span><span class="token punctuation">)</span>
+            bStartDecrypt <span class="token operator">=</span> <span class="token boolean">True</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span>plain<span class="token punctuation">)</span>
+</code></pre>
 
 <p>诶，又要拼人品吗？</p>
 
