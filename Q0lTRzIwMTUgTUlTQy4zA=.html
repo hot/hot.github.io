@@ -104,20 +104,41 @@ def main():
 ~~~~
 然后是加密解密函数
 ~~~~{python}
+#加密函数
 def encrypt(data,key):
-    srand(key)
+    srand(key) #用key设置随机数种子
     cipher = ""
-    for c in data:
-        cipher += pack("i",(ord(c)<<22) + rand())
+    for c in data: 
+        #对传入的每个字符先左移22位
+        #然后再加上一个随机数
+        #最后用pack将这个数字转换为int(int为32bit，即4字节)
+        cipher += pack("i",(ord(c)<<22) + rand()) 
     return cipher
 
+#解密函数
 def decrypt(data,key):
-    srand(key)
+    srand(key) #用key设置随机数种子
     plain = ""
-    for i in range(0,len(data),4):
+    for i in range(0,len(data),4): #因为int为4字节，所以这里的step为4
+        #加密过程的逆向
+        #先减去随机数
         temp = unpack("i",data[i:i+4])[0] - rand()
+        #然后右移22位，并将之转化为字符
         plain += chr(temp >> 22)
     return plain
+~~~~
+最后就是随机数生成函数了
+~~~~{python}
+state = 0
+
+def rand():
+    global state
+    state = (state * 1103515425 + 54321) & 0x3fffffff
+    return state
+    
+def srand(seed):
+    global state
+    state = seed
 ~~~~
 
 ##各种曲折
@@ -209,20 +230,39 @@ state <span class="token operator">=</span> <span class="token number">0</span>
     data <span class="token operator">=</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>secretkey<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#调用加密函数来加密data
 </span>    <span class="token number">f2</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#将密文写入到密文文件
 </span></code></pre>然后是加密解密函数
-<pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
-    cipher <span class="token operator">=</span> <span class="token string">""</span>
-    <span class="token keyword">for</span> <span class="token number">c</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span>
-        cipher <span class="token operator">+</span><span class="token operator">=</span> pack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span><span class="token punctuation">(</span>ord<span class="token punctuation">(</span><span class="token number">c</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">&lt;</span><span class="token number">22</span><span class="token punctuation">)</span> <span class="token operator">+</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<pre class=" language-python"><code class=" language-python"><span class="token comment" spellcheck="true">#加密函数
+</span><span class="token keyword">def</span> encrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#用key设置随机数种子
+</span>    cipher <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> <span class="token number">c</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span> 
+        <span class="token comment" spellcheck="true">#对传入的每个字符先左移22位
+</span>        <span class="token comment" spellcheck="true">#然后再加上一个随机数
+</span>        <span class="token comment" spellcheck="true">#最后用pack将这个数字转换为int(int为32bit，即4字节)
+</span>        cipher <span class="token operator">+</span><span class="token operator">=</span> pack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span><span class="token punctuation">(</span>ord<span class="token punctuation">(</span><span class="token number">c</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">&lt;</span><span class="token number">22</span><span class="token punctuation">)</span> <span class="token operator">+</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> 
     <span class="token keyword">return</span> cipher
 
-<span class="token keyword">def</span> decrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
-    plain <span class="token operator">=</span> <span class="token string">""</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">#解密函数
+</span><span class="token keyword">def</span> decrypt<span class="token punctuation">(</span>data<span class="token punctuation">,</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    srand<span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#用key设置随机数种子
+</span>    plain <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true">#因为int为4字节，所以这里的step为4
+</span>        <span class="token comment" spellcheck="true">#加密过程的逆向
+</span>        <span class="token comment" spellcheck="true">#先减去随机数
+</span>        temp <span class="token operator">=</span> unpack<span class="token punctuation">(</span><span class="token string">"i"</span><span class="token punctuation">,</span>data<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true">#然后右移22位，并将之转化为字符
+</span>        plain <span class="token operator">+</span><span class="token operator">=</span> chr<span class="token punctuation">(</span>temp &gt;&gt; <span class="token number">22</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> plain
+</code></pre>最后就是随机数生成函数了
+<pre class=" language-python"><code class=" language-python">state <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token keyword">def</span> rand<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">global</span> state
+    state <span class="token operator">=</span> <span class="token punctuation">(</span>state <span class="token operator">*</span> <span class="token number">1103515425</span> <span class="token operator">+</span> <span class="token number">54321</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>amp<span class="token punctuation">;</span> <span class="token number">0x3fffffff</span>
+    <span class="token keyword">return</span> state
+
+<span class="token keyword">def</span> srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">global</span> state
+    state <span class="token operator">=</span> seed
 </code></pre>
 
 <h2 id="">各种曲折</h2>
