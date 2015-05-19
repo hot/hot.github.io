@@ -270,11 +270,12 @@ hidden in the above data It is a picture and you should base64decode it.
 之前抱着死马当活马医的态度用Base64将半个flag解密了下，果然没有一个图片软件能打开。。
 顺便用xxd看了下它的16进制表示：
 ```
+...
 014acf0: adfd 23c8 5060 0000 0004 9454 e44a e426  ..#.P`.....T.J.&
 014ad00: 0820   
 ```
 
-首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（[参考](http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html)） ,然而我们并没有见到。
+从最后两个字节`0820`我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（[参考](http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html)） ,然而我们并没有见到。
 
 ##思路：
 * 因为每个随机数都是通过上一个随机数计算而来的，因此只要知道了第一个密文的随机数，我们就可以解密接下来的所有内容。
@@ -639,11 +640,12 @@ hidden in the above data It is a picture and you should base64decode it.
 <p>之前抱着死马当活马医的态度用Base64将半个flag解密了下，果然没有一个图片软件能打开。。
 顺便用xxd看了下它的16进制表示：</p>
 
-<pre><code>014acf0: adfd 23c8 5060 0000 0004 9454 e44a e426  ..#.P`.....T.J.&amp;
+<pre><code>...
+014acf0: adfd 23c8 5060 0000 0004 9454 e44a e426  ..#.P`.....T.J.&amp;
 014ad00: 0820   
 </code></pre>
 
-<p>首先我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。</p>
+<p>从最后两个字节<code>0820</code>我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。</p>
 
 <h2 id="">思路：</h2>
 
