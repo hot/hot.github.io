@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Mr.Hot</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+[原文链接](http://blog.digitaltutors.com/understanding-ambient-occlusion/)
+
+>第一次翻译，发现翻译真不是一件简单的事，这篇短短的文章大概花费了我3个小时的时间去修改整理。。>...<
+
+![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/523_MASTER_zpsc4likmq3.jpg "")
+
+
+
+Ambient occlusion能够在外界的间接光照（indirrect lighting）照射到场景中的时候模拟3D物体上的裂缝产生的柔和阴影(soft shadow)。通过Ambient occlusion产生的柔和阴影能帮助区别场景中的物体，并能给你的渲染结果增加另外一层的真实性。
+
+
+
+![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg)
+
+举例来说，通过ambient occlusion能帮助提升砖墙上的不同砖块的视觉上的区分。在没有ambient occlusion的情况下，它们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。
+
+![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Rays_zpsocmlm0la.jpg)
+
+当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上的ambient occlusion shader来计算的。渲染完成后，为了做后期处理，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。
+
+Ambient occlusion是通过射线来检测周围物体（来达到模拟效果）的，使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过周围物体对光线的阻挡情况来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。
+
+当全局光照太亮的时候，ambient occlusion能很好地柔化它。不需要添加额外的光照，因为ambinet occlusion并不像光源那样向外投射光线。ambient occlusion能展现出光照的细微变化来帮助你的眼睛看到表面上一些原本模糊，微不可查的细节。它也能让一个没有贴图的模型展现出良好的视觉效果。
+
+##一些帮助你设置Ambient Occlusion的小贴士
+
+烘焙出ambient occlusion能极快得提升渲染时间。这在渲染动画的时候特别明显。因为动画的每帧渲染都会重新计算ambient occlusion，这会增加大量渲染时间。
+
+![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Distance_zpsudmsbza1.jpg)
+当ambient occlusion渲染出的效果不理想时，比如说阴影太宽或太窄，你可以在ambient occlusion的设置中调整最大距离(max distance)。这个选项决定了射线所能投射的距离。当射线投射得越远，则阴影越宽，同时会增加场景中的阴影量。当射线投射的越近，则阴影越少。在通常应用在物体之间靠得非常近的时候。随意调整这些选项来达到你想要的效果吧。
+
+![alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Directional_Occlusion_zpsgyanzst7.jpg)
+在大多数的渲染应用中，利用方向性的环境遮蔽(directional ambient occlusion)能让环境遮蔽渲染的真实性提升一个台阶。这项技术能通过灯光在场景中的位置来给ambient occlusion增加更多的方向性。而它并不完全基于周围的几何体，根据光设置的不同，这往往会的不同而导致场景中出现不真实的阴影。
+
+在某些情况下，你并不需要分离渲染ambient occlusion，因为ambient occlusion已经直接集成到了特定的材质中了。在大多数的3d应用中，比如3ds max， Maya或者Softimage，它们已经将ambient occlusion内置到架构和设计材质中了。因此当你在开始Ambient occlusion渲染过程之前，先看看你的材质是否已经集成了它。
+
+Ambient occlusion能让你的场景看上去更专业，更真实。想要了解更多关于Ambient occlusion以及其他渲染技术的朋友，请查阅我们大受欢迎的[CG101: Rendering tutorial](http://www.digitaltutors.com/tutorial/718)或更多[3D lighting tutorials](http://www.digitaltutors.com/subject/3d-lighting-tutorials).
+
+
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p><a href="http://blog.digitaltutors.com/understanding-ambient-occlusion/">原文链接</a></p>
+
+<blockquote>
+  <p>第一次翻译，发现翻译真不是一件简单的事，这篇短短的文章大概花费了我3个小时的时间去修改整理。。&gt;...&lt;</p>
+</blockquote>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/523_MASTER_zpsc4likmq3.jpg" alt="alt text" title=""></p>
+
+<p>Ambient occlusion能够在外界的间接光照（indirrect lighting）照射到场景中的时候模拟3D物体上的裂缝产生的柔和阴影(soft shadow)。通过Ambient occlusion产生的柔和阴影能帮助区别场景中的物体，并能给你的渲染结果增加另外一层的真实性。</p>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Ambient_Occlusion_zpspbskseie.jpg" alt="alt text" title=""></p>
+
+<p>举例来说，通过ambient occlusion能帮助提升砖墙上的不同砖块的视觉上的区分。在没有ambient occlusion的情况下，它们看上去可能是连在一起的。Ambient occlusion所产生的阴影并不等同于方向光（direct lighting）所产生的阴影，它是通过物体上的每个面投射出的射线给渲染器(render)增加的虚拟间接阴影(fake indirect shadows)。</p>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Rays_zpsocmlm0la.jpg" alt="alt text" title=""></p>
+
+<p>当射线接触到另一个表面的时候，那片区域会更暗。反之则更亮。在大多数3D应用中，ambient occlusion是通过物体上的ambient occlusion shader来计算的。渲染完成后，为了做后期处理，ambient occlusion 过程通常是通过Photoshop等影像合成工具来添加到最终渲染结果中的。</p>
+
+<p>Ambient occlusion是通过射线来检测周围物体（来达到模拟效果）的，使用了透明材质的物体将不会被计算在内。这是因为ambient occlusion是通过周围物体对光线的阻挡情况来使光线通过透明物体的，而不是去查看物体上具体的贴图材质。</p>
+
+<p>当全局光照太亮的时候，ambient occlusion能很好地柔化它。不需要添加额外的光照，因为ambinet occlusion并不像光源那样向外投射光线。ambient occlusion能展现出光照的细微变化来帮助你的眼睛看到表面上一些原本模糊，微不可查的细节。它也能让一个没有贴图的模型展现出良好的视觉效果。</p>
+
+<h2 id="ambientocclusion">一些帮助你设置Ambient Occlusion的小贴士</h2>
+
+<p>烘焙出ambient occlusion能极快得提升渲染时间。这在渲染动画的时候特别明显。因为动画的每帧渲染都会重新计算ambient occlusion，这会增加大量渲染时间。</p>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Distance_zpsudmsbza1.jpg" alt="alt text" title="">
+当ambient occlusion渲染出的效果不理想时，比如说阴影太宽或太窄，你可以在ambient occlusion的设置中调整最大距离(max distance)。这个选项决定了射线所能投射的距离。当射线投射得越远，则阴影越宽，同时会增加场景中的阴影量。当射线投射的越近，则阴影越少。在通常应用在物体之间靠得非常近的时候。随意调整这些选项来达到你想要的效果吧。</p>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Directional_Occlusion_zpsgyanzst7.jpg" alt="alt text" title="">
+在大多数的渲染应用中，利用方向性的环境遮蔽(directional ambient occlusion)能让环境遮蔽渲染的真实性提升一个台阶。这项技术能通过灯光在场景中的位置来给ambient occlusion增加更多的方向性。而它并不完全基于周围的几何体，根据光设置的不同，这往往会的不同而导致场景中出现不真实的阴影。</p>
+
+<p>在某些情况下，你并不需要分离渲染ambient occlusion，因为ambient occlusion已经直接集成到了特定的材质中了。在大多数的3d应用中，比如3ds max， Maya或者Softimage，它们已经将ambient occlusion内置到架构和设计材质中了。因此当你在开始Ambient occlusion渲染过程之前，先看看你的材质是否已经集成了它。</p>
+
+<p>Ambient occlusion能让你的场景看上去更专业，更真实。想要了解更多关于Ambient occlusion以及其他渲染技术的朋友，请查阅我们大受欢迎的<a href="http://www.digitaltutors.com/tutorial/718">CG101: Rendering tutorial</a>或更多<a href="http://www.digitaltutors.com/subject/3d-lighting-tutorials">3D lighting tutorials</a>.</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+<!-- duoshuo -->
+<div class="ds-thread" data-thread-key="WFdNBbWJpZW50IE9jY2x1c2lvbv9Q==" data-title="[译]理解Ambient Occlusion（环境遮蔽）" data-url=hot.github.io"WFdNBbWJpZW50IE9jY2x1c2lvbv9Q==.html"></div>
+<!-- duoshuo end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hotgithub"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
+<script src="main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "WFdNBbWJpZW50IE9jY2x1c2lvbv9Q==.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
