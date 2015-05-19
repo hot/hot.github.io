@@ -35,6 +35,8 @@
 
 http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）
 
+
+
 ##Misc3_new.zip文件内容
 * ciphertext 9.8MB
 * crypt.py    806byte
@@ -85,6 +87,9 @@ def main():
 if __name__ == "__main__":
     main()    
 ~~~~
+
+##题目解析
+这题的目的就是要解密ciphertext，然后拿到flag
 
 ##思路
 * 首先看看ciphertext里面到底有什么，然而是一对乱码>...<
@@ -207,7 +212,8 @@ def order(data):
 
 排序已经出来了，拼人品的时候终于到了，我好激动>...<
 
-尝试了第一个数字0xac01b96,在解密到一半的时候错误（）
+尝试了第一个数字0xac01b96,在解密到一半的时候错误，错误的原因应该是一个较大的随机数加上了一个较小的字符值，导致右移22位之后的值正好在[0, 255]之间。
+
 在尝试第二个数字0xac03df4的时候顺利解完，解密函数如下：
 
 ~~~~{python}
@@ -446,6 +452,10 @@ state <span class="token operator">=</span> <span class="token number">0</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span>    
 </code></pre>
 
+<h2 id="">题目解析</h2>
+
+<p>这题的目的就是要解密ciphertext，然后拿到flag</p>
+
 <h2 id="">思路</h2>
 
 <ul>
@@ -575,8 +585,9 @@ state <span class="token operator">=</span> <span class="token number">0</span>
 
 <p>排序已经出来了，拼人品的时候终于到了，我好激动&gt;...&lt;</p>
 
-<p>尝试了第一个数字0xac01b96,在解密到一半的时候错误（）
-在尝试第二个数字0xac03df4的时候顺利解完，解密函数如下：</p>
+<p>尝试了第一个数字0xac01b96,在解密到一半的时候错误，错误的原因应该是一个较大的随机数加上了一个较小的字符值，导致右移22位之后的值正好在[0, 255]之间。</p>
+
+<p>在尝试第二个数字0xac03df4的时候顺利解完，解密函数如下：</p>
 
 <pre class=" language-python"><code class=" language-python"><span class="token keyword">def</span> decrypt<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
     plain <span class="token operator">=</span> <span class="token string">""</span>
