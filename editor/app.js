@@ -13,8 +13,9 @@ Date.prototype.yyyymmdd = function() {
     return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]);
 };
 function reescape(data) {
-    return data.replace(/>/g, "&gt;").replace(/</g, "&lt;");
+    return data.replace(/>/g, "&gt;").replace(/</g, "&lt;").replace((/&/g,"&amp;"));
 }
+//code converter!! need fix it
 function mdupdate() {
     var converter = new Showdown.converter();
     var tmp = $("#editmd").val();
@@ -243,7 +244,7 @@ $(document).ready(function() {
                         $("#postdate").val(now.date);
                         $("#posttags").val(now.tags);
                         $("#loading").show();
-                        repo.read("master", now.path, function(err, data) {
+                        repo.read("master", "posts/" + now.path, function(err, data) {
                             $("#loading").hide();
                             var content = data.match(contentpattern)[1];
                             var md = data.match(mdpattern)[1];
@@ -344,7 +345,7 @@ $(document).ready(function() {
                                 data = data.replace(duoshuopattern, "<!-- duoshuo -->\n"+now.duoshuo+"\n<!-- duoshuo end -->\n");
                                 data = data.replace("//path//", now.path);
                                 data = data.replace(mdpattern, "<!-- markdown -->\n"+md+"\n<!-- markdown end -->\n");
-                                repo.write("master", now.path, data, now.title, function(err) {
+                                repo.write("master", "posts/" + now.path, data, now.title, function(err) {
                                     repo.write("master", "main.json", JSON.stringify(gconfig), now.title, function(err) {
                                         if (!errShow($("saveerror", err))) {
                                             temp.posts.init(param);
