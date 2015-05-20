@@ -6,6 +6,7 @@ var contentpattern = /<!-- content -->\n([\s\S]*)\n<!-- content end -->\n/m;
 var pathpattern = /\/\/path\nvar path=\"(.*)\";\n\/\/path end\n/m;
 var mdpattern = /<!-- markdown -->\n([\s\S]*)\n<!-- markdown end -->\n/m;
 var duoshuopattern = /<!-- duoshuo -->\n([\s\S]*)\n<!-- duoshuo end -->\n/m;
+var savePrefix = "posts/"
 Date.prototype.yyyymmdd = function() {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth()+1).toString();
@@ -13,7 +14,7 @@ Date.prototype.yyyymmdd = function() {
     return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]);
 };
 function reescape(data) {
-    return data.replace(/>/g, "&gt;").replace(/</g, "&lt;").replace((/&/g,"&amp;"));
+    return data.replace(/>/g, "&gt;").replace(/</g, "&lt;");
 }
 //code converter!! need fix it
 function mdupdate() {
@@ -148,15 +149,15 @@ $(document).ready(function() {
         },
         //init bt call back
         initRepo: function(e) {
-            e.preventDefault();
-            var error = curry(errShow, this.err);
-            var a1 = curry(asyncWriteFile, "template/index.html", "index.html", error);
-            var a2 = curry(asyncWriteFile, "template/main.css", "main.css", error);
-            var a3 = curry(asyncWriteFile, "template/main.js", "main.js", error);
-            var config = {"name": global.user, "number_of_posts_per_page": 7, "disqus_shortname": "", "posts": [], "pages": []};
-            var a4 = curry(asyncWrite, JSON.stringify(config), "main.json", error);
-            var a5 = curry(asyncWrite, "", "CNAME", error);
-            syncSeq(function() {$("#initok").show()}, a1, a2, a3, a4, a5);
+            //e.preventDefault();
+            //var error = curry(errShow, this.err);
+            //var a1 = curry(asyncWriteFile, "template/index.html", "index.html", error);
+            //var a2 = curry(asyncWriteFile, "template/main.css", "main.css", error);
+            //var a3 = curry(asyncWriteFile, "template/main.js", "main.js", error);
+            //var config = {"name": global.user, "number_of_posts_per_page": 7, "disqus_shortname": "", "posts": [], "pages": []};
+            //var a4 = curry(asyncWrite, JSON.stringify(config), "main.json", error);
+            //var a5 = curry(asyncWrite, "", "CNAME", error);
+            //syncSeq(function() {$("#initok").show()}, a1, a2, a3, a4, a5);
         },
         go: function(e) {
             this.navigate("/posts");
@@ -244,7 +245,7 @@ $(document).ready(function() {
                         $("#postdate").val(now.date);
                         $("#posttags").val(now.tags);
                         $("#loading").show();
-                        repo.read("master", "posts/" + now.path, function(err, data) {
+                        repo.read("master", savePrefix + now.path, function(err, data) {
                             $("#loading").hide();
                             var content = data.match(contentpattern)[1];
                             var md = data.match(mdpattern)[1];
@@ -291,7 +292,7 @@ $(document).ready(function() {
                             gconfig.pages = posts;
                         }
                         repo.write("master", "main.json", JSON.stringify(gconfig), "remove", function(err) {
-                            repo.delete("master", now.path, function(err) {
+                            repo.delete("master", savePrefix + now.path, function(err) {
                                 temp.posts.init(param);
                                 temp.posts.active();
                             });
@@ -345,7 +346,8 @@ $(document).ready(function() {
                                 data = data.replace(duoshuopattern, "<!-- duoshuo -->\n"+now.duoshuo+"\n<!-- duoshuo end -->\n");
                                 data = data.replace("//path//", now.path);
                                 data = data.replace(mdpattern, "<!-- markdown -->\n"+md+"\n<!-- markdown end -->\n");
-                                repo.write("master", "posts/" + now.path, data, now.title, function(err) {
+								//save start
+                                repo.write("master", savePrefix + now.path, data, now.title, function(err) {
                                     repo.write("master", "main.json", JSON.stringify(gconfig), now.title, function(err) {
                                         if (!errShow($("saveerror", err))) {
                                             temp.posts.init(param);
