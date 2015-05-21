@@ -5,12 +5,13 @@ f = open("main.json")
 jData = json.load(f)
 f.close()
 
+
 xmlHead = """
 <html>
 <body>
 """
 
-xmlEntry = """ <a href="{}">{}</a>
+xmlEntry = """ <a href=posts/"{}">{}</a>
 """
 xmlEnd = """</body></html>"""
 
