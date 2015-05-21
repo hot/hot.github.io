@@ -11,7 +11,7 @@ xmlHead = """
 <body>
 """
 
-xmlEntry = """ <a href=posts/"{}">{}</a>
+xmlEntry = """ <a href=posts/{}>{}</a>
 """
 xmlEnd = """</body></html>"""
 
