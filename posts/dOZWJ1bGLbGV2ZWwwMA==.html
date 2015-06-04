@@ -52,8 +52,17 @@ neubla是一个关于linux的渗透测试练习平台。是exploit-exercise的�
 * 其次这次的主要任务是要找东西，自然而然就会想到用find来找，看来是时候展现大家find的功力了。
 
 
-##什么是Set User ID？
+##什么是Set User ID（SetUID位）？
+回想一下sudo的作用，我们通过sudo就能够暂时使普通用户获得root的权限来执行程序。而这正是通过其SetUID位来实现的。
 
+可以使用ls -l来看一下sudo的权限：
+-rwsr-xr-x 1 root root 155008  2月 11  2014 /usr/bin/sudo
+
+有没有发现在权限中存在了s，而这个s正是代表了SetUID位。可以参考下
+
+
+
+[参考wiki](http://en.wikipedia.org/wiki/Setuid)
 
 待续
 
@@ -94,7 +103,16 @@ neubla是一个关于linux的渗透测试练习平台。是exploit-exercise的�
 <li>其次这次的主要任务是要找东西，自然而然就会想到用find来找，看来是时候展现大家find的功力了。</li>
 </ul>
 
-<h2 id="setuserid">什么是Set User ID？</h2>
+<h2 id="setuseridsetuid">什么是Set User ID（SetUID位）？</h2>
+
+<p>回想一下sudo的作用，我们通过sudo就能够暂时使普通用户获得root的权限来执行程序。而这正是通过其SetUID位来实现的。</p>
+
+<p>可以使用ls -l来看一下sudo的权限：
+-rwsr-xr-x 1 root root 155008  2月 11  2014 /usr/bin/sudo</p>
+
+<p>有没有发现在权限中存在了s，而这个s正是代表了SetUID位。可以参考下</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Setuid">参考wiki</a></p>
 
 <p>待续</p>
 <!-- content end -->
