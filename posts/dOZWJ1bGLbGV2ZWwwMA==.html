@@ -56,9 +56,9 @@ neubla是一个关于linux的渗透测试练习平台。是exploit-exercise的�
 回想一下sudo的作用，我们通过sudo就能够暂时使普通用户获得root的权限来执行程序。而这正是通过其SetUID位来实现的。
 
 可以使用ls -l来看一下sudo的权限：
--rwsr-xr-x 1 root root 155008  2月 11  2014 /usr/bin/sudo
+`-rwsr-xr-x 1 root root 155008  2月 11  2014 /usr/bin/sudo`
 
-有没有发现在权限中存在了s，而这个s正是代表了SetUID位。可以参考下
+有没有发现在权限中存在了`s`，而这个`s`正是代表了SetUID位。可以参考下
 
 
 
@@ -108,9 +108,9 @@ neubla是一个关于linux的渗透测试练习平台。是exploit-exercise的�
 <p>回想一下sudo的作用，我们通过sudo就能够暂时使普通用户获得root的权限来执行程序。而这正是通过其SetUID位来实现的。</p>
 
 <p>可以使用ls -l来看一下sudo的权限：
--rwsr-xr-x 1 root root 155008  2月 11  2014 /usr/bin/sudo</p>
+<code>-rwsr-xr-x 1 root root 155008  2月 11  2014 /usr/bin/sudo</code></p>
 
-<p>有没有发现在权限中存在了s，而这个s正是代表了SetUID位。可以参考下</p>
+<p>有没有发现在权限中存在了<code>s</code>，而这个<code>s</code>正是代表了SetUID位。可以参考下</p>
 
 <p><a href="http://en.wikipedia.org/wiki/Setuid">参考wiki</a></p>
 
