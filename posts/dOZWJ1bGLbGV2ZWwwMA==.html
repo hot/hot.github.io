@@ -66,7 +66,38 @@ neubla是一个关于linux的渗透测试练习平台。是exploit-exercise的�
 
 [参考wiki](http://en.wikipedia.org/wiki/Setuid)
 
-待续
+##那么如何使用find来查找我们需要的文件呢？
+###目标特征分析：
+* 首先它肯定是一个属于flag00的文件
+* 其次它被设置了setUID位
+
+###如何使用find查找属于flag00的文件？
+可以使用-user选项来指定文件拥有者
+
+~~~~
+find / -user flag00
+~~~~
+
+然而当我们运行了这条命令的时候发现很多文件夹以level的权限无法访问，然后报了很多错，使我们扰乱了我们的视线。
+
+这时候就需要错误重定向了，参考[Bash的输入输出重定向](http://linux-wiki.cn/wiki/zh-hans/Bash%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91)
+
+~~~~
+find / -user flag00 2>/dev/null
+~~~~
+
+###如何查找setUID过的程序呢？
+可以使用-perm选项
+~~~~
+find / -user flag00  -perm -4000 2>/dev/null
+~~~~
+
+这样我们就找到了所需要的文件
+~~~~
+/bin/.../flag00
+/rofs/bin/.../flag00
+~~~~
+这两个文件是一样的，运行完之后成功拿到flag，并且获得了flag的sh
 
 <!-- markdown end -->
 </div>
@@ -118,7 +149,40 @@ neubla是一个关于linux的渗透测试练习平台。是exploit-exercise的�
 
 <p><a href="http://en.wikipedia.org/wiki/Setuid">参考wiki</a></p>
 
-<p>待续</p>
+<h2 id="find">那么如何使用find来查找我们需要的文件呢？</h2>
+
+<h3 id="">目标特征分析：</h3>
+
+<ul>
+<li>首先它肯定是一个属于flag00的文件</li>
+<li>其次它被设置了setUID位</li>
+</ul>
+
+<h3 id="findflag00">如何使用find查找属于flag00的文件？</h3>
+
+<p>可以使用-user选项来指定文件拥有者</p>
+
+<pre><code>find / -user flag00
+</code></pre>
+
+<p>然而当我们运行了这条命令的时候发现很多文件夹以level的权限无法访问，然后报了很多错，使我们扰乱了我们的视线。</p>
+
+<p>这时候就需要错误重定向了，参考<a href="http://linux-wiki.cn/wiki/zh-hans/Bash%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91">Bash的输入输出重定向</a></p>
+
+<pre><code>find / -user flag00 2&gt;/dev/null
+</code></pre>
+
+<h3 id="setuid">如何查找setUID过的程序呢？</h3>
+
+<p>可以使用-perm选项</p>
+
+<pre><code>find / -user flag00  -perm -4000 2&gt;/dev/null
+</code></pre>
+
+<p>这样我们就找到了所需要的文件
+</p><pre><code>/bin/.../flag00
+/rofs/bin/.../flag00
+</code></pre>这两个文件是一样的，运行完之后成功拿到flag，并且获得了flag的sh<p></p>
 <!-- content end -->
 </div>
 <br>
