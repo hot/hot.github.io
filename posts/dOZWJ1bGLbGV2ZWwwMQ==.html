@@ -84,20 +84,20 @@ int main(int argc, char **argv, char **envp)
   system("/usr/bin/env echo and now what?");
 }~~~~
 
-##程序弱点分析
+##线索收集
 * 线索1：这是一个拥有setuid位的程序，且拥有者为flag01
 * 线索2：程序将当前进程的resgid和resuid都设置为了当前的有效ID
 * 线索3：调用了system函数来执行命令，由于之前的设置，system开启的新进程rid将会变成之前设置的eid
 * 线索4：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考[env的wiki](https://en.wikipedia.org/wiki/Env)
 
-##见证奇迹的时刻到了
+##庖丁解牛
 既然关卡的要求是要能执行任意程序，那么最好的选择肯定是拿到一个flag01的shell了。
 
 首先我们需要构造一个新的“echo”来以假乱真，在`/tmp`目录下新建一个名为echo的文件，并为其加上可执行权限，命令如下:
 
-```
+~~~~{bash}
 echo sh>echo&&chmod +x echo
-```
+~~~~
 
 没错，你没有看错就两个字母`sh`。
 
@@ -109,9 +109,12 @@ echo sh>echo&&chmod +x echo
 
 ###那么如何修改当前的PATH变量？
 
+~~~~{bash}
+export PATH=/tmp:$PATH
+~~~~
 
-
-
+##见证奇迹的时刻到了
+到/home/flag01/下运行一下flag01文件。
 
 
 
@@ -183,7 +186,7 @@ echo sh>echo&&chmod +x echo
 </span>  <span class="token function">system<span class="token punctuation">(</span></span><span class="token string">"/usr/bin/env echo and now what?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 
-<h2 id="">程序弱点分析</h2>
+<h2 id="">线索收集</h2>
 
 <ul>
 <li>线索1：这是一个拥有setuid位的程序，且拥有者为flag01</li>
@@ -192,13 +195,13 @@ echo sh>echo&&chmod +x echo
 <li>线索4：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考<a href="https://en.wikipedia.org/wiki/Env">env的wiki</a></li>
 </ul>
 
-<h2 id="">见证奇迹的时刻到了</h2>
+<h2 id="">庖丁解牛</h2>
 
 <p>既然关卡的要求是要能执行任意程序，那么最好的选择肯定是拿到一个flag01的shell了。</p>
 
 <p>首先我们需要构造一个新的“echo”来以假乱真，在<code>/tmp</code>目录下新建一个名为echo的文件，并为其加上可执行权限，命令如下:</p>
 
-<pre><code>echo sh&gt;echo&amp;&amp;chmod +x echo
+<pre class=" language-bash"><code class=" language-bash"><span class="token keyword">echo</span> sh<span class="token operator">&gt;</span><span class="token keyword">echo</span><span class="token operator">&amp;&amp;</span>chmod <span class="token operator">+</span>x <span class="token keyword">echo</span>
 </code></pre>
 
 <p>没错，你没有看错就两个字母<code>sh</code>。</p>
@@ -210,6 +213,13 @@ echo sh>echo&&chmod +x echo
 <p>因为bash是根据环境变量<code>PATH</code>(注意大小写)中存储的路径来查找命令的，而越在前面的路径会越先被查找。因此我们只需要将/tmp目录放到PATH的最前面就行了。</p>
 
 <h3 id="path">那么如何修改当前的PATH变量？</h3>
+
+<pre class=" language-bash"><code class=" language-bash">export PATH<span class="token operator">=</span><span class="token operator">/</span>tmp<span class="token punctuation">:</span><span class="token property">$PATH</span>
+</code></pre>
+
+<h2 id="">见证奇迹的时刻到了</h2>
+
+<p>到/home/flag01/下运行一下flag01文件。</p>
 
 <p>未完待续</p>
 <!-- content end -->
