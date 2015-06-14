@@ -33,7 +33,25 @@
 
 [关卡原址](https://exploit-exercises.com/nebula/level01/)
 
+~~~~{c}
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <stdio.h>
 
+int main(int argc, char **argv, char **envp)
+{
+  gid_t gid;
+  uid_t uid;
+  gid = getegid();
+  uid = geteuid();
+
+  setresgid(gid, gid, gid);
+  setresuid(uid, uid, uid);
+
+  system("/usr/bin/env echo and now what?");
+}~~~~
 
 未完待续
 <!-- markdown end -->
@@ -47,6 +65,25 @@
 相关文件可以在/home/flag01中找到。</p>
 
 <p><a href="https://exploit-exercises.com/nebula/level01/">关卡原址</a></p>
+
+<pre class=" language-c"><code class=" language-c"><span class="token property">#include <span class="token property">&lt;stdlib.h&gt;</span></span>
+<span class="token property">#include <span class="token property">&lt;unistd.h&gt;</span></span>
+<span class="token property">#include <span class="token property">&lt;string.h&gt;</span></span>
+<span class="token property">#include &lt;sys/types.h&gt;</span>
+<span class="token property">#include <span class="token property">&lt;stdio.h&gt;</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main<span class="token punctuation">(</span></span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  gid_t gid<span class="token punctuation">;</span>
+  uid_t uid<span class="token punctuation">;</span>
+  gid <span class="token operator">=</span> <span class="token function">getegid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  uid <span class="token operator">=</span> <span class="token function">geteuid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">setresgid<span class="token punctuation">(</span></span>gid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">setresuid<span class="token punctuation">(</span></span>uid<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">system<span class="token punctuation">(</span></span><span class="token string">"/usr/bin/env echo and now what?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
 
 <p>未完待续</p>
 <!-- content end -->
