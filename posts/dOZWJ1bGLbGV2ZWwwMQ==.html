@@ -113,6 +113,10 @@ echo sh>echo&&chmod +x echo
 export PATH=/tmp:$PATH
 ~~~~
 
+关于export的理解：
+
+* 使用export之后，当前shell以及该shell中衍生出来的其他进程都能访问到这个变量。相当于将局部变量全局化了。
+
 ##见证奇迹的时刻到了
 到/home/flag01/下运行一下flag01文件。
 
@@ -219,6 +223,12 @@ export PATH=/tmp:$PATH
 
 <pre class=" language-bash"><code class=" language-bash">export PATH<span class="token operator">=</span><span class="token operator">/</span>tmp<span class="token punctuation">:</span><span class="token property">$PATH</span>
 </code></pre>
+
+<p>关于export的理解：</p>
+
+<ul>
+<li>使用export之后，当前shell以及该shell中衍生出来的其他进程都能访问到这个变量。相当于将局部变量全局化了。</li>
+</ul>
 
 <h2 id="">见证奇迹的时刻到了</h2>
 
