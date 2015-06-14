@@ -33,6 +33,47 @@
 相关文件可以在/home/flag02中找到。
 
 [关卡原址](https://exploit-exercises.com/nebula/level02/)
+
+##直接分析代码
+
+~~~~{c}
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <stdio.h>
+
+int main(int argc, char **argv, char **envp)
+{
+  char *buffer;
+
+  gid_t gid;
+  uid_t uid;
+
+  gid = getegid();
+  uid = geteuid();
+
+  setresgid(gid, gid, gid);
+  setresuid(uid, uid, uid);
+
+  buffer = NULL;
+
+  asprintf(&buffer, "/bin/echo %s is cool", getenv("USER"));
+  printf("about to call system(\"%s\")\n", buffer);
+  
+  system(buffer);
+}
+~~~~
+
+##线索收集
+* 线索1：使用了getenv来获取环境变量`USER`
+* 线索2：依然使用了system来创建新的进程
+* 线索3：被执行的命令中包含了环境变量中的`USER`
+
+##庖丁解牛
+这次的
+
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/UserIDS_zpscmsiw8cz.jpg)
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -46,6 +87,50 @@
 <p>相关文件可以在/home/flag02中找到。</p>
 
 <p><a href="https://exploit-exercises.com/nebula/level02/">关卡原址</a></p>
+
+<h2 id="">直接分析代码</h2>
+
+<pre class=" language-c"><code class=" language-c"><span class="token property">#include <span class="token property">&lt;stdlib.h&gt;</span></span>
+<span class="token property">#include <span class="token property">&lt;unistd.h&gt;</span></span>
+<span class="token property">#include <span class="token property">&lt;string.h&gt;</span></span>
+<span class="token property">#include &lt;sys/types.h&gt;</span>
+<span class="token property">#include <span class="token property">&lt;stdio.h&gt;</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main<span class="token punctuation">(</span></span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">char</span> <span class="token operator">*</span>buffer<span class="token punctuation">;</span>
+
+  gid_t gid<span class="token punctuation">;</span>
+  uid_t uid<span class="token punctuation">;</span>
+
+  gid <span class="token operator">=</span> <span class="token function">getegid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  uid <span class="token operator">=</span> <span class="token function">geteuid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">setresgid<span class="token punctuation">(</span></span>gid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">setresuid<span class="token punctuation">(</span></span>uid<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  buffer <span class="token operator">=</span> NULL<span class="token punctuation">;</span>
+
+  <span class="token function">asprintf<span class="token punctuation">(</span></span><span class="token operator">&amp;</span>buffer<span class="token punctuation">,</span> <span class="token string">"/bin/echo %s is cool"</span><span class="token punctuation">,</span> <span class="token function">getenv<span class="token punctuation">(</span></span><span class="token string">"USER"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf<span class="token punctuation">(</span></span><span class="token string">"about to call system(\"%s\")\n"</span><span class="token punctuation">,</span> buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">system<span class="token punctuation">(</span></span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<h2 id="">线索收集</h2>
+
+<ul>
+<li>线索1：使用了getenv来获取环境变量<code>USER</code></li>
+<li>线索2：依然使用了system来创建新的进程</li>
+<li>线索3：被执行的命令中包含了环境变量中的<code>USER</code></li>
+</ul>
+
+<h2 id="">庖丁解牛</h2>
+
+<p>这次的</p>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/UserIDS_zpscmsiw8cz.jpg" alt="Alt text" title=""></p>
 <!-- content end -->
 </div>
 <br>
