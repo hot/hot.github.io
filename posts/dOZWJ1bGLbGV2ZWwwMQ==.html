@@ -28,7 +28,9 @@
 
 ##Level01关卡介绍：
 这一关主要是要利用有漏洞的程序(源代码在下面列出)，来达到执行任意程序的目的。少年，能否找到就看你的本事了。
+
 使用level01的账号登陆系统（密码也是level01）
+
 相关文件可以在/home/flag01中找到。
 
 [关卡原址](https://exploit-exercises.com/nebula/level01/)
@@ -83,9 +85,10 @@ int main(int argc, char **argv, char **envp)
 }~~~~
 
 ##程序弱点分析
-* 线索1：程序将当前进程的resgid和resuid都设置为了当前的有效ID
-* 线索2：调用了system函数来执行命令，system开启的新进程rid将会变成之前设置的eid
-* 线索3：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考[env的wiki](https://en.wikipedia.org/wiki/Env)
+* 线索1：这是一个拥有setuid位的程序，且拥有者为flag01
+* 线索2：程序将当前进程的resgid和resuid都设置为了当前的有效ID
+* 线索3：调用了system函数来执行命令，由于之前的设置，system开启的新进程rid将会变成之前设置的eid
+* 线索4：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考[env的wiki](https://en.wikipedia.org/wiki/Env)
 
 ##见证奇迹的时刻到了
 
@@ -100,9 +103,11 @@ int main(int argc, char **argv, char **envp)
 <!-- content -->
 <h2 id="level01">Level01关卡介绍：</h2>
 
-<p>这一关主要是要利用有漏洞的程序(源代码在下面列出)，来达到执行任意程序的目的。少年，能否找到就看你的本事了。
-使用level01的账号登陆系统（密码也是level01）
-相关文件可以在/home/flag01中找到。</p>
+<p>这一关主要是要利用有漏洞的程序(源代码在下面列出)，来达到执行任意程序的目的。少年，能否找到就看你的本事了。</p>
+
+<p>使用level01的账号登陆系统（密码也是level01）</p>
+
+<p>相关文件可以在/home/flag01中找到。</p>
 
 <p><a href="https://exploit-exercises.com/nebula/level01/">关卡原址</a></p>
 
@@ -161,9 +166,10 @@ int main(int argc, char **argv, char **envp)
 <h2 id="">程序弱点分析</h2>
 
 <ul>
-<li>线索1：程序将当前进程的resgid和resuid都设置为了当前的有效ID</li>
-<li>线索2：调用了system函数来执行命令，system开启的新进程rid将会变成之前设置的eid</li>
-<li>线索3：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考<a href="https://en.wikipedia.org/wiki/Env">env的wiki</a></li>
+<li>线索1：这是一个拥有setuid位的程序，且拥有者为flag01</li>
+<li>线索2：程序将当前进程的resgid和resuid都设置为了当前的有效ID</li>
+<li>线索3：调用了system函数来执行命令，由于之前的设置，system开启的新进程rid将会变成之前设置的eid</li>
+<li>线索4：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考<a href="https://en.wikipedia.org/wiki/Env">env的wiki</a></li>
 </ul>
 
 <h2 id="">见证奇迹的时刻到了</h2>
