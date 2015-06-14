@@ -93,7 +93,7 @@ int main(int argc, char **argv, char **envp)
 ##见证奇迹的时刻到了
 既然关卡的要求是要能执行任意程序，那么最好的选择肯定是拿到一个flag01的shell了。
 
-首先我们需要构造一个新的“echo”来以假乱真，在`/tmp`目录下新建一个名为echo的文件，并为其加上可执行权限，内容如下:
+首先我们需要构造一个新的“echo”来以假乱真，在`/tmp`目录下新建一个名为echo的文件，并为其加上可执行权限，命令如下:
 
 ```
 echo sh>echo&&chmod +x echo
@@ -196,7 +196,7 @@ echo sh>echo&&chmod +x echo
 
 <p>既然关卡的要求是要能执行任意程序，那么最好的选择肯定是拿到一个flag01的shell了。</p>
 
-<p>首先我们需要构造一个新的“echo”来以假乱真，在<code>/tmp</code>目录下新建一个名为echo的文件，并为其加上可执行权限，内容如下:</p>
+<p>首先我们需要构造一个新的“echo”来以假乱真，在<code>/tmp</code>目录下新建一个名为echo的文件，并为其加上可执行权限，命令如下:</p>
 
 <pre><code>echo sh&gt;echo&amp;&amp;chmod +x echo
 </code></pre>
