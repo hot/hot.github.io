@@ -91,6 +91,23 @@ int main(int argc, char **argv, char **envp)
 * 线索4：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考[env的wiki](https://en.wikipedia.org/wiki/Env)
 
 ##见证奇迹的时刻到了
+既然关卡的要求是要能执行任意程序，那么最好的选择肯定是拿到一个flag01的shell了。
+
+首先我们需要构造一个新的“echo”来以假乱真，在`/tmp`目录下新建一个名为echo的文件，内容如下:
+
+```
+sh
+```
+
+没错就两个字母，保存别忘了给文件加上执行权限哦。
+
+```
+chomd +x echo
+```
+
+这个脚本的作用就是打开一个shell以供交互使用。至于为什么在`/tmp`下建立，原因是因为任何人都有权限去访问这个目录，真的是一个很便利的目录呢。
+
+
 
 
 
@@ -173,6 +190,20 @@ int main(int argc, char **argv, char **envp)
 </ul>
 
 <h2 id="">见证奇迹的时刻到了</h2>
+
+<p>既然关卡的要求是要能执行任意程序，那么最好的选择肯定是拿到一个flag01的shell了。</p>
+
+<p>首先我们需要构造一个新的“echo”来以假乱真，在<code>/tmp</code>目录下新建一个名为echo的文件，内容如下:</p>
+
+<pre><code>sh
+</code></pre>
+
+<p>没错就两个字母，保存别忘了给文件加上执行权限哦。</p>
+
+<pre><code>chomd +x echo
+</code></pre>
+
+<p>这个脚本的作用就是打开一个shell以供交互使用。至于为什么在<code>/tmp</code>下建立，原因是因为任何人都有权限去访问这个目录，真的是一个很便利的目录呢。</p>
 
 <p>未完待续</p>
 <!-- content end -->
