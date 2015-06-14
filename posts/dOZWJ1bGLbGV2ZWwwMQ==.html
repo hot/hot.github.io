@@ -33,25 +33,7 @@
 
 [关卡原址](https://exploit-exercises.com/nebula/level01/)
 
-~~~~{c}
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <stdio.h>
 
-int main(int argc, char **argv, char **envp)
-{
-  gid_t gid;
-  uid_t uid;
-  gid = getegid();
-  uid = geteuid();
-
-  setresgid(gid, gid, gid);
-  setresuid(uid, uid, uid);
-
-  system("/usr/bin/env echo and now what?");
-}~~~~
 
 ##先让我们去看看所谓的相关文件吧
 
@@ -64,13 +46,13 @@ int main(int argc, char **argv, char **envp)
 
 在一个进程中，通常包含了三种类型的UID：
 
-* RUID(Real user ID)
-* EUID(Effective user ID)
-* SUID(Saved user ID)
+* ruid(Real user ID)
+* euid(Effective user ID)
+* suid(Saved user ID)
 
 ![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/UserIDS_zpscmsiw8cz.jpg)
 
-而SUID主要用在由高权限转换为低权限后再获取回高权限的时候。
+而suid主要用在由高权限转换为低权限后再获取回高权限的时候。
 
 参考：
 
@@ -78,8 +60,37 @@ int main(int argc, char **argv, char **envp)
 * [Real and Effective IDs](http://www.lst.de/~okir/blackhats/node23.html)
 
 ##让我们来分析一下代码吧
-###
-###getegid和geteuid的作用
+~~~~{c}
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <stdio.h>
+
+int main(int argc, char **argv, char **envp)
+{
+  gid_t gid;
+  uid_t uid;
+  gid = getegid();//获得egid
+  uid = geteuid();//获得euid
+
+  //将当前进程的rgid，egid，sgid都设置为之前获得的egid
+  setresgid(gid, gid, gid);
+  //同理设置UID
+  setresuid(uid, uid, uid);
+  //通过system来开启新的进程
+  system("/usr/bin/env echo and now what?");
+}~~~~
+
+##程序弱点分析
+* 线索1：程序将当前进程的resgid和resuid都设置为了当前的有效ID
+* 线索2：调用了system函数来执行命令，system开启的新进程rid将会变成之前设置的eid
+* 线索3：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考[env的wiki](https://en.wikipedia.org/wiki/Env)
+
+##见证奇迹的时刻到了
+
+
+
 
 
 未完待续
@@ -95,25 +106,6 @@ int main(int argc, char **argv, char **envp)
 
 <p><a href="https://exploit-exercises.com/nebula/level01/">关卡原址</a></p>
 
-<pre class=" language-c"><code class=" language-c"><span class="token property">#include <span class="token property">&lt;stdlib.h&gt;</span></span>
-<span class="token property">#include <span class="token property">&lt;unistd.h&gt;</span></span>
-<span class="token property">#include <span class="token property">&lt;string.h&gt;</span></span>
-<span class="token property">#include &lt;sys/types.h&gt;</span>
-<span class="token property">#include <span class="token property">&lt;stdio.h&gt;</span></span>
-
-<span class="token keyword">int</span> <span class="token function">main<span class="token punctuation">(</span></span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  gid_t gid<span class="token punctuation">;</span>
-  uid_t uid<span class="token punctuation">;</span>
-  gid <span class="token operator">=</span> <span class="token function">getegid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  uid <span class="token operator">=</span> <span class="token function">geteuid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-  <span class="token function">setresgid<span class="token punctuation">(</span></span>gid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gid<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">setresuid<span class="token punctuation">(</span></span>uid<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-  <span class="token function">system<span class="token punctuation">(</span></span><span class="token string">"/usr/bin/env echo and now what?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-
 <h2 id="">先让我们去看看所谓的相关文件吧</h2>
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/nebula_level01_1_zpsw7l7uk52.png" alt="Alt text" title=""></p>
@@ -127,14 +119,14 @@ int main(int argc, char **argv, char **envp)
 <p>在一个进程中，通常包含了三种类型的UID：</p>
 
 <ul>
-<li>RUID(Real user ID)</li>
-<li>EUID(Effective user ID)</li>
-<li>SUID(Saved user ID)</li>
+<li>ruid(Real user ID)</li>
+<li>euid(Effective user ID)</li>
+<li>suid(Saved user ID)</li>
 </ul>
 
 <p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/UserIDS_zpscmsiw8cz.jpg" alt="Alt text" title=""></p>
 
-<p>而SUID主要用在由高权限转换为低权限后再获取回高权限的时候。</p>
+<p>而suid主要用在由高权限转换为低权限后再获取回高权限的时候。</p>
 
 <p>参考：</p>
 
@@ -145,9 +137,36 @@ int main(int argc, char **argv, char **envp)
 
 <h2 id="">让我们来分析一下代码吧</h2>
 
-<h2 id="">#</h2>
+<pre class=" language-c"><code class=" language-c"><span class="token property">#include <span class="token property">&lt;stdlib.h&gt;</span></span>
+<span class="token property">#include <span class="token property">&lt;unistd.h&gt;</span></span>
+<span class="token property">#include <span class="token property">&lt;string.h&gt;</span></span>
+<span class="token property">#include &lt;sys/types.h&gt;</span>
+<span class="token property">#include <span class="token property">&lt;stdio.h&gt;</span></span>
 
-<h3 id="getegidgeteuid">getegid和geteuid的作用</h3>
+<span class="token keyword">int</span> <span class="token function">main<span class="token punctuation">(</span></span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  gid_t gid<span class="token punctuation">;</span>
+  uid_t uid<span class="token punctuation">;</span>
+  gid <span class="token operator">=</span> <span class="token function">getegid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token comment" spellcheck="true">;//获得egid
+</span>  uid <span class="token operator">=</span> <span class="token function">geteuid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token comment" spellcheck="true">;//获得euid
+</span>
+ <span class="token comment" spellcheck="true"> //将当前进程的rgid，egid，sgid都设置为之前获得的egid
+</span>  <span class="token function">setresgid<span class="token punctuation">(</span></span>gid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true"> //同理设置UID
+</span>  <span class="token function">setresuid<span class="token punctuation">(</span></span>uid<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true"> //通过system来开启新的进程
+</span>  <span class="token function">system<span class="token punctuation">(</span></span><span class="token string">"/usr/bin/env echo and now what?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+
+<h2 id="">程序弱点分析</h2>
+
+<ul>
+<li>线索1：程序将当前进程的resgid和resuid都设置为了当前的有效ID</li>
+<li>线索2：调用了system函数来执行命令，system开启的新进程rid将会变成之前设置的eid</li>
+<li>线索3：使用了/usr/bin/env来执行命令，这个命令会将当前的环境变量代入，参考<a href="https://en.wikipedia.org/wiki/Env">env的wiki</a></li>
+</ul>
+
+<h2 id="">见证奇迹的时刻到了</h2>
 
 <p>未完待续</p>
 <!-- content end -->
