@@ -59,17 +59,23 @@ int main(int argc, char **argv, char **envp)
 
 细心的你是否已经发现flag01的权限上有SetUID位，而其拥有者又是flag01。这说明了我们在执行flag01的时候拥有flag01用户的权限。这是一条重要的线索。
 
-##让我们来了解下UID(User identifier)的概念吧
+##UID(User identifier)是啥？
 虽然我们平常使用的用户都是字符串形式的，但是Unix系的系统在内部都是通过UID（一个整数）来区分用户的。字符串和实际的UID的映射存储在/etc/passwd中。
 
 在一个进程中，通常包含了三种类型的UID：
 
+* RUID(Real user ID)
 * EUID(Effective user ID)
 * SUID(Saved user ID)
-* RUID(Real user ID)
 
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/UserIDS_zpscmsiw8cz.jpg)
 
-[参考wiki](https://en.wikipedia.org/wiki/User_identifier)
+而SUID主要用在由高权限转换为低权限后再获取回高权限的时候。
+
+参考：
+
+* [wiki](https://en.wikipedia.org/wiki/User_identifier)
+* [Real and Effective IDs](http://www.lst.de/~okir/blackhats/node23.html)
 
 ##让我们来分析一下代码吧
 ###
@@ -114,19 +120,28 @@ int main(int argc, char **argv, char **envp)
 
 <p>细心的你是否已经发现flag01的权限上有SetUID位，而其拥有者又是flag01。这说明了我们在执行flag01的时候拥有flag01用户的权限。这是一条重要的线索。</p>
 
-<h2 id="uiduseridentifier">让我们来了解下UID(User identifier)的概念吧</h2>
+<h2 id="uiduseridentifier">UID(User identifier)是啥？</h2>
 
 <p>虽然我们平常使用的用户都是字符串形式的，但是Unix系的系统在内部都是通过UID（一个整数）来区分用户的。字符串和实际的UID的映射存储在/etc/passwd中。</p>
 
 <p>在一个进程中，通常包含了三种类型的UID：</p>
 
 <ul>
+<li>RUID(Real user ID)</li>
 <li>EUID(Effective user ID)</li>
 <li>SUID(Saved user ID)</li>
-<li>RUID(Real user ID)</li>
 </ul>
 
-<p><a href="https://en.wikipedia.org/wiki/User_identifier">参考wiki</a></p>
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/UserIDS_zpscmsiw8cz.jpg" alt="Alt text" title=""></p>
+
+<p>而SUID主要用在由高权限转换为低权限后再获取回高权限的时候。</p>
+
+<p>参考：</p>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/User_identifier">wiki</a></li>
+<li><a href="http://www.lst.de/~okir/blackhats/node23.html">Real and Effective IDs</a></li>
+</ul>
 
 <h2 id="">让我们来分析一下代码吧</h2>
 
