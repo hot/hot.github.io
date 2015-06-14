@@ -53,6 +53,29 @@ int main(int argc, char **argv, char **envp)
   system("/usr/bin/env echo and now what?");
 }~~~~
 
+##先让我们去看看所谓的相关文件吧
+
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/nebula_level01_1_zpsw7l7uk52.png)
+
+细心的你是否已经发现flag01的权限上有SetUID位，而其拥有者又是flag01。这说明了我们在执行flag01的时候拥有flag01用户的权限。这是一条重要的线索。
+
+##让我们来了解下UID(User identifier)的概念吧
+虽然我们平常使用的用户都是字符串形式的，但是Unix系的系统在内部都是通过UID（一个整数）来区分用户的。字符串和实际的UID的映射存储在/etc/passwd中。
+
+在一个进程中，通常包含了三种类型的UID：
+
+* EUID(Effective user ID)
+* SUID(Saved user ID)
+* RUID(Real user ID)
+
+
+[参考wiki](https://en.wikipedia.org/wiki/User_identifier)
+
+##让我们来分析一下代码吧
+###
+###getegid和geteuid的作用
+
+
 未完待续
 <!-- markdown end -->
 </div>
@@ -84,6 +107,32 @@ int main(int argc, char **argv, char **envp)
 
   <span class="token function">system<span class="token punctuation">(</span></span><span class="token string">"/usr/bin/env echo and now what?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
+
+<h2 id="">先让我们去看看所谓的相关文件吧</h2>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/nebula_level01_1_zpsw7l7uk52.png" alt="Alt text" title=""></p>
+
+<p>细心的你是否已经发现flag01的权限上有SetUID位，而其拥有者又是flag01。这说明了我们在执行flag01的时候拥有flag01用户的权限。这是一条重要的线索。</p>
+
+<h2 id="uiduseridentifier">让我们来了解下UID(User identifier)的概念吧</h2>
+
+<p>虽然我们平常使用的用户都是字符串形式的，但是Unix系的系统在内部都是通过UID（一个整数）来区分用户的。字符串和实际的UID的映射存储在/etc/passwd中。</p>
+
+<p>在一个进程中，通常包含了三种类型的UID：</p>
+
+<ul>
+<li>EUID(Effective user ID)</li>
+<li>SUID(Saved user ID)</li>
+<li>RUID(Real user ID)</li>
+</ul>
+
+<p><a href="https://en.wikipedia.org/wiki/User_identifier">参考wiki</a></p>
+
+<h2 id="">让我们来分析一下代码吧</h2>
+
+<h2 id="">#</h2>
+
+<h3 id="getegidgeteuid">getegid和geteuid的作用</h3>
 
 <p>未完待续</p>
 <!-- content end -->
