@@ -43,14 +43,58 @@
 * 存储记录时，通过哈希函数计算出记录的哈希地址
 * 当查找记录时，我们通过同样的哈希函数计算记录的散列地址，并按此散列地址访问记录
 
-###哈希表的优点：
-###哈希表的缺点：
+
 
 ###如何构造哈希函数：
 
-###如何解决碰撞：
+参考[wiki](https://en.m.wikipedia.org/wiki/Hash_table)
+
+###常见的冲突解决方法：
+###`Separate chainning`
+~~~~
+在index相同的位置上存放的不是一个元素，而是一个指向List的指针
+~~~~
+
+1. hash函数计算出key的hash值
+2. 通过hash值获取存储位置处的List
+3. 通过遍历每个list，并比较key来取得确切位置
+
+####list中的数据结构：
+     * next指针
+     * key
+     * value
+####时间消耗：
+    hash表查找时间+list查找时间
+
+###`Separate chainning with linked lists`
+####有序链表：
+    一个经过排序的链表，能增加查找速度
+####根据查询的频率来排序排序链表：
+    很显然，只要查询的频率变化不大的话，那就可以保证一个良好的效率
+
+####缺点：
+     * 当用来放置较小的数据的时候，next的指针所占的空间就显得比较大了。
+     * 遍历链表对缓存命中率比较低
+###`Separate chainning with list head cells`
+    在slot中直接放置第一条记录通常情况下都能减少一次指针的跳转，这样可以提高缓存命中率。
+####缺点也是很明显的：
+    空的slot会和有记录的slot占用同样的空间，当记录少的时候是比较明显的空间浪费
+
+
+##Open addressing
+当发现slot已经被占用的时候，会根据probe sequence算法来寻找下一个空着的slot，找到后将是数据放入。取出的时候也是按照这样的方式来取。
+
+###常见的probe sequence：
+* Liner probing：以固定的步长向后寻找空的slot
+* Quadratic probing：步长通过取数列中的数的平方来增长
+* Double Hash：步长通过另一个hash函数来计算
+
+Open addressing的缺陷：不能存储比slot更多的数据，当数据填充率高于70%的时候性能会急剧下降
+
+
 
 未完待续
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -81,13 +125,76 @@
 <li>当查找记录时，我们通过同样的哈希函数计算记录的散列地址，并按此散列地址访问记录</li>
 </ul>
 
-<h3 id="">哈希表的优点：</h3>
-
-<h3 id="">哈希表的缺点：</h3>
-
 <h3 id="">如何构造哈希函数：</h3>
 
-<h3 id="">如何解决碰撞：</h3>
+<p>参考<a href="https://en.m.wikipedia.org/wiki/Hash_table">wiki</a></p>
+
+<h3 id="">常见的冲突解决方法：</h3>
+
+<h3 id="separatechainning"><code>Separate chainning</code></h3>
+
+<pre><code>在index相同的位置上存放的不是一个元素，而是一个指向List的指针
+</code></pre>
+
+<ol>
+<li>hash函数计算出key的hash值</li>
+<li>通过hash值获取存储位置处的List</li>
+<li>通过遍历每个list，并比较key来取得确切位置</li>
+</ol>
+
+<h4 id="list">list中的数据结构：</h4>
+
+<pre><code> * next指针
+ * key
+ * value
+</code></pre>
+
+<h4 id="">时间消耗：</h4>
+
+<pre><code>hash表查找时间+list查找时间
+</code></pre>
+
+<h3 id="separatechainningwithlinkedlists"><code>Separate chainning with linked lists</code></h3>
+
+<h4 id="">有序链表：</h4>
+
+<pre><code>一个经过排序的链表，能增加查找速度
+</code></pre>
+
+<h4 id="">根据查询的频率来排序排序链表：</h4>
+
+<pre><code>很显然，只要查询的频率变化不大的话，那就可以保证一个良好的效率
+</code></pre>
+
+<h4 id="">缺点：</h4>
+
+<pre><code> * 当用来放置较小的数据的时候，next的指针所占的空间就显得比较大了。
+ * 遍历链表对缓存命中率比较低
+</code></pre>
+
+<h3 id="separatechainningwithlistheadcells"><code>Separate chainning with list head cells</code></h3>
+
+<pre><code>在slot中直接放置第一条记录通常情况下都能减少一次指针的跳转，这样可以提高缓存命中率。
+</code></pre>
+
+<h4 id="">缺点也是很明显的：</h4>
+
+<pre><code>空的slot会和有记录的slot占用同样的空间，当记录少的时候是比较明显的空间浪费
+</code></pre>
+
+<h2 id="openaddressing">Open addressing</h2>
+
+<p>当发现slot已经被占用的时候，会根据probe sequence算法来寻找下一个空着的slot，找到后将是数据放入。取出的时候也是按照这样的方式来取。</p>
+
+<h3 id="probesequence">常见的probe sequence：</h3>
+
+<ul>
+<li>Liner probing：以固定的步长向后寻找空的slot</li>
+<li>Quadratic probing：步长通过取数列中的数的平方来增长</li>
+<li>Double Hash：步长通过另一个hash函数来计算</li>
+</ul>
+
+<p>Open addressing的缺陷：不能存储比slot更多的数据，当数据填充率高于70%的时候性能会急剧下降</p>
 
 <p>未完待续</p>
 <!-- content end -->
