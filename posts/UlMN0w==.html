@@ -46,11 +46,18 @@
 
 
 ###如何构造哈希函数：
+哈希函数的主要作用是将key对应到某个Bucket中。
+
+通常分两步来做：
+
+    hash = hashfunc(key)
+    index = hash % array_size
 
 参考[wiki](https://en.m.wikipedia.org/wiki/Hash_table)
 
-###常见的冲突解决方法：
-###`Separate chainning`
+##常见的冲突解决方法：
+
+##Separate chainning
 ~~~~
 在index相同的位置上存放的不是一个元素，而是一个指向List的指针
 ~~~~
@@ -92,9 +99,6 @@
 Open addressing的缺陷：不能存储比slot更多的数据，当数据填充率高于70%的时候性能会急剧下降
 
 
-
-未完待续
-
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -127,11 +131,19 @@ Open addressing的缺陷：不能存储比slot更多的数据，当数据填充�
 
 <h3 id="">如何构造哈希函数：</h3>
 
+<p>哈希函数的主要作用是将key对应到某个Bucket中。</p>
+
+<p>通常分两步来做：</p>
+
+<pre><code>hash = hashfunc(key)
+index = hash % array_size
+</code></pre>
+
 <p>参考<a href="https://en.m.wikipedia.org/wiki/Hash_table">wiki</a></p>
 
-<h3 id="">常见的冲突解决方法：</h3>
+<h2 id="">常见的冲突解决方法：</h2>
 
-<h3 id="separatechainning"><code>Separate chainning</code></h3>
+<h2 id="separatechainning">Separate chainning</h2>
 
 <pre><code>在index相同的位置上存放的不是一个元素，而是一个指向List的指针
 </code></pre>
@@ -195,8 +207,6 @@ Open addressing的缺陷：不能存储比slot更多的数据，当数据填充�
 </ul>
 
 <p>Open addressing的缺陷：不能存储比slot更多的数据，当数据填充率高于70%的时候性能会急剧下降</p>
-
-<p>未完待续</p>
 <!-- content end -->
 </div>
 <br>
