@@ -99,6 +99,8 @@ python -c "print open('id_rsa.pub').read() in open('authorized_keys').read()"
 
 执行完脚本后发现备份的`authorized_keys`中确实存在flag05的公钥，这说明了当前flag05的home目录下的authorized_keys文件中有`极大可能`还存在其公钥。
 
+尝试登录下就知道了:P
+
 ###参考：
 * [SSH原理与运用（一）：远程登录](http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html)
 * [RSA算法原理（一）](http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html)
@@ -183,6 +185,8 @@ python -c "print open('id_rsa.pub').read() in open('authorized_keys').read()"
 </code></pre>
 
 <p>执行完脚本后发现备份的<code>authorized_keys</code>中确实存在flag05的公钥，这说明了当前flag05的home目录下的authorized_keys文件中有<code>极大可能</code>还存在其公钥。</p>
+
+<p>尝试登录下就知道了:P</p>
 
 <h3 id="">参考：</h3>
 
