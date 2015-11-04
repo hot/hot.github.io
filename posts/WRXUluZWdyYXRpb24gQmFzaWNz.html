@@ -91,10 +91,11 @@ while ( t <= 10 )
     t = t + dt;
 }
 ~~~~
+
 注意积分出来的速度和位置是如何提供给下一帧的。这里每次使用最近一次计算出来的积分得到时间和位置差值来更新汽车的位置和速度，由此我们可以知道在任意一秒这辆汽车行驶了多远，以及它在以多快的速度行驶。
 
 ##为什么欧拉不总是那么完美无缺
-我们上述所做的内容叫做欧拉积分(Euler Integration)。它是积分的一种特殊形式，叫做显式欧拉(explicit euler)[http://en.wikipedia.org/wiki/Euler_method]。
+我们上述所做的内容叫做欧拉积分(Euler Integration)。它是积分的一种特殊形式，叫做显式欧拉[explicit euler](http://en.wikipedia.org/wiki/Euler_method)。
 
 为了不让尴尬的事情发生，我得提前告诉你Euler的发音是"Oiler"，而不是“yew-ler”,因为欧拉积分是以发现了这个数学技巧的瑞典数学家莱昂哈德·欧拉的姓氏命名的。
 
@@ -146,7 +147,7 @@ t=10:     位置 = 450     速度 =100
 ##世上还存在很多积分方法
 显然你已经发现*显式欧拉*存在着很大的误差。但请不要武断认为它就是糟糕透顶的，永远都不该使用的。只需要心中明了它的缺陷。世上还有许多欧拉积分的变体，使用了不同的属性，有着不同的区域稳定性（regions of stability）。
 
-例如，[半隐式欧拉(implicit euler/backward euler)][http://en.wikipedia.org/wiki/Semi_implicit_euler]，相对于显式欧拉，区别仅在于何时对速度进行取样。举例来说，它先使用加速度计算出当前的速度，然后再使用刚求出来的速度来求解位移。（显式欧拉则相反）。然而正是这给了积分器不同的属性，并且使它在更宽的时间间隔取值域中表现出更强的稳定性和节能性（energy conserving）。尽管他存在头号的积分误差。
+例如，[半隐式欧拉(implicit euler/backward euler)](http://en.wikipedia.org/wiki/Semi_implicit_euler)，相对于显式欧拉，区别仅在于何时对速度进行取样。举例来说，它先使用加速度计算出当前的速度，然后再使用刚求出来的速度来求解位移。（显式欧拉则相反）。然而正是这给了积分器不同的属性，并且使它在更宽的时间间隔取值域中表现出更强的稳定性和节能性（energy conserving）。尽管他存在头号的积分误差。
 
 另一个值得注意的是 [隐式欧拉](http://en.wikipedia.org/wiki/Implicit_Euler_method)。这种方法擅长处理刚性方程（例如：刚性弹簧）。它更加复杂，并且需要在每个时间间隔内去求解方程组，而其他方法仅需替换，相加等等简单操作。它的实现会和显示欧拉和半隐式欧拉有很大区别。
 
@@ -319,20 +320,23 @@ a <span class="token operator">=</span> f<span class="token operator">/</span>m
     velocity <span class="token operator">=</span> velocity <span class="token operator">+</span> <span class="token punctuation">(</span> force <span class="token operator">/</span> mass <span class="token punctuation">)</span> <span class="token operator">*</span> dt<span class="token punctuation">;</span>
     t <span class="token operator">=</span> t <span class="token operator">+</span> dt<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>注意积分出来的速度和位置是如何提供给下一帧的。这里每次使用最近一次计算出来的积分得到时间和位置差值来更新汽车的位置和速度，由此我们可以知道在任意一秒这辆汽车行驶了多远，以及它在以多快的速度行驶。
+</code></pre>
 
-##为什么欧拉不总是那么完美无缺
-我们上述所做的内容叫做欧拉积分(Euler Integration)。它是积分的一种特殊形式，叫做显式欧拉(explicit euler)[http://en.wikipedia.org/wiki/Euler_method]。
+<p>注意积分出来的速度和位置是如何提供给下一帧的。这里每次使用最近一次计算出来的积分得到时间和位置差值来更新汽车的位置和速度，由此我们可以知道在任意一秒这辆汽车行驶了多远，以及它在以多快的速度行驶。</p>
 
-为了不让尴尬的事情发生，我得提前告诉你Euler的发音是"Oiler"，而不是“yew-ler”,因为欧拉积分是以发现了这个数学技巧的瑞典数学家莱昂哈德·欧拉的姓氏命名的。
+<h2 id="">为什么欧拉不总是那么完美无缺</h2>
 
-欧拉积分是最基础的数值积分技巧。它只在变化率相对于时间间隔恒定的时候才有100%的正确率。例如上例中对速度的积分就是正确的，因为加速度是恒定的10米每秒。但是如果我们想通过对速度的积分来求位置的话，那就不是完全正确了。这是因为速度不是恒定值，由于加速度的存在，速度会随着时间不断改变。
+<p>我们上述所做的内容叫做欧拉积分(Euler Integration)。它是积分的一种特殊形式，叫做显式欧拉<a href="http://en.wikipedia.org/wiki/Euler_method">explicit euler</a>。</p>
 
-这意味着随着时间的推移，积分所产生的x(t)和v(t)会和真实的值产生越来越大的偏差。在上例中，由于使用了积分，汽车的位移是不精确的。
+<p>为了不让尴尬的事情发生，我得提前告诉你Euler的发音是"Oiler"，而不是“yew-ler”,因为欧拉积分是以发现了这个数学技巧的瑞典数学家莱昂哈德·欧拉的姓氏命名的。</p>
 
-那欧拉积分到底有多不精确？
+<p>欧拉积分是最基础的数值积分技巧。它只在变化率相对于时间间隔恒定的时候才有100%的正确率。例如上例中对速度的积分就是正确的，因为加速度是恒定的10米每秒。但是如果我们想通过对速度的积分来求位置的话，那就不是完全正确了。这是因为速度不是恒定值，由于加速度的存在，速度会随着时间不断改变。</p>
 
-根据基本物理学知识我们知道：
+<p>这意味着随着时间的推移，积分所产生的x(t)和v(t)会和真实的值产生越来越大的偏差。在上例中，由于使用了积分，汽车的位移是不精确的。</p>
+
+<p>那欧拉积分到底有多不精确？</p>
+
+<p>根据基本物理学知识我们知道：</p>
 
 <pre class=" language-c"><code class=" language-c">s <span class="token operator">=</span> ut <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">.</span>5at<span class="token operator">^</span><span class="token number">2</span>
 </code></pre>
@@ -372,7 +376,7 @@ t<span class="token operator">=</span><span class="token number">10</span><span 
 
 <p>显然你已经发现<em>显式欧拉</em>存在着很大的误差。但请不要武断认为它就是糟糕透顶的，永远都不该使用的。只需要心中明了它的缺陷。世上还有许多欧拉积分的变体，使用了不同的属性，有着不同的区域稳定性（regions of stability）。</p>
 
-<p>例如，[半隐式欧拉(implicit euler/backward euler)][http://en.wikipedia.org/wiki/Semi<em>implicit</em>euler]，相对于显式欧拉，区别仅在于何时对速度进行取样。举例来说，它先使用加速度计算出当前的速度，然后再使用刚求出来的速度来求解位移。（显式欧拉则相反）。然而正是这给了积分器不同的属性，并且使它在更宽的时间间隔取值域中表现出更强的稳定性和节能性（energy conserving）。尽管他存在头号的积分误差。</p>
+<p>例如，<a href="http://en.wikipedia.org/wiki/Semi_implicit_euler">半隐式欧拉(implicit euler/backward euler)</a>，相对于显式欧拉，区别仅在于何时对速度进行取样。举例来说，它先使用加速度计算出当前的速度，然后再使用刚求出来的速度来求解位移。（显式欧拉则相反）。然而正是这给了积分器不同的属性，并且使它在更宽的时间间隔取值域中表现出更强的稳定性和节能性（energy conserving）。尽管他存在头号的积分误差。</p>
 
 <p>另一个值得注意的是 <a href="http://en.wikipedia.org/wiki/Implicit_Euler_method">隐式欧拉</a>。这种方法擅长处理刚性方程（例如：刚性弹簧）。它更加复杂，并且需要在每个时间间隔内去求解方程组，而其他方法仅需替换，相加等等简单操作。它的实现会和显示欧拉和半隐式欧拉有很大区别。</p>
 
