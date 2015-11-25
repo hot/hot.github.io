@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Mr.Hot</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+##Level06关卡介绍：
+这一关提示说flag06是在旧的unix系统中继承过来的。
+
+使用level06的账号登陆系统（密码也是level06）。
+
+[关卡原址](https://exploit-exercises.com/nebula/level06/)
+
+##线索分析：
+* 从旧的unix系统中继承过来的
+
+>一般来说旧的系统意味着有功能不完善的地方或者是各种已知的漏洞
+
+但是光凭这个线索太宽泛了，我也是无意间查看了一下/etc/passwd才发现了一些线索：
+ ![](http://hot.github.io/img/passwd.png)
+###passwd的格式解析
+
+~~~~{bash}
+nickname:password_hash:UserID:GroupID:Complete_Name:home_dir:shell_bin
+~~~~
+
+很明显在第二个位置存储的是用户密码的hash值，那为什么其他用户的都是x呢，这就涉及到unix系统的安全改进：/etc/shadow文件了，将密码的hash值存储在只有特权用户能访问[shadow](https://en.wikipedia.org/wiki/Passwd#Shadow_file)文件中，就避免了所有用户都能访问到其他用户的密码hash值的问题。
+
+那么问题来了，旧的unix用的到底是什么hash算法呢？
+
+##在线查询ueqwOCnSGdsuM
+[hash查询网址](http://www.onlinehashcrack.com/hash-identification.php)
+
+![](http://hot.github.io/img/hash_type.png) 
+
+查询发现使用的是DES算法。
+
+##那么如何破解DES算法呢？
+
+这里要隆重介绍一下暴力破解神器 -->   [jhon the ripper](http://www.openwall.com/john/) !!
+jhon是一款跨平台的开源暴力破解工具，能自动识别hash类型，囊括各类主流Unix系统，Windows系统，以及各种数据库所使用的密码加密类型。
+
+##使用Jhon破解flag06的密码
+1. 先构建一个文件u.txt，格式为username:hash
+2. 使用jhon破解，秒出密码！！
+
+ ![](http://hot.github.io/img/jhon.png)
+
+
+##密码到手，天下我有~
+尝试用hello登录flag06，成功拿到shell~~
+
+
+###参考：
+* [Unix_security](https://en.wikipedia.org/wiki/Unix_security#User_and_administrative_techniques)
+* [John the Ripper](https://en.wikipedia.org/wiki/John_the_Ripper)
+* [Cracking linux password with john the ripper](http://www.binarytides.com/cracking-linux-password-with-john-the-ripper-tutorial/)
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h2 id="level06">Level06关卡介绍：</h2>
+
+<p>这一关提示说flag06是在旧的unix系统中继承过来的。</p>
+
+<p>使用level06的账号登陆系统（密码也是level06）。</p>
+
+<p><a href="https://exploit-exercises.com/nebula/level06/">关卡原址</a></p>
+
+<h2 id="">线索分析：</h2>
+
+<ul>
+<li>从旧的unix系统中继承过来的</li>
+</ul>
+
+<blockquote>
+  <p>一般来说旧的系统意味着有功能不完善的地方或者是各种已知的漏洞</p>
+</blockquote>
+
+<p>但是光凭这个线索太宽泛了，我也是无意间查看了一下/etc/passwd才发现了一些线索：
+ <img src="http://hot.github.io/img/passwd.png" alt="" title=""></p>
+
+<h3 id="passwd">passwd的格式解析</h3>
+
+<pre class=" language-bash"><code class=" language-bash">nickname<span class="token punctuation">:</span>password_hash<span class="token punctuation">:</span>UserID<span class="token punctuation">:</span>GroupID<span class="token punctuation">:</span>Complete_Name<span class="token punctuation">:</span>home_dir<span class="token punctuation">:</span>shell_bin
+</code></pre>
+
+<p>很明显在第二个位置存储的是用户密码的hash值，那为什么其他用户的都是x呢，这就涉及到unix系统的安全改进：/etc/shadow文件了，将密码的hash值存储在只有特权用户能访问<a href="https://en.wikipedia.org/wiki/Passwd#Shadow_file">shadow</a>文件中，就避免了所有用户都能访问到其他用户的密码hash值的问题。</p>
+
+<p>那么问题来了，旧的unix用的到底是什么hash算法呢？</p>
+
+<h2 id="ueqwocnsgdsum">在线查询ueqwOCnSGdsuM</h2>
+
+<p><a href="http://www.onlinehashcrack.com/hash-identification.php">hash查询网址</a></p>
+
+<p><img src="http://hot.github.io/img/hash_type.png" alt="" title=""> </p>
+
+<p>查询发现使用的是DES算法。</p>
+
+<h2 id="des">那么如何破解DES算法呢？</h2>
+
+<p>这里要隆重介绍一下暴力破解神器 --&gt;   <a href="http://www.openwall.com/john/">jhon the ripper</a> !!
+jhon是一款跨平台的开源暴力破解工具，能自动识别hash类型，囊括各类主流Unix系统，Windows系统，以及各种数据库所使用的密码加密类型。</p>
+
+<h2 id="jhonflag06">使用Jhon破解flag06的密码</h2>
+
+<ol>
+<li>先构建一个文件u.txt，格式为username:hash</li>
+<li><p>使用jhon破解，秒出密码！！</p>
+
+<p><img src="http://hot.github.io/img/jhon.png" alt="" title=""></p></li>
+</ol>
+
+<h2 id="t">密码到手，天下我有~</h2>
+
+<p>尝试用hello登录flag06，成功拿到shell~~</p>
+
+<h3 id="">参考：</h3>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Unix_security#User_and_administrative_techniques">Unix_security</a></li>
+<li><a href="https://en.wikipedia.org/wiki/John_the_Ripper">John the Ripper</a></li>
+<li><a href="http://www.binarytides.com/cracking-linux-password-with-john-the-ripper-tutorial/">Cracking linux password with john the ripper</a></li>
+</ul>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>↖(▔＾▔)↗</p>
+	</div>
+<!-- duoshuo -->
+<div class="ds-thread" data-thread-key="dOZWJ1bGLbGV2ZWwwNg==" data-title="单刷Nebula之level06" data-url=hot.github.io"dOZWJ1bGLbGV2ZWwwNg==.html"></div>
+<!-- duoshuo end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"hotgithub"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+</div>
+<script src="../main.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "../main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "dOZWJ1bGLbGV2ZWwwNg==.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
