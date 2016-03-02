@@ -26,11 +26,102 @@
 <div id="md" style="display: none;">
 <!-- markdown -->
  ![](http://hot.github.io/img/banner_perl.jpg)
+##Level07关卡介绍：
+在这一关中flag07写了一个perl程序来ping远程主机，看是否能从web server Ping通。
+
+使用level07的账号登陆系统（密码也是level07）。
+
+[关卡原址](https://exploit-exercises.com/nebula/level07/)
+
+
+##看看是否在/home/flag07下能发现一些线索：
+
+###thttpd.conf分析：
+* 端口为7007
+* 默认目录是/home/flag07
+* 并不使用chroot
+* 启动后将会以flag07身份运行
+* **.cgi的文件将被认为是cgi程序（可以访问）
+
+
+##index.cgi分析
+~~~~{bash}
+#!/usr/bin/perl
+use CGI qw{param};
+print "Content-type: text/html\n\n";
+sub ping {
+     $host = $_[0];
+     print("<html><head><title>Ping results</title></head><body><pre>");
+     @output = `ping -c 3 $host 2>&1`;
+     foreach $line (@output)
+     {
+          print "$line";
+     }
+     print("</pre></body></html>");
+}
+# check if Host set. if not, display normal page, etc
+
+ping(param("Host")); #从URL中解析出Host，并传入ping函数
+~~~~
+
+##如何将Host传入进去呢：
+赶紧掏出万能下载神器wget：
+~~~~{bash}
+wget http://127.0.0.1:7007/index.cgi?Host=www.baidu.com
+~~~~
+得到 ![](http://hot.github.io/img/ScreenClip.png)
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
 <p><img src="http://hot.github.io/img/banner_perl.jpg" alt="" title=""></p>
+
+<h2 id="level07">Level07关卡介绍：</h2>
+
+<p>在这一关中flag07写了一个perl程序来ping远程主机，看是否能从web server Ping通。</p>
+
+<p>使用level07的账号登陆系统（密码也是level07）。</p>
+
+<p><a href="https://exploit-exercises.com/nebula/level07/">关卡原址</a></p>
+
+<h2 id="homeflag07">看看是否在/home/flag07下能发现一些线索：</h2>
+
+<h3 id="thttpdconf">thttpd.conf分析：</h3>
+
+<ul>
+<li>端口为7007</li>
+<li>默认目录是/home/flag07</li>
+<li>并不使用chroot</li>
+<li>启动后将会以flag07身份运行</li>
+<li>**.cgi的文件将被认为是cgi程序（可以访问）</li>
+</ul>
+
+<h2 id="indexcgi">index.cgi分析</h2>
+
+<pre class=" language-bash"><code class=" language-bash"><span class="token comment" spellcheck="true">#!/usr/bin/perl
+</span>use CGI qw<span class="token punctuation">{</span>param<span class="token punctuation">}</span><span class="token punctuation">;</span>
+print <span class="token string">"Content-type: text/html\n\n"</span><span class="token punctuation">;</span>
+sub ping <span class="token punctuation">{</span>
+     <span class="token property">$host</span> <span class="token operator">=</span> <span class="token property">$_</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+     <span class="token function">print<span class="token punctuation">(</span></span><span class="token string">"&lt;html&gt;&lt;head&gt;&lt;title&gt;Ping results&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;pre&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     @output <span class="token operator">=</span> `ping <span class="token operator">-</span>c <span class="token number">3</span> <span class="token property">$host</span> <span class="token number">2</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span><span class="token number">1</span>`<span class="token punctuation">;</span>
+     foreach <span class="token property">$line</span> <span class="token punctuation">(</span>@output<span class="token punctuation">)</span>
+     <span class="token punctuation">{</span>
+          print <span class="token string">"<span class="token property">$line</span>"</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+     <span class="token function">print<span class="token punctuation">(</span></span><span class="token string">"&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true"># check if Host set. if not, display normal page, etc
+</span>
+<span class="token function">ping<span class="token punctuation">(</span></span><span class="token function">param<span class="token punctuation">(</span></span><span class="token string">"Host"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">#从URL中解析出Host，并传入ping函数
+</span></code></pre>
+
+<h2 id="host">如何将Host传入进去呢：</h2>
+
+<p>赶紧掏出万能下载神器wget：
+</p><pre class=" language-bash"><code class=" language-bash">wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span>www<span class="token punctuation">.</span>baidu<span class="token punctuation">.</span>com
+</code></pre>得到 <img src="http://hot.github.io/img/ScreenClip.png" alt="" title=""><p></p>
 <!-- content end -->
 </div>
 <br>
