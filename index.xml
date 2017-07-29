@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DEADBEEF</title>
+    <link>https://geekorz.com/</link>
+    <description>Recent content on DEADBEEF</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 29 Jul 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://geekorz.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Pico8中的粒子系统 Part.1</title>
+      <link>https://geekorz.com/post/ps_intro/</link>
+      <pubDate>Sat, 29 Jul 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://geekorz.com/post/ps_intro/</guid>
+      <description>什么是粒子系统 Particle system 粒子系统组成：
+ 发射器 发射速度 初始速度 颜色 发射速率 etc  简单的死亡爆炸特效  生成一圈小圆点，然后向外扩散，形成一个简单的爆炸效果
+ 单个粒子生成方法 每个粒子拥有的属性：
+ 当前的位置信息：x,y 粒子的sprite信息：frame 粒子的颜色：col 生存时间信息：t, max_t 速度信息：dx, dy 加速度信息：ddy  function make_sparkle(x,y,frame,col) local s = {} s.x=x s.y=y s.frame=frame s.col=col s.t=0 s.max_t = 8+rnd(4) s.dx = 0 s.dy = 0 s.ddy = 0 add(sparkle,s) return s end  粒子是怎么运动的？ 粒子的运动遵循基础的物理定律(注意不是精确的，但在此使用足矣)。
+function move_sparkle(sp) if (sp.t &amp;gt; sp.max_t) then	--当粒子的到达自己的寿命的时候将被删除 del(sparkle,sp) end sp.x = sp.</description>
+    </item>
+    
+  </channel>
+</rss>

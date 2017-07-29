@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+    <head>
+
+        <title>Pico8中的粒子系统 Part.1</title>
+
+        <style>
+
+    html body {
+        font-family: Quicksand, sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #f11111;
+        --border-width:  0 ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+
+
+ <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/lua.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+ <meta name="generator" content="Hugo 0.25" />
+
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Pico8中的粒子系统 Part.1</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                        </ul>
+                    
+
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+
+        <h4><a href="/post/ps_intro/">Pico8中的粒子系统 Part.1</a></h4>
+
+        <h5>July 29, 2017</h5>
+
+        
+
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h3 id="什么是粒子系统">什么是粒子系统</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Particle_system">Particle system</a>
+粒子系统组成：</p>
+
+<ul>
+<li>发射器</li>
+<li>发射速度</li>
+<li>初始速度</li>
+<li>颜色</li>
+<li>发射速率</li>
+<li>etc</li>
+</ul>
+
+<h3 id="简单的死亡爆炸特效">简单的死亡爆炸特效</h3>
+
+<blockquote>
+<p>生成一圈小圆点，然后向外扩散，形成一个简单的爆炸效果</p>
+</blockquote>
+
+<p><img src="/images/ps_intro/particle_1.gif" alt="" /></p>
+
+<h3 id="单个粒子生成方法">单个粒子生成方法</h3>
+
+<p>每个粒子拥有的属性：</p>
+
+<ul>
+<li>当前的位置信息：x,y</li>
+<li>粒子的sprite信息：frame</li>
+<li>粒子的颜色：col</li>
+<li>生存时间信息：t, max_t</li>
+<li>速度信息：dx, dy</li>
+<li>加速度信息：ddy</li>
+</ul>
+
+<pre><code>function make_sparkle(x,y,frame,col)
+ local s = {}
+ s.x=x
+ s.y=y
+ s.frame=frame
+ s.col=col
+ s.t=0 s.max_t = 8+rnd(4)
+ s.dx = 0 s.dy = 0
+ s.ddy = 0
+ add(sparkle,s)
+ return s
+end
+</code></pre>
+
+<h3 id="粒子是怎么运动的">粒子是怎么运动的？</h3>
+
+<p>粒子的运动遵循基础的物理定律(注意不是精确的，但在此使用足矣)。</p>
+
+<pre><code>function move_sparkle(sp)
+ if (sp.t &gt; sp.max_t) then		--当粒子的到达自己的寿命的时候将被删除
+  del(sparkle,sp)
+ end
+ 
+ sp.x = sp.x + sp.dx			--根据速度更新x坐标
+ sp.y = sp.y + sp.dy			--根据速度更新y坐标
+ sp.dy= sp.dy+ sp.ddy			--根据加速度更新速度的y值，用来模拟重力加速度
+ sp.t = sp.t + 1				--生存时间每帧递增
+end
+</code></pre>
+
+<p>每帧对每个粒子调用move_sparkle，来更新粒子的状态</p>
+
+<pre><code>foreach(sparkle, move_sparkle)
+</code></pre>
+
+<h3 id="生成一个圈吧">生成一个圈吧</h3>
+
+<ul>
+<li>通过sin,cos在单位圆上获取粒子的初速度</li>
+<li>设置了最大生存时间</li>
+<li>随机获得sprite</li>
+</ul>
+
+<pre><code>for i=1,32 do
+ s=make_sparkle(
+  pl.x, pl.y-0.6, 96, 0)
+ s.dx = cos(i/32)/2
+ s.dy = sin(i/32)/2
+ s.max_t = 30 
+ s.ddy = 0.01
+ s.frame=96+rnd(3)
+ s.col = 7
+end
+</code></pre>
+
+<p>粒子的绘制函数</p>
+
+<ul>
+<li>将调色板设置为粒子的颜色col，再绘制粒子的sprite</li>
+<li>重置调色板</li>
+</ul>
+
+<pre><code>function draw_sparkle(s)
+ 
+ if (s.col &gt; 0) then
+  for i=1,15 do
+   pal(i,s.col)
+  end
+ end
+
+ spr(s.frame, s.x*8-4, s.y*8-4)
+
+ pal()
+end
+
+</code></pre>
+
+<h3 id="子弹拖尾特效">子弹拖尾特效</h3>
+
+<blockquote>
+<p>子弹快速飞行，在飞行的过程中不断生成粒子。粒子原地不动，但是会很快的缩小，直至消失。</p>
+</blockquote>
+
+<p><img src="/images/ps_intro/particle_trail.gif" alt="" /></p>
+
+<p>拖尾粒子的数据结构:</p>
+
+<ul>
+<li>位置信息：x, y</li>
+<li>半径：r</li>
+<li>颜色：c</li>
+</ul>
+
+<pre><code>--bullet trail
+function make_trail(x,y,r,c)
+ local new_trail={
+ x=guy.bx,
+ y=guy.by,
+ r=flr(rnd(3))+1,
+ c=flr(rnd(2))+5,
+ }
+ return new_trail
+end
+</code></pre>
+
+<p>拖尾粒子的绘制函数:</p>
+
+<ul>
+<li>单个粒子绘制一个圆,半径为r, 颜色为c</li>
+</ul>
+
+<pre><code>function draw_trail(thistrail)
+ circfill(thistrail.x,thistrail.y,thistrail.r,thistrail.c)
+end
+</code></pre>
+
+<p>拖尾粒子的每帧更新函数:</p>
+
+<ul>
+<li>粒子每帧减少半径r， 当r&lt;=0的时候，删除这个粒子</li>
+</ul>
+
+<pre><code>function trailshrink(thistrail)
+ if thistrail.r&gt;0 then
+  thistrail.r-=1
+ else del(trail,thistrail)
+ end
+end
+</code></pre>
+
+<h3 id="爆炸如烟">爆炸如烟</h3>
+
+<blockquote>
+<p>在同一个位置的一定半径内生成大量粒子，粒子由大变小，颜色由白变深，并且有一个微微上飘的过程</p>
+</blockquote>
+
+<p><img src="/images/ps_intro/particle_explode.gif" alt="" /></p>
+
+<p>粒子管理的数据结构</p>
+
+<ul>
+<li>统一的颜色</li>
+<li>xdrop/ydrop:爆炸的初始位置</li>
+</ul>
+
+<pre><code>splode={}
+splode.col=14
+splode.xdrop=0
+splode.ydrop=0
+
+</code></pre>
+
+<p>生成粒子：</p>
+
+<ul>
+<li>随机颜色，从白色和灰色中选，50%的概率</li>
+<li>在半径8的圆内生成粒子</li>
+<li>粒子半径[5-15]</li>
+</ul>
+
+<pre><code>function make_splode(x,y,r,c)	--这里的参数实际上并没有意义
+ if (flr(rnd(2)))==1 then
+  splode.col=7
+ else splode.col=6
+ end
+ if box.bottom==false then
+  local new_splode={
+  x=splode.xdrop+(flr(rnd(16))-3),
+  y=splode.ydrop+(flr(rnd(16))-3),
+  r=(rnd(10))+5,
+  c=splode.col,
+  }
+  return new_splode
+ elseif box.bottom==true then
+  local new_splode={
+  x=box.z+(rnd(14)-7),
+  y=106+(rnd(4)-6),
+  r=(rnd(8))+2,
+  c=shrapnel.col,
+  }
+  return new_splode
+ end
+end
+
+</code></pre>
+
+<p>绘制粒子：</p>
+
+<ul>
+<li>使用内部填充的圆形绘制</li>
+</ul>
+
+<pre><code>function draw_splode(thissplode)
+ circfill(thissplode.x,thissplode.y,thissplode.r,thissplode.c)
+end
+
+</code></pre>
+
+<p>粒子的每帧更新：</p>
+
+<ul>
+<li>每帧缩小10%</li>
+<li>根据不同半径赋予不同颜色</li>
+<li>在指定的半径范围内，每帧减少y坐标，即形成向上飘飞的效果</li>
+<li>在粒子半径过小时，删除粒子</li>
+</ul>
+
+<pre><code>function splodeshrink(thissplode)
+ if thissplode.r&gt;0 then
+  thissplode.r*=.9
+ end
+ if thissplode.r&lt;3 and thissplode.r&gt;.8 then
+  thissplode.c=5
+  thissplode.y-=.2
+  thissplode.x+=rnd(1)
+ elseif thissplode.r&lt;.8 then
+  del(splode,thissplode)
+ end
+end
+
+</code></pre>
+
+<h3 id="炸裂碎片">炸裂碎片</h3>
+
+<blockquote>
+<p>这个粒子的特点就是它具有物理特性，看上去就像是一些硬质碎片掉落的感觉</p>
+</blockquote>
+
+<p><img src="/images/ps_intro/particle_explode2.gif" alt="" /></p>
+
+<p>粒子的数据结构：</p>
+
+<ul>
+<li>颜色</li>
+<li>初始位置</li>
+<li>初始速度</li>
+<li>半径</li>
+<li>bounce值，最大弹跳次数</li>
+</ul>
+
+<pre><code>--shrapnel
+function make_shrapnel(x,y,xdir,ydir,r,c,b)
+ if box.shrapcol==10 then
+  shrapnel.col=8
+ elseif box.shrapcol==11 then
+  shrapnel.col=10
+ elseif box.shrapcol==12 then
+  shrapnel.col=11
+ elseif box.shrapcol==13 then
+  shrapnel.col=13
+ elseif box.shrapcol==14 then
+  shrapnel.col=14
+ elseif box.shrapcol==15 then
+  shrapnel.col=9
+ end
+ local new_shrapnel={
+ x=box.z,
+ y=106,
+ xdir=rnd(14)-7,
+ ydir=rnd(4)-7,
+ r=(rnd(2)),
+ c=shrapnel.col,
+ b=flr(rnd(2))+1,
+ }
+ return new_shrapnel
+end
+
+</code></pre>
+
+<p>绘制函数：</p>
+
+<ul>
+<li>简单的通过绘制圆形实现</li>
+</ul>
+
+<pre><code>function draw_shrapnel(thisshrapnel)
+ circfill(thisshrapnel.x,thisshrapnel.y,thisshrapnel.r,thisshrapnel.c)
+end
+</code></pre>
+
+<p>物理碰撞处理：</p>
+
+<ul>
+<li>速度每帧减少5%</li>
+<li>当y值&gt;106的时，y的速度方向取反，并且损失10%的y值速度，bounce值减一</li>
+<li>当x轴上的位置超出预订范围的时候， 直接删除粒子，也就是没有左右方向的物理碰撞</li>
+<li>粒子的弹跳次数也是有限制的，当bunce值为0的时候，也会删除这个粒子</li>
+</ul>
+
+<pre><code>function shrapnelbounce(thisshrapnel)
+ thisshrapnel.x+=thisshrapnel.xdir
+ thisshrapnel.y+=thisshrapnel.ydir
+ thisshrapnel.xdir*=.95
+ thisshrapnel.ydir+=.95
+ if thisshrapnel.y&gt;106 then
+  thisshrapnel.ydir*=-.9
+  thisshrapnel.b-=1
+  sfx(3)
+ end
+ if thisshrapnel.x&lt;8 or
+    thisshrapnel.x&gt;120 or
+    thisshrapnel.b&lt;1 then
+  del(shrapnel,thisshrapnel)
+ end
+end
+
+</code></pre>
+
+<h3 id="烟花效果">烟花效果</h3>
+
+<p><img src="/images/ps_intro/particle_fireworks.gif" alt="" /></p>
+
+<blockquote>
+<p>通过长条形的粒子模拟烟花的效果，重点关注：重力加速度处理，以及颜色渐变处理</p>
+</blockquote>
+
+<p>生成粒子：</p>
+
+<ul>
+<li>初始位置x,y</li>
+<li>随机的颜色序列，从预定义的颜色序列中选择一个</li>
+<li>初始速度vx,vy是随机生成的
+
+<ul>
+<li>这里通过随机一个[0, 1)之间的值计算sin，cos确定vx,vy, 因为pico8的sin和cos接受0-1范围的参数，而不是0-PI*2</li>
+</ul></li>
+<li>随机一个生命值</li>
+</ul>
+
+<pre><code>function add_p(px,py)
+	local p={}
+	p.x,p.y=px,py
+	--random color scheme
+	p.c=rnd()&gt;0.5 and c or c2
+
+	local a=rnd() --angle
+	p.vx=sin(a)*rnd(pforce)
+	p.vy=cos(a)*rnd(pforce)
+
+	--need to know start life
+	--for color progression math
+	p.sl=plife+flr(rnd(9)-4)
+	p.l=p.sl --life
+	add(ps,p)
+end
+</code></pre>
+
+<p>绘制函数：</p>
+
+<ul>
+<li>粒子主要通过线条来表现</li>
+<li>线条从当前位置绘制到下一帧即将到达的位置</li>
+<li>每帧根据粒子当前的生命值重新计算对应颜色值</li>
+</ul>
+
+<pre><code>for i=1,#ps do
+	local p=ps[i]
+	col_num=flr((p.l/p.sl)*10)+1
+	col=p.c[col_num]
+	
+	line(p.x,p.y,p.x+p.vx,p.y+p.vy,col)
+end
+</code></pre>
+
+<p>更新函数：</p>
+
+<ul>
+<li>生命值每帧减一</li>
+<li>当生命值减为0的时候，粒子死亡</li>
+<li>每帧更新y轴的速度，并且根据速度更新位置</li>
+</ul>
+
+<pre><code>function update_p(p)
+	p.l-=1						--decrease life
+	if (p.l&lt;=0) then
+		del(ps,p)		--del if dead
+	else
+	 p.vy+=g    --gravity
+		p.x+=p.vx		--add velocity
+		p.y+=p.vy   
+	end		
+end
+</code></pre>
+
+<h3 id="雨的感觉">雨的感觉</h3>
+
+<p><img src="/images/ps_intro/particle_rain.gif" alt="" /></p>
+
+<blockquote>
+<p>通过粒子模拟暴雨的感觉， 主要通过快速下落的线条，以及在地上生成的水花粒子模拟</p>
+</blockquote>
+
+<p>每帧随机添加雨滴到列表中</p>
+
+<pre><code>  for i=0, 2 do
+  d = make_banurzel()
+   if (rnd(10)&gt;4) add(raindrops,d)
+  end
+
+</code></pre>
+
+<p>下落雨滴的数据结构：</p>
+
+<ul>
+<li>位置信息x/y， x位置可能在屏幕横向坐标的任意位置</li>
+<li>横向速度gh</li>
+<li>纵向速度gv</li>
+<li>默认属性
+
+<ul>
+<li>基础下落速度randropspeed=10</li>
+<li>雨滴纵向加速度pgrav=.4</li>
+</ul></li>
+</ul>
+
+<pre><code>--生成下落线条
+function make_banurzel()
+return {y=0, x=flr(rnd(127)), s=rnd(1)+10, gh=rxspeed, gv=rnd(1)+1}
+end
+</code></pre>
+
+<p>雨滴下落过程的每帧更新函数：</p>
+
+<ul>
+<li>y轴速度每帧加上加速度pgrav</li>
+<li>根据gv，gh计算新的x，y</li>
+<li>如果雨滴到达地平线，则
+
+<ul>
+<li>生成水花粒子，数量随机</li>
+<li>下落速度越快，生成的水花粒子数越多</li>
+<li>水花的属性</li>
+<li>x方向速度范围[-1.5, 1.5)</li>
+<li>y方向速度范围[0, 雨滴数量的负值)</li>
+<li>删除这个雨滴</li>
+</ul></li>
+</ul>
+
+<pre><code>function update_raindrops()
+   for d in all(raindrops) do
+     d.gv+=pgrav
+     d.y+=d.gv*raindropspeed
+     d.x+=d.gh*raindropspeed
+ 
+     p=min(#water-1,max(1,flr(d.x/2)))
+     ch = water[p].y
+     if d.y&gt;ch then
+       if (d.x&lt;127) then
+       water[p-1].gv-=d.gv*2	--water在这里并没有作用，可以忽略
+       water[p].gv-=d.gv*3
+       water[p+1].gv-=d.gv*2
+         
+       for i=0, flr(rnd(3*d.gv)+1) do
+       p=make_part(d.x,ch,rnd(3)-1.5,-rnd(d.gv)*1,rnd(.6))
+       add(leave,p)
+       end
+       
+      end
+       del(raindrops,d)
+     end
+   end
+end
+</code></pre>
+
+<p>水花的数据结构</p>
+
+<ul>
+<li>当前位置x,y</li>
+<li>速度：gh,gv</li>
+<li>生存时间at</li>
+</ul>
+
+<pre><code>--生成水花
+function make_part(x,y,aa,bb,r)
+return {x=x, y=y, gh=aa, gv=bb,r=r,at=0}
+end
+
+</code></pre>
+
+<p>水花的每帧更新</p>
+
+<ul>
+<li>每帧根据速度计算新的位置</li>
+<li>仅在y轴速度上存在加速度</li>
+<li>当粒子生存时间大于4帧且位置低于地平线的时候删除粒子</li>
+</ul>
+
+<pre><code>-- rain
+function update_leave()
+  for p in all(leave) do
+    p.at+=1
+    p.x+=p.gh
+    p.gv+=pgrav
+    p.y+=p.gv
+    h=min(#water-1,max(1,flr(p.x/2)))
+    if (p.at&gt;4 and p.y&gt;water[h].y) then
+       water[h-1].gv-=p.gv/1.2
+       del(leave,p)  
+    end
+  end
+end
+
+</code></pre>
+
+<p>绘制下落的雨滴</p>
+
+<ul>
+<li>从当前位置，向着速度方向延伸4倍速度的像素距离</li>
+</ul>
+
+<pre><code> for d in all(raindrops) do
+  	line(d.x,d.y,d.x-d.gh*4, d.y-d.gv*4,5)
+ end
+</code></pre>
+
+<p>绘制水花</p>
+
+<ul>
+<li>从当前位置，向着速度方向延伸0.5倍速度的像素距离</li>
+</ul>
+
+<pre><code> for p in all(leave) do
+   line(p.x,p.y,p.x+p.gh*.5,p.y+p.gv*.5,5)
+ end
+</code></pre>
+
+<p>CC&lt;</p>
+</div>
+
+    
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved.</p>
+
+        </footer>
+
+    </body>
+
+</html>
+
