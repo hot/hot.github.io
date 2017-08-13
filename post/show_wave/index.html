@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+    <head>
+
+        <title>如何实现一个水面</title>
+
+        <style>
+
+    html body {
+        font-family: Quicksand, sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #f11111;
+        --border-width:  0 ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+
+
+ <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script>  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/lua.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+ <meta name="generator" content="Hugo 0.25" />
+
+        <meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">如何实现一个水面</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                        </ul>
+                    
+
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+
+        <h4><a href="/post/show_wave/">如何实现一个水面</a></h4>
+
+        <h5>August 13, 2017</h5>
+
+        
+
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h1 id="如何在2d游戏中实现一个水面">如何在2d游戏中实现一个水面？</h1>
+
+<p><img src="/images/show_wave/wave.gif" alt="" /></p>
+
+<h2 id="水如何影响被水淹没的物体的颜色">水如何影响被水淹没的物体的颜色？</h2>
+
+<blockquote>
+<p>被水淹没的物体改变了颜色，这里处于水面以下的物体经过了一层映射，处于水面的物体经过了两层映射。颜色的映射存储在sprite-sheet中。</p>
+</blockquote>
+
+<h3 id="水下颜色的映射关系">水下颜色的映射关系</h3>
+
+<p>通过一段简单的代码获取颜色的映射关系。</p>
+
+<pre><code>function dr_image()
+	for i=0, 15 do
+		local x = i * 8
+		rectfill(x, 40, x+8, 48, i)
+		rectfill(x, 50, x+8, 58, sget(48+i, 2))
+	end
+end
+</code></pre>
+
+<p><img src="/images/show_wave/color_image.gif" alt="" /></p>
+
+<p>因为要表现的是绿色的水，所以大部分颜色都映射成了绿色，以及黄色。</p>
+
+<h3 id="水表面颜色的映射关系">水表面颜色的映射关系</h3>
+
+<p>映射代码，注意两次sget实现了颜色的两次映射：</p>
+
+<pre><code>function dr_image()
+	for i=0, 15 do
+		local x = i * 8
+		rectfill(x, 40, x+8, 48, i)
+		local pix=sget(48+i,1)	
+		rectfill(x, 50, x+8, 58, sget(48+pix, 2))
+	end
+end
+
+</code></pre>
+
+<p><img src="/images/show_wave/3_color_image.gif" alt="" /></p>
+
+<p>这次大部分的颜色都被映射成了浅绿色和黄色，这就是水表面的颜色。</p>
+
+<h2 id="如何让水面波动起来">如何让水面波动起来？</h2>
+
+<blockquote>
+<p>水面的波形很像cos，sin的函数图像。还记得高中的三角函数知识么？</p>
+</blockquote>
+
+<ul>
+<li>其中cmx=hero.x-64，将hero的x坐标带入，这样当hero移动的时候水面的波浪也能显示正常。</li>
+<li>第一个cos负责产生原始的波浪</li>
+<li>第二个cos负责随时间波浪的强度变化</li>
+</ul>
+
+<pre><code>function gwy(x)
+ local n=cos((cmx*1.5+x)/48)*cos(t/40)*3 --具体负责产生弯曲的波浪
+ local wy=water_y+get_tide(x-cmx)+n		--负责潮涨潮落
+ return wy
+end
+
+</code></pre>
+
+<h3 id="具体绘制函数">具体绘制函数</h3>
+
+<blockquote>
+<p>通过遍历x轴的每一个像素，计算当前x对应的y坐标，波浪是通过三角函数计算所得。</p>
+</blockquote>
+
+<p>通过first变量存储水面的厚度，这些像素会存在两次要颜色转换。</p>
+
+<pre><code> -- ocean
+ for x=0,127 do
+
+  first=2			--水面同色层的厚度
+  by=gwy(x)			--获取高度
+  for y=by,128 do
+   pix=pget(x,y)	--获取屏幕上需要绘制点的原始颜色
+   if first&gt;0 then
+    for i=1,first do
+     pix=sget(48+pix,1)	--获取spritesheet上(48+pix, 1)位置的颜色，一次颜色映射
+    end
+    first-=1
+   end
+   pset(x,y,sget(48+pix,2))	--获取spritesheet上(48+pix, 2)位置的颜色, 一次颜色映射
+  end
+ end
+</code></pre>
+
+<h3 id="让它平静如水">让它平静如水</h3>
+
+<p>给循环中获取高度的地方传递一个固定的值，让水面的y值固定下来，就能获得一个平静的水面了。</p>
+
+<pre><code>by=90
+</code></pre>
+
+<p><img src="/images/show_wave/peaceful_water.gif" alt="" /></p>
+
+<h3 id="让水面变厚实一些">让水面变厚实一些</h3>
+
+<pre><code>first=5			--水面同色层的厚度
+</code></pre>
+
+<p><img src="/images/show_wave/5px_water_surface.gif" alt="" /></p>
+
+<h3 id="让水面波动更加明显些">让水面波动更加明显些</h3>
+
+<blockquote>
+<p>给一个三角函数乘上一个值，让它y值范围增加。</p>
+</blockquote>
+
+<pre><code> local n=cos((cmx*1+x)/48)*cos(t/40)*7 
+</code></pre>
+
+<p><img src="/images/show_wave/big_wave.gif" alt="" /></p>
+
+<h3 id="总结一下本次实现一个水面的要素">总结一下本次实现一个水面的要素</h3>
+
+<ul>
+<li>颜色转换。</li>
+<li>水表面颜色的特殊处理。</li>
+<li>水面波浪。</li>
+<li>高低起伏的潮汐效果。</li>
+</ul>
+
+<p><code>颜色转换</code>和<code>水表面颜色的特殊处理</code>主要体现了水的物理材质特性，想不想喝一口呢：）</p>
+</div>
+
+    
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved.</p>
+
+        </footer>
+
+    </body>
+
+</html>
+
