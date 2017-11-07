@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>DEADBEEF</title>
+    <title></title>
     <link>https://geekorz.com/</link>
-    <description>Recent content on DEADBEEF</description>
+    <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Aug 2017 00:00:00 +0000</lastBuildDate>
+    <copyright>ب_ب</copyright>
+    <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://geekorz.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>10分钟带你飞跃GFW</title>
+      <link>https://geekorz.com/post/10min-shadowsock/</link>
+      <pubDate>Sun, 15 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://geekorz.com/post/10min-shadowsock/</guid>
+      <description>0x00 热身运动 下面放了一段一个黑人叔叔和48个漂亮女孩充满爱与和平的嘿嘿嘿的故事。
+ 什么？你看到的是一片空白？浏览器还不停转圈圈显示加载中，那么请继续往下阅读：）
+ 我国由于某些原因无法正常访问国外的网站，具体原因请参考GFW的wiki页
+ 本文将介绍如何搭建shadowssocks来带你翻越GFW的封锁，看到墙外的风光。
+0x01 准备虚拟主机 什么是虚拟主机？ 虚拟专用服务器，是指通过虚拟化技术在独立服务器中运行的专用服务器。它在我们飞跃GFW的过程中扮演了一个墙外信使的角色。
+ 优选稳定高速的服务器, 个人推荐vultr的vps, 点击下面的图片注册个账户吧。
+ 
+ 注册成功后用支付宝充值VPS运行资金
+ 因为服务器是按运行时间计费的，当你把服务器停掉（注意是destroy）后资金是不会再扣除了。
+第一次充值建议选择10$的最低额度，10$够服务器运行2个月了。后面用了觉得好那就再充值呗：）
+ 选择左侧Servers的标签页，点击右侧➕按钮添加服务器
+关于服务器选型的几点小建议
+  重要VPS类型选择Vultr Cloud Compute(VC2)，不是Storage Instance，也不是Dedicated Instance。 优先选择距离比较近的地区，这样网络延时会比较小，这一点对游戏玩家及其重要，优选日本，新加坡的服务器。 运行shadowsock并不会占用很多资源所以选择便宜的机型即可，这里推荐5$每月的机型，已经稳定使用1年多了，每月1T的流量也能满足大部分的视屏需求。 服务器类型选择Ubuntu 17.10，其他版本的linux或老版本的Ubuntu可能无法正常执行下面的安装脚本。  点击deploy后服务器就开始部署了，大概要等待1min左右。去泡杯茶，回来就好啦：）
+点击Manage进入管理页面。复制里面的Ip Address和Password，这是我们登陆服务器所需要的信息。  至此VPS部署完成：）
+ 0x02 部署shadowsocks服务端  使用ssh工具登陆服务器
+ 工具选择：
+ windows推荐使用putty mac/linux可以直接使用终端输入命令即可登陆  ssh root@这里填写你的服务器地址  在提示输入密码的时候黏贴你复制的密码然后回车即可（PS：mac和linux在输入密码的时候是不会像windows一样有****提示密码位数的）
+登陆后能看到如下信息
+Welcome to Ubuntu 17.10 (GNU/Linux 4.13.0-16-generic x86_64) * Documentation: https://help.</description>
+    </item>
     
     <item>
       <title>如何实现一个水面</title>

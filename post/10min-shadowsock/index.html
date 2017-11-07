@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>10分钟带你飞跃GFW</title>
+        <style>
+
+    html body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #f11111;
+        --border-width:  0 ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="/css/font_quicksand.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="/js/highlight.min.js"></script>
+
+     <script src="/js/lua.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.30" />
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', '');
+        </script>
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">10分钟带你飞跃GFW</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                        </ul>
+                    
+
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/10min-shadowsock/">10分钟带你飞跃GFW</a></h4>
+    <h5>October 15, 2017</h5>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p><img src="/images/10min_ss/netssocks.png" alt="" /></p>
+
+<h2 id="0x00-热身运动">0x00 热身运动</h2>
+
+<p>下面放了一段一个黑人叔叔和48个漂亮女孩充满爱与和平的嘿嘿嘿的故事。</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dFf4AgBNR1E?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+
+<p>什么？你看到的是一片空白？浏览器还不停转圈圈显示加载中，那么请继续往下阅读：）</p>
+
+<blockquote>
+<p>我国由于某些原因无法正常访问国外的网站，具体原因请参考<a href="https://zh.wikipedia.org/wiki/%E9%98%B2%E7%81%AB%E9%95%BF%E5%9F%8E">GFW的wiki页</a></p>
+</blockquote>
+
+<p>本文将介绍如何搭建shadowssocks来带你翻越GFW的封锁，看到墙外的风光。</p>
+
+<h2 id="0x01-准备虚拟主机">0x01 准备虚拟主机</h2>
+
+<h3 id="什么是-虚拟主机-https-zh-wikipedia-org-wiki-e8-99-9a-e6-8b-9f-e4-b8-93-e7-94-a8-e6-9c-8d-e5-8a-a1-e5-99-a8">什么是<a href="https://zh.wikipedia.org/wiki/%E8%99%9A%E6%8B%9F%E4%B8%93%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8">虚拟主机</a>？</h3>
+
+<p><img src="/images/10min_ss/overview_bypass.jpg" alt="" /></p>
+
+<p>虚拟专用服务器，是指通过虚拟化技术在独立服务器中运行的专用服务器。它在我们飞跃GFW的过程中扮演了一个墙外信使的角色。</p>
+
+<blockquote>
+<p>优选稳定高速的服务器, 个人推荐<a href="https://www.vultr.com/?ref=6951615">vultr</a>的vps, 点击下面的图片注册个账户吧。</p>
+</blockquote>
+
+<p><a href="https://www.vultr.com/?ref=6951615"><img src="https://www.vultr.com/media/banner_2.png" width="468" height="60"></a></p>
+
+<blockquote>
+<p>注册成功后用支付宝充值VPS运行资金</p>
+</blockquote>
+
+<p>因为服务器是按运行时间计费的，当你把服务器停掉（注意是<code>destroy</code>）后资金是不会再扣除了。</p>
+
+<p>第一次充值建议选择10$的最低额度，10$够服务器运行2个月了。后面用了觉得好那就再充值呗：）</p>
+
+<p><img src="/images/10min_ss/pay.png" alt="" /></p>
+
+<blockquote>
+<p>选择左侧Servers的标签页，点击右侧➕按钮添加服务器</p>
+
+<p>关于服务器选型的几点小建议</p>
+</blockquote>
+
+<ul>
+<li><code>重要</code>VPS类型选择<code>Vultr Cloud Compute(VC2)</code>，不是Storage Instance，也不是Dedicated Instance。</li>
+<li>优先选择距离比较近的地区，这样<code>网络延时</code>会比较小，这一点对游戏玩家及其重要，优选<code>日本</code>，<code>新加坡</code>的服务器。</li>
+<li>运行shadowsock并不会占用很多资源所以选择便宜的机型即可，这里推荐5$每月的机型，已经稳定使用1年多了，每月1T的流量也能满足大部分的视屏需求。</li>
+<li>服务器类型选择<code>Ubuntu 17.10</code>，其他版本的linux或老版本的Ubuntu可能无法正常执行下面的安装脚本。</li>
+</ul>
+
+<p><img src="/images/10min_ss/select_vps_type.png" alt="" />
+点击deploy后服务器就开始部署了，大概要等待1min左右。去泡杯茶，回来就好啦：）</p>
+
+<p><img src="/images/10min_ss/deploy_over.png" alt="" />
+点击Manage进入管理页面。复制里面的<code>Ip Address</code>和<code>Password</code>，这是我们登陆服务器所需要的信息。
+<img src="/images/10min_ss/copy_id_pass.png" alt="" /></p>
+
+<blockquote>
+<p>至此VPS部署完成：）</p>
+</blockquote>
+
+<h2 id="0x02-部署shadowsocks服务端">0x02 部署shadowsocks服务端</h2>
+
+<blockquote>
+<p>使用ssh工具登陆服务器</p>
+</blockquote>
+
+<p>工具选择：</p>
+
+<ul>
+<li>windows推荐使用<a href="http://www.putty.org/">putty</a></li>
+<li>mac/linux可以直接使用终端输入命令即可登陆</li>
+</ul>
+
+<pre><code>ssh root@这里填写你的服务器地址
+</code></pre>
+
+<p>在提示输入密码的时候黏贴你复制的密码然后回车即可（PS：mac和linux在输入密码的时候是不会像windows一样有****提示密码位数的）</p>
+
+<p>登陆后能看到如下信息</p>
+
+<pre><code>Welcome to Ubuntu 17.10 (GNU/Linux 4.13.0-16-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+
+0 packages can be updated.
+0 updates are security updates.
+root@vultr:~#
+</code></pre>
+
+<blockquote>
+<p>开始安装shadowsocks</p>
+</blockquote>
+
+<p>复制下列命令到窗口中执行</p>
+
+<pre><code>cd `mktemp -d`&amp;&amp;wget --no-check-certificate -O ss.sh https://raw.githubusercontent.com/hot/ss-builder/master/ss.sh&amp;&amp;bash ss.sh
+</code></pre>
+
+<p>执行成功到话会有信息输出配置信息（<code>端口</code>和<code>密码</code>是<code>随机生成</code>的，请复制自己窗口中的信息）：</p>
+
+<pre><code>&gt;&gt;&gt;&gt;&gt;&gt;请记下下面的配置&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+端口(port):34787
+密码(password):zrHLCVD1FAqbJfbviGgqDUAFyoYW9HZtowQnEqYGdzg=
+加密方法(cipher):aes-256-cfb
+&gt;&gt;&gt;&gt;&gt;&gt;请记下上面的配置置&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+shadowsocks安装完成，用客户端链接一下试试吧：）
+</code></pre>
+
+<h2 id="0x03-shadowsocks客户端软件">0x03 shadowsocks客户端软件</h2>
+
+<p>个平台对应的客户端，具体可参考<a href="http://shadowsocks.org/en/download/clients.html">这里</a>。</p>
+
+<p>客户端软件中需要填写的内容</p>
+
+<ul>
+<li>服务器IP</li>
+<li>端口</li>
+<li>密码</li>
+<li>加密方法</li>
+</ul>
+
+<p>各个平台下载地址：</p>
+
+<ul>
+<li><a href="https://github.com/shadowsocks/shadowsocks-windows/releases">windows</a></li>
+<li><a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases">mac</a></li>
+<li><a href="https://github.com/shadowsocks/shadowsocks-qt5/wiki/Installation">linux</a></li>
+<li><a href="https://play.google.com/store/apps/details?id=com.github.shadowsocks">android</a></li>
+<li><a href="https://itunes.apple.com/us/app/wingy-http-s-socks5-proxy-utility/id1178584911">iOS</a></li>
+</ul>
+
+<h2 id="0x04-troubleshooting-https-en-wikipedia-org-wiki-troubleshooting">0x04 <a href="https://en.wikipedia.org/wiki/Troubleshooting">Troubleshooting</a></h2>
+
+<ul>
+<li>部署了VPS后却无法链接，ping也无法ping通。
+
+<ul>
+<li>解决方法：部分日本IP可能被运营商封禁，可以选择在<code>新加坡</code>或其他地点的主机。</li>
+</ul></li>
+<li>客户端链接后不能上网。
+
+<ul>
+<li>先检查配置内容是否填写正确。</li>
+<li>如果有多个配置的话，填写完成后，重启客户端尝试链接。</li>
+</ul></li>
+</ul>
+
+<h2 id="0x05-还记得开头的故事么-连上shadowsocks刷新下看看">0x05 还记得开头的故事么，连上shadowsocks刷新下看看</h2>
+
+<p><img src="/images/10min_ss/run.png" alt="" /></p>
+
+<h2 id="参考">参考：</h2>
+
+<ul>
+<li><a href="http://shadowsocks.org/en/download/clients.html">shadowsocks</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/Shadowsocks">wiki</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">ب_ب</p>
+
+        </footer>
+       
+    </body>
+
+</html>
+
