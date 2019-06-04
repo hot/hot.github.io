@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>理解epoll中Level-triggered 和 edge-triggered</title>
+        <style>
+
+    html body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #f11111;
+        --border-width:  0 ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="/css/font_quicksand.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="/js/highlight.min.js"></script>
+
+     <script src="/js/lua.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', '');
+        </script>
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">理解epoll中Level-triggered 和 edge-triggered</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                        </ul>
+                    
+
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/epoll-triggered/">理解epoll中Level-triggered 和 edge-triggered</a></h4>
+    <h5>June 4, 2019</h5>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p><img src="/images/epoll-triggered/LTvsET.png" alt="" /></p>
+
+<h2 id="0x00-名词解释">0x00 名词解释</h2>
+
+<p><img src="/images/epoll-triggered/trigger.png" alt="" /></p>
+
+<blockquote>
+<p><a href="https://en.wiktionary.org/wiki/level-triggered">Level-triggered</a>:
+(electronics) Describing a circuit or component whose output is sensitive to changes of the inputs only so long as the clock input&rsquo;s signal is high.</p>
+</blockquote>
+
+<ul>
+<li>当处于高电平状态时持续触发，在epoll中表示
+
+<ul>
+<li>读取时：如果缓存中存在未读数据则 持续 触发</li>
+<li>写入时：fd处于可写状态则持续触发
+<br /></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><a href="https://en.wiktionary.org/wiki/edge-triggered">Edge-triggered</a>:
+(electronics) Describing a circuit or component which is either positive-edge-triggered or negative-edge-triggered.</p>
+</blockquote>
+
+<ul>
+<li>当信号有变化时触发，在epoll中表示
+
+<ul>
+<li>读取时：有新数据到来时触发，(如果缓存中存在上次没读完的数据， 但是也没有新数据到来也不会触发)</li>
+<li>写入时：状态从不可写入变为可写时触发</li>
+</ul></li>
+</ul>
+
+<h2 id="0x01-举个栗子">0x01 举个栗子</h2>
+
+<p><img src="/images/epoll-triggered/98k.jpeg" alt="" /></p>
+
+<blockquote>
+<p>Edge-triggered:就像是一把98k(非自动步枪)，扣下扳机后只会发射一发子弹， 即使你一直扣着扳机也没用 ，只会发射一发子弹</p>
+</blockquote>
+
+<p><img src="/images/epoll-triggered/m416.jpg" alt="" /></p>
+
+<blockquote>
+<p>Level-triggered:就像是一把M416(自动步枪)，只要弹匣里面有足够的子弹， 扣下后就会一直发射</p>
+</blockquote>
+
+<h2 id="0x02-如何申明edge-triggered">0x02 如何申明Edge-triggered</h2>
+
+<blockquote>
+<p>默认epoll增加和修改socket的是处于<code>level-triggered模式</code>，如果要设置为<code>edge-triggered</code>模式则需要<code>显式</code>设置</p>
+
+<p>需要注意：在首次增加和每次修改套接字的events时，都需要指明EPOLLET，并不是ADD一次后就会永久是EPOLLET模式</p>
+</blockquote>
+
+<pre><code>struct epoll_event ev;
+ev.events = EPOLLIN | EPOLLET; /* ET模式 */
+ev.data.fd = sockfd;
+if (-1 == epoll_ctl(efd, EPOLL_CTL_ADD, sockfd, &amp;ev)) {
+perror(&quot;epoll_ctl EPOLL_CTL_ADD fail&quot;);
+</code></pre>
+
+<h2 id="0x03-skynet使用的是什么方式">0x03 skynet使用的是什么方式</h2>
+
+<blockquote>
+<p>摘自skynet-src/socket_epoll.h</p>
+</blockquote>
+
+<pre><code>static int 
+sp_add(int efd, int sock, void *ud) {
+	struct epoll_event ev;
+	ev.events = EPOLLIN;
+	ev.data.ptr = ud;
+	if (epoll_ctl(efd, EPOLL_CTL_ADD, sock, &amp;ev) == -1) {
+		return 1;
+	}
+	return 0;
+}
+</code></pre>
+
+<p><code>ev.events = EPOLLIN;</code>可见skynet使用的是level-triggered方式</p>
+
+<h2 id="0x04-redis使用的是什么方式">0x04 redis使用的是什么方式</h2>
+
+<blockquote>
+<p>摘自src/ae_epoll.c</p>
+</blockquote>
+
+<pre><code>static int aeApiAddEvent(aeEventLoop *eventLoop, int fd, int mask) {
+    aeApiState *state = eventLoop-&gt;apidata;
+    struct epoll_event ee = {0}; /* avoid valgrind warning */
+    /* If the fd was already monitored for some event, we need a MOD
+     * operation. Otherwise we need an ADD operation. */
+    int op = eventLoop-&gt;events[fd].mask == AE_NONE ?
+            EPOLL_CTL_ADD : EPOLL_CTL_MOD;
+
+    ee.events = 0;
+    mask |= eventLoop-&gt;events[fd].mask; /* Merge old events */
+    if (mask &amp; AE_READABLE) ee.events |= EPOLLIN;
+    if (mask &amp; AE_WRITABLE) ee.events |= EPOLLOUT;
+    ee.data.fd = fd;
+    if (epoll_ctl(state-&gt;epfd,op,fd,&amp;ee) == -1) return -1;
+    return 0;
+}
+</code></pre>
+
+<p>redis使用的也是level-trigger方式。关于为什么不用ET模式，开发者给出了一些在github的<a href="https://github.com/redis/hiredis/issues/615">issue_615</a>中给出了回复：</p>
+
+<blockquote>
+<p>mnunberg commented on Oct 2, 2018</p>
+
+<p>Thank you, let me see if my connfix branch addresses this.. I recall seeing something like this before. <code>However, we would need to be aware of whether we are in ET mode or not. Otherwise we risk starving other I/O (and CPU time) if there is a lot of data on the socket.</code></p>
+</blockquote>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://en.wiktionary.org/wiki/level-triggered">level-triggered wiki</a></li>
+<li><a href="https://en.wiktionary.org/wiki/edge-triggered">Edge-triggered wiki</a></li>
+<li><a href="https://www.zhihu.com/question/20122137/answer/14049112">知乎 蓝形参的回答</a></li>
+<li><a href="https://github.com/torvalds/linux/blob/master/fs/eventpoll.c">fs/eventpoll.c</a></li>
+<li><a href="https://blog.csdn.net/daiyudong2020/article/details/50459215">epoll：EPOLLET模式下的正确读写方式</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">ب_ب</p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

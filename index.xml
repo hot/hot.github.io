@@ -6,10 +6,21 @@
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Jun 2019 23:04:56 +0800</lastBuildDate>
     
 	<atom:link href="https://geekorz.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>理解epoll中Level-triggered 和 edge-triggered</title>
+      <link>https://geekorz.com/post/epoll-triggered/</link>
+      <pubDate>Tue, 04 Jun 2019 23:04:56 +0800</pubDate>
+      
+      <guid>https://geekorz.com/post/epoll-triggered/</guid>
+      <description>0x00 名词解释  Level-triggered: (electronics) Describing a circuit or component whose output is sensitive to changes of the inputs only so long as the clock input&amp;rsquo;s signal is high.
+  当处于高电平状态时持续触发，在epoll中表示  读取时：如果缓存中存在未读数据则 持续 触发 写入时：fd处于可写状态则持续触发     Edge-triggered: (electronics) Describing a circuit or component which is either positive-edge-triggered or negative-edge-triggered.
+  当信号有变化时触发，在epoll中表示  读取时：有新数据到来时触发，(如果缓存中存在上次没读完的数据， 但是也没有新数据到来也不会触发) 写入时：状态从不可写入变为可写时触发   0x01 举个栗子  Edge-triggered:就像是一把98k(非自动步枪)，扣下扳机后只会发射一发子弹， 即使你一直扣着扳机也没用 ，只会发射一发子弹</description>
+    </item>
     
     <item>
       <title>10分钟带你飞跃GFW</title>
