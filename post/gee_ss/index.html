@@ -57,7 +57,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.30" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
         
         <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
@@ -178,15 +178,15 @@
 <ul>
 <li>由外而内地看，这行代码是echo了一个字符串，然后把它附加到了/etc/crontabs/root文件的末尾，而这个文件正是root用户的定时执行任务列表， <a href="https://en.wikipedia.org/wiki/Cron#Non-Standard_Characters">*/1 * * * *</a>表示每隔一分钟执行一次。</li>
 <li>每次执行什么命令呢</li>
-<li>简单来说就是通过mkfifo命令创建一条<a href="https://en.wikipedia.org/wiki/Named_pipe">命名管道</a>/tmp/f，然后用cat读取管道中的内容，并使用/bin/sh执行， 并将执行结果通过nc发送到45.32.253.23的1082端口，并将从nc接收到的命令通过命名管道f将和cat再送到/bin/sh执行。相当于创造了一条从远程执行shell命令的通道。而且属于反向链接，可以穿透nat。</li>
-</ul>
+
+<li><p>简单来说就是通过mkfifo命令创建一条<a href="https://en.wikipedia.org/wiki/Named_pipe">命名管道</a>/tmp/f，然后用cat读取管道中的内容，并使用/bin/sh执行， 并将执行结果通过nc发送到45.32.253.23的1082端口，并将从nc接收到的命令通过命名管道f将和cat再送到/bin/sh执行。相当于创造了一条从远程执行shell命令的通道。而且属于反向链接，可以穿透nat。</p>
 
 <pre><code>2&gt;&amp;1
-</code></pre>
+</code></pre></li>
 
-<ul>
-<li>表示将stderr重定向到stdout</li>
-<li>&amp;表示等同于，即2的输出重定向并等同于1</li>
+<li><p>表示将stderr重定向到stdout</p></li>
+
+<li><p>&amp;表示等同于，即2的输出重定向并等同于1</p></li>
 </ul>
 
 <ol>

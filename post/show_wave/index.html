@@ -57,7 +57,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.30" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
         
         <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
@@ -184,16 +184,17 @@ end
 <ul>
 <li>其中cmx=hero.x-64，将hero的x坐标带入，这样当hero移动的时候水面的波浪也能显示正常。</li>
 <li>第一个cos负责产生原始的波浪</li>
-<li>第二个cos负责随时间波浪的强度变化</li>
-</ul>
+
+<li><p>第二个cos负责随时间波浪的强度变化</p>
 
 <pre><code>function gwy(x)
- local n=cos((cmx*1.5+x)/48)*cos(t/40)*3 --具体负责产生弯曲的波浪
- local wy=water_y+get_tide(x-cmx)+n		--负责潮涨潮落
- return wy
+local n=cos((cmx*1.5+x)/48)*cos(t/40)*3 --具体负责产生弯曲的波浪
+local wy=water_y+get_tide(x-cmx)+n		--负责潮涨潮落
+return wy
 end
 
-</code></pre>
+</code></pre></li>
+</ul>
 
 <h3 id="具体绘制函数">具体绘制函数</h3>
 
