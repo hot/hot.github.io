@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>另辟蹊径，next powof two新解法</title>
+        <style>
+
+    html body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #f11111;
+        --border-width:  0 ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="/css/font_quicksand.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="/js/highlight.min.js"></script>
+
+     <script src="/js/lua.min.js"></script>  <script src="/js/x86asm.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', '');
+        </script>
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">另辟蹊径，next powof two新解法</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                        </ul>
+                    
+
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/next_pow_of_two/">另辟蹊径，next powof two新解法</a></h4>
+    <h5>June 5, 2019</h5>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p><img src="https://en.m.wikipedia.org/wiki/File:Ten_octaves_visualization.svg" alt="" /></p>
+
+<h2 id="0x0-什么是next-power-of-2">0x0 什么是next power of 2?</h2>
+
+<p>给定正整数n， 求比n大的最小的2的幂次的数m</p>
+
+<blockquote>
+<p>例如：</p>
+
+<p>3 -&gt;4</p>
+
+<p>5-&gt;8</p>
+
+<p>19-&gt;32</p>
+</blockquote>
+
+<h2 id="常规解法">常规解法</h2>
+
+<pre><code>unsigned int next_power_of_two_log(unsigned int v)
+{
+        double next = pow(2, ceil(log2(v)));
+        return (int)next;
+}
+</code></pre>
+
+<blockquote>
+<p>通俗<code>易懂</code>，但是<code>慢</code>。</p>
+</blockquote>
+
+<h2 id="快速解法">快速解法</h2>
+
+<pre><code>unsigned long upper_power_of_two(unsigned long v){
+v--;
+v |= v &gt;&gt; 1;
+v |= v &gt;&gt; 2;
+v |= v &gt;&gt; 4;
+v |= v &gt;&gt; 8;
+v |= v &gt;&gt; 16;
+v++;
+return v;
+
+}
+</code></pre>
+
+<blockquote>
+<p>仅使用了位移和位操作， 巧妙 ，<code>快速</code>。</p>
+</blockquote>
+
+<h2 id="float解法-新解法">float解法(新解法)</h2>
+
+<blockquote>
+<p>思路：利用float的数据存储特性，<code>直接提取指数部分</code>。</p>
+</blockquote>
+
+<h2 id="ieee-754单精度浮点数格式">IEEE 754单精度浮点数格式</h2>
+
+<p><img src="/images/pow_of_two/IEEE_754_bitwise_demo.jpg" alt="" /></p>
+
+<blockquote>
+<p>浮点数数值的计算方法</p>
+
+<p><img src="/images/pow_of_two/float-cacl1.svg" alt="" /></p>
+
+<p><img src="/images/pow_of_two/float-cacl2.svg" alt="" /></p>
+</blockquote>
+
+<p>因为我们的条件是正整数， 因此sign可以不看， 其次小数(fraction)部分，并不会影响我们的计算结果因为</p>
+
+<p>$$
+ 2^{(e-127)}\times \left ( 1+\sum_{i=1}^{23}b_{23-i}2^{-i} \right ) &lt; 2^{(e-127 +1)}
+$$</p>
+
+<p>因此我们只需要重点关注exponent中的数据，这里记录了浮点数的指数部分，实际指数的值是偏移了127的，因此实际指数是e-127(PS:有一个例外， 下面会讲到)。</p>
+
+<h3 id="实际代码实现">实际代码实现</h3>
+
+<pre><code>unsigned int next_power_of_two(unsigned int v)
+{
+        if(v == 1) return 2;    //1 is an exception
+        v--;
+        float f = (float)v;
+        unsigned int* pf = reinterpret_cast&lt;unsigned int *&gt;(&amp;f);
+        *pf = *pf &lt;&lt; 1;         //remove sign bit
+        *pf = *pf &gt;&gt; 24;        //move to least significant byte
+        *pf = *pf - 127 + 1;
+        return 1 &lt;&lt; *pf;
+}
+</code></pre>
+
+<h2 id="为什么1时例外">为什么1时例外？</h2>
+
+<p>算法中需要先减一，因此实际操作的float值为0， 而IEEE754的float值为0的时候其指数部分(exponent)也为0，而不是127， 这就无法使用后面算法统一计算了。</p>
+
+<p><img src="/images/pow_of_two/IEEE_754_bitwise_0.jpg" alt="" /></p>
+
+<h2 id="运行效率大pk-float解法是否能威胁到快速解法的擂主地位">运行效率大PK float解法是否能威胁到快速解法的擂主地位？！！</h2>
+
+<h3 id="运行效率比较">运行效率比较</h3>
+
+<ul>
+<li>快速方法:     val:1000, times:100000000, dt:86</li>
+<li>float方法:  val:1000, times:100000000, dt:156</li>
+<li>log方法:        val:1000, times:100000000, dt:1543</li>
+</ul>
+
+<p>float解法比快速解法慢了80.4%！！！
+logf解法最慢，比快速解法慢了889.1%！！！</p>
+
+<h3 id="g-o2-汇编代码比较">g++ -O2 汇编代码比较</h3>
+
+<pre><code class="language-x86asm">00000690 &lt;float方法&gt;:
+690:   83 ec 14                sub    $0x14,%esp
+693:   8b 44 24 18             mov    0x18(%esp),%eax
+697:   c7 44 24 04 00 00 00    movl   $0x0,0x4(%esp)
+69e:   00
+69f:   83 e8 01                sub    $0x1,%eax
+6a2:   89 04 24                mov    %eax,(%esp)
+6a5:   df 2c 24                fildll (%esp)
+6a8:   d9 1c 24                fstps  (%esp)
+6ab:   8b 04 24                mov    (%esp),%eax
+6ae:   83 c4 14                add    $0x14,%esp
+6b1:   8d 0c 00                lea    (%eax,%eax,1),%ecx
+6b4:   b8 01 00 00 00          mov    $0x1,%eax
+6b9:   c1 e9 18                shr    $0x18,%ecx
+6bc:   83 e9 7e                sub    $0x7e,%ecx
+6bf:   d3 e0                   shl    %cl,%eax
+6c1:   c3                      ret
+
+</code></pre>
+
+<pre><code class="language-x86asm">000006d0 &lt;快速方法&gt;:
+6d0:   8b 44 24 04             mov    0x4(%esp),%eax
+6d4:   8d 50 ff                lea    -0x1(%eax),%edx
+6d7:   89 d0                   mov    %edx,%eax
+6d9:   d1 e8                   shr    %eax
+6db:   09 d0                   or     %edx,%eax
+6dd:   89 c2                   mov    %eax,%edx
+6df:   c1 ea 02                shr    $0x2,%edx
+6e2:   09 d0                   or     %edx,%eax
+6e4:   89 c2                   mov    %eax,%edx
+6e6:   c1 ea 04                shr    $0x4,%edx
+6e9:   09 c2                   or     %eax,%edx
+6eb:   89 d0                   mov    %edx,%eax
+6ed:   c1 e8 08                shr    $0x8,%eax
+6f0:   09 c2                   or     %eax,%edx
+6f2:   89 d0                   mov    %edx,%eax
+6f4:   c1 e8 10                shr    $0x10,%eax
+6f7:   09 d0                   or     %edx,%eax
+6f9:   83 c0 01                add    $0x1,%eax
+6fc:   c3                      ret
+
+</code></pre>
+
+<h2 id="相比快速方法更慢的原因">相比快速方法更慢的原因</h2>
+
+<ul>
+<li>更多的内存访问操作</li>
+<li>浮点操作指令相对耗时</li>
+</ul>
+
+<h2 id="后记">后记</h2>
+
+<p>快速算法在加载了数据之后全部都在寄存器内操作完成， 确实非常厉害。</p>
+
+<p>float算法是刚毕业时做合图工具时想到的解法，虽然性能上比不上快速算法， 但是折腾起来倒还是挺有意思的:P</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">Single-precision floating-point format</a></li>
+<li><a href="https://stackoverflow.com/questions/466204/rounding-up-to-next-power-of-2">Rounding up to next power of 2</a></li>
+<li><a href="https://www.agner.org/optimize/#manual_instr_tab">Instruction tables: Lists of instruction latencies, throughputs and micro-operation breakdowns for Intel, AMD and VIA CPUs</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">ب_ب</p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

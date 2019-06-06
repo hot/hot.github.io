@@ -6,10 +6,25 @@
     <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jun 2019 23:04:56 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 05 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://geekorz.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>另辟蹊径，next powof two新解法</title>
+      <link>https://geekorz.com/post/next_pow_of_two/</link>
+      <pubDate>Wed, 05 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://geekorz.com/post/next_pow_of_two/</guid>
+      <description>0x0 什么是next power of 2? 给定正整数n， 求比n大的最小的2的幂次的数m
+ 例如：
+3 -&amp;gt;4
+5-&amp;gt;8
+19-&amp;gt;32
+ 常规解法 unsigned int next_power_of_two_log(unsigned int v) { double next = pow(2, ceil(log2(v))); return (int)next; }   通俗易懂，但是慢。
+ 快速解法 unsigned long upper_power_of_two(unsigned long v){ v--; v |= v &amp;gt;&amp;gt; 1; v |= v &amp;gt;&amp;gt; 2; v |= v &amp;gt;&amp;gt; 4; v |= v &amp;gt;&amp;gt; 8; v |= v &amp;gt;&amp;gt; 16; v++; return v; }   仅使用了位移和位操作， 巧妙 ，快速。</description>
+    </item>
     
     <item>
       <title>理解epoll中Level-triggered 和 edge-triggered</title>
