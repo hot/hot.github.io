@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CISG2015 MISC.3解析</title>
+        <style>
+
+    html body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #f11111;
+        --border-width:  0 ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="/css/font_quicksand.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="/js/highlight.min.js"></script>
+
+     <script src="/js/lua.min.js"></script>  <script src="/js/x86asm.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', '');
+        </script>
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">CISG2015 MISC.3解析</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                        </ul>
+                    
+
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<script type="text/javascript"
+        async
+        src="https://cdn.bootcss.com/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[\[','\]\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+
+MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<style>
+code.has-jax {
+    font: inherit;
+    font-size: 100%;
+    background: inherit;
+    border: inherit;
+    color: #515151;
+}
+</style>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/cigs2015/">CISG2015 MISC.3解析</a></h4>
+    <h5>May 18, 2015</h5>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h2 id="引子">引子</h2>
+
+<p>每个少年，也许都曾有过一个成为武林高手的梦。但随着时间流逝，还有多少热血存留在记忆的深处，多少人成为了茫茫红尘中的一个庸庸碌碌之辈。浮生若梦，弹指一挥间，青丝白发。</p>
+
+<p>我不是武林高手，但我希望我是。我希望你是。</p>
+
+<h2 id="题目原文">题目原文</h2>
+
+<p>藤原暮雨在一个月的观察行动中，机智地截获到了“三叶豆腐店”内部通讯的一段密文。面对密文藤原一头雾水，不过他知道明文中一定出现了flag这个单词。请你帮他解密出明文。</p>
+
+<p><a href="http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）">http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）</a></p>
+
+<h2 id="misc3-new-zip文件内容">Misc3_new.zip文件内容</h2>
+
+<ul>
+<li>ciphertext 9.8MB</li>
+<li>crypt.py    806byte</li>
+</ul>
+
+<pre><code class="language-python">#!/usr/bin/python
+
+from struct import pack
+from struct import unpack
+
+state = 0
+
+def rand():
+    global state
+    state = (state * 1103515425 + 54321) &amp; 0x3fffffff
+    return state
+    
+def srand(seed):
+    global state
+    state = seed
+    
+def encrypt(data,key):
+    srand(key)
+    cipher = &quot;&quot;
+    for c in data:
+        cipher += pack(&quot;i&quot;,(ord(c)&lt;&lt;22) + rand())
+    return cipher
+
+def decrypt(data,key):
+    srand(key)
+    plain = &quot;&quot;
+    for i in range(0,len(data),4):
+        temp = unpack(&quot;i&quot;,data[i:i+4])[0] - rand()
+        plain += chr(temp &gt;&gt; 22)
+    return plain
+
+def main():
+    f1 = open(&quot;plaintext&quot;,&quot;rb&quot;)
+    f2 = open(&quot;ciphertext&quot;,&quot;wb&quot;)
+    data = f1.read()
+    from secretfile import secretkey
+    data = encrypt(data,secretkey)
+    f2.write(data)
+
+if __name__ == &quot;__main__&quot;:
+    main()    
+</code></pre>
+
+<h2 id="题目解析">题目解析</h2>
+
+<p>这题的目的就是要解密ciphertext，然后拿到flag</p>
+
+<h2 id="思路">思路</h2>
+
+<ul>
+<li>首先看看ciphertext里面到底有什么，然而是一对乱码&gt;&hellip;&lt;</li>
+<li>让我们来分析一下crypt.py吧</li>
+</ul>
+
+<h3 id="crypt-py分析">crypt.py分析</h3>
+
+<p>首先是main函数</p>
+
+<pre><code class="language-python">def main():
+    f1 = open(&quot;plaintext&quot;,&quot;rb&quot;) #打开明文
+    f2 = open(&quot;ciphertext&quot;,&quot;wb&quot;) #打开密文文件准备写入
+    data = f1.read() #从明文中读入数据
+    #不知从哪里拿来了一个secretkey，这并不重要，后面会详细分析
+    from secretfile import secretkey 
+    data = encrypt(data,secretkey) #调用加密函数来加密data
+    f2.write(data) #将密文写入到密文文件
+</code></pre>
+
+<p>然后是加密解密函数</p>
+
+<pre><code class="language-python">#加密函数
+def encrypt(data,key):
+    srand(key) #用key设置随机数种子
+    cipher = &quot;&quot;
+    for c in data: 
+        #对传入的每个字符先左移22位
+        #然后再加上一个随机数
+        #最后用pack将这个数字转换为int(int为32bit，即4字节)
+        cipher += pack(&quot;i&quot;,(ord(c)&lt;&lt;22) + rand()) 
+    return cipher
+
+#解密函数
+def decrypt(data,key):
+    srand(key) #用key设置随机数种子
+    plain = &quot;&quot;
+    for i in range(0,len(data),4): #因为int为4字节，所以这里的step为4
+        #加密过程的逆向
+        #先减去随机数
+        temp = unpack(&quot;i&quot;,data[i:i+4])[0] - rand()
+        #然后右移22位，并将之转化为字符
+        plain += chr(temp &gt;&gt; 22)
+    return plain
+</code></pre>
+
+<p>最后就是随机数生成函数了，这个随机数生成算法并不同于常见的<a href="http://en.wikipedia.org/wiki/Linear_congruential_generator">线性同余算法</a>，它最后使用了按位与的操作，将随机数<code>限定在了[0,0x3fffffff]之间</code>。</p>
+
+<pre><code class="language-python">state = 0 #保存随机数状态的值
+
+#随机数生成函数
+def rand():
+    global state #注明state是全局变量
+    #每个随机数都是由上一个随机数计算得来的，这点很重要
+    state = (state * 1103515425 + 54321) &amp; 0x3fffffff
+    return state
+
+#设置随机数种子，就是直接设置了state的值    
+def srand(seed):
+    global state
+    state = seed
+</code></pre>
+
+<p>好了代码分析已经差不多了。</p>
+
+<h2 id="加密的弱点分析">加密的弱点分析：</h2>
+
+<p>重要线索：</p>
+
+<ul>
+<li>随机数肯定在[0,0x3fffffff]之间</li>
+<li>加密过程是先将字符值左移22位</li>
+<li>使用了ord来取字符值，那么被加密的字符应该都是ascii字符，也就是说字符值的范围限定在了[0,0xff]之间</li>
+</ul>
+
+<p>猜测一下可能的情况：</p>
+
+<ul>
+<li>随机数很大，貌似没什么用</li>
+<li>随机数很小 ，貌似大头搞头</li>
+</ul>
+
+<h2 id="当随机数很小的时候的情况分析">当随机数很小的时候的情况分析：</h2>
+
+<p>例如被加密的字符是a，随机数很小为54321</p>
+
+<p><code>1100001</code> <code>0000000000000000000000</code>    #a&lt;&lt;22之后的二进制表示</p>
+
+<p><code>0000000</code> <code>0000001101010000110001</code>    #54321的二进制表示</p>
+
+<p><code>1100001</code> <code>0000001101010000110001</code>    #加密后的二进制表示</p>
+
+<p>当随机数位于[0, 0x3fffff] （0x3fffff也就是二进制中22个1）的时候那其实就是明文的字符值+明文的随机数</p>
+
+<p>而这种事件出现的平均概率为0.0039062490723154033（0x3fffff/0x3fffffff）。</p>
+
+<p>因为ascii字符的范围在[0,255]之间，所以我们可以先将密文右移22位，看看是否在范围内，代码为下面的check22()函数。</p>
+
+<p>但是很显然，我们有理由相信在较小的密文中这种事件出现的概率更大，so，让我们给密文排个序吧。</p>
+
+<pre><code class="language-python">def check22(num):
+    t = num &gt;&gt;22
+    return t in range(256)
+
+def order(data):
+    a = []
+    for i in range(0,len(data),4):
+        temp = unpack(&quot;i&quot;,data[i:i+4])[0]
+        if check22(temp):
+            a.append((temp, hex(temp), bin(temp)))
+
+    a.sort()
+    for i in a:
+        print(i)
+</code></pre>
+
+<p>运行完order()函数，得到了排序完的数字</p>
+
+<pre><code class="language-python">(180362139, '0xac01b9b', '0b1010110000000001101110011011')
+(180370932, '0xac03df4', '0b1010110000000011110111110100')
+(180372350, '0xac0437e', '0b1010110000000100001101111110')
+(180402993, '0xac0bb31', '0b1010110000001011101100110001')
+(180511464, '0xac262e8', '0b1010110000100110001011101000')
+...
+</code></pre>
+
+<p>排序已经出来了，拼人品的时候终于到了，我好激动&gt;&hellip;&lt;</p>
+
+<p>尝试了第一个数字0xac01b96,在解密到一半的时候错误，错误的原因应该是一个较大的随机数加上了一个较小的字符值，导致右移22位之后的值正好在[0, 255]之间。</p>
+
+<p>在尝试第二个数字0xac03df4的时候顺利解完，解密函数如下：</p>
+
+<pre><code class="language-python">def decrypt(data):
+    plain = &quot;&quot;
+    bStartDecrypt = False
+    for i in range(0,len(data),4):
+        temp = unpack(&quot;i&quot;,data[i:i+4])[0]
+        if bStartDecrypt:
+            temp -= rand()
+            plain += chr(temp &gt;&gt; 22)
+            #print(plain)
+        elif temp == 0xac03df4: #只要检测到了0xac03df4，就开始解密
+            print(&quot;get min i:&quot;, i)
+            print(chr((temp - 0x3df4)&gt;&gt;22))
+            srand(0x3df4)
+            bStartDecrypt = True
+
+    print(plain)
+</code></pre>
+
+<p>运行完后得到flag</p>
+
+<pre><code>('get min i:', 2572260)
++
+...省略n个字符
+XxuEMGwaAqTXQlF+7pB/5S4vnZ85Lap2siP8q/jFYp87z7PXHmJ20opxy8yxnBsRP
+oWEs8glONXf1H+h4kkdTcCg+HfwGXqYrf0jyFBgAAAABJRU5ErkJggg==|flag is 
+hidden in the above data It is a picture and you should base64decode it.
+</code></pre>
+
+<p>前两句是我的debug输出内容，表明了是从第2572260个密文开始解密的。
+最初开始解密的明文字符是&rsquo;+&rsquo;</p>
+
+<p><code>flag is hidden in the above data It is a picture and you should base64decode it.</code></p>
+
+<p>然后flag说我不是flag，flag在我上面。。。然后它是一张图片而且还是被Base64加密了图片。</p>
+
+<h2 id="现在问题来了-我们是从一半开始解密的-明文只有一半-直接用base64解密肯定是不行的">现在问题来了，我们是从一半开始解密的，明文只有一半，直接用Base64解密肯定是不行的</h2>
+
+<p>这里有两条线索：</p>
+
+<ul>
+<li>flag是一张图片</li>
+<li>flag是被Base64加密过的</li>
+</ul>
+
+<p>如果不熟悉<a href="http://en.wikipedia.org/wiki/Base64">Base64编码</a>的话可能会遇到麻烦。我已经被坑过了。。</p>
+
+<p>是图片就好办了，因为图片一般都是有固定格式的，而常见的图片格式也就那么几种。只要猜到是哪种格式的图片就好办了。</p>
+
+<p>诶，又要拼人品吗？哈哈，我喜欢。</p>
+
+<p>##思路：
+* 因为每个随机数都是通过上一个随机数计算而来的，因此只要知道了第一个密文的随机数，我们就可以解密接下来的所有内容。而常见的图片格式都是有<code>固定的文件头</code>的。</p>
+
+<p>常见的图片格式文件头分析：</p>
+
+<ul>
+<li><code>FFD8FF</code> jpg</li>
+<li><code>89504E47</code> png</li>
+<li><code>47494638</code> gif</li>
+<li><code>424D</code> bmp</li>
+</ul>
+
+<p>之前抱着死马当活马医的态度用Base64将半个flag解密了下，果然没有一个图片软件能打开。。
+顺便用xxd看了下它的16进制表示：</p>
+
+<pre><code>...
+014acf0: adfd 23c8 5060 0000 0004 9454 e44a e426  ..#.P`.....T.J.&amp;
+014ad00: 0820   
+</code></pre>
+
+<p>从最后两个字节<code>0820</code>我们可以排除jpg，因为jpg在文件末尾有0xFFD9的结束标记（<a href="http://www.cnblogs.com/RobotTech/archive/2008/07/21/1247721.html">参考</a>） ,然而我们并没有见到。</p>
+
+<p>密文查看函数，查看密文的前5个整数：</p>
+
+<pre><code class="language-python">def showData(data):
+    for i in range(0,20,4):
+        temp = unpack(&quot;i&quot;,data[i:i+4])[0]
+        print(hex(temp))
+</code></pre>
+
+<p>得到第一个密文是：<code>0x52aaac6b</code>，然后我们就可以根据这个密文来推测随机数了，函数如下：</p>
+
+<pre><code class="language-python">def getRandNum(cNum, c):
+    return cNum - (ord(c)&lt;&lt;22)
+</code></pre>
+
+<p>接下来拼下人品，看看是不是png，根据png的文件头 <code>89504E47</code> 的Base64码来逆推随机数</p>
+
+<pre><code class="language-python">import base64
+base64.b64encode(chr(0x89)+chr(0x50)+chr(0x4e)+chr(0x47))
+</code></pre>
+
+<p>获得png文件头的Base64密文：<code>iVBORw==</code>，首字母为<code>i</code>。</p>
+
+<p>然后调用decryptSecond()函数来解密：</p>
+
+<pre><code class="language-python">seed = getRandNum(0x52aaac6b, 'i')
+decryptSecond(data, seed)
+</code></pre>
+
+<p>相应的解密函数如下：</p>
+
+<pre><code class="language-python">def decryptSecond(data,key):
+    srand(key)
+    plain = &quot;&quot;
+    for i in range(4,len(data),4):  #注意这里的起始值为4，意思是从第二个int开始解码
+        temp = unpack(&quot;i&quot;,data[i:i+4])[0] - rand()
+        plain += chr(temp &gt;&gt; 22)
+
+    print(plain)
+    return plain
+</code></pre>
+
+<p>然后人品爆发，完整解密通过，将输出内容重定向到文件后，记得要<code>将最后一句话去掉</code>，然后在<code>文件开头</code>添加字符<code>i</code>。</p>
+
+<p>于是我们得到了整个图片被Base64加密过的密文。</p>
+
+<p>Base64解密代码：</p>
+
+<pre><code class="language-python">import base64
+f = open(&quot;NEWFLAG&quot;)
+flagStr = f.read()
+f.close()
+
+a = base64.b64decode(flagStr)
+
+f = open(&quot;FLAG_PIC.png&quot;, &quot;wb&quot;)
+f.write(a)
+f.close()
+</code></pre>
+
+<p>最终拿到flag，Happy~</p>
+
+<p><img src="/images/cigs2015/FLAG_PIC_zpss4i7sz9j.png" alt="" /></p>
+
+<h2 id="各种曲折">各种曲折</h2>
+
+<h3 id="再不相信大力出奇迹了">再不相信大力出奇迹了</h3>
+
+<p>其实题面中有一句话误导了我：<code>他知道明文中一定出现了flag这个单词</code>，然后我自然而然就想到了爆破。</p>
+
+<p>虽然爆破没有成功，但是还是很有收获的。</p>
+
+<p>爆破的思路1:</p>
+
+<ul>
+<li>因为随机数限定在了[0,0x3fffffff]，所以只要尝试每个可能的数字，然后对比解密后的文字中是否包含flag这个单词，就能得到答案</li>
+<li>然后，写了代码（就不贴出来了），然后尝试跑了下，每尝试一个数字大概需要0.5秒，好吧，17年内我肯定能得到答案。</li>
+</ul>
+
+<p>爆破的思路2:</p>
+
+<ul>
+<li>之前是解密密文，因为密文很大，有9.8MB，所以对其解密是很漫长的。</li>
+<li>然后想到了对“flag”这个单词进行加密，然后拿flag的密文到ciphertext中找有没有匹配的（这个感觉上很不靠谱）。</li>
+<li>测试发现速度快了接近100倍，然而这并没有什么用&gt;&hellip;&lt;</li>
+</ul>
+
+<p>爆破的思路3：</p>
+
+<ul>
+<li>使用显卡加速：OpenCL</li>
+<li>之前对OpenCL也就是闻其名的程度，深入了解后发现水很深，暂时搁置了。</li>
+</ul>
+
+<p>爆破思路2的优化：</p>
+
+<ul>
+<li>用c重写了爆破思路2的代码，结果发现即使使用了gcc -O3的c代码比python的代码还是慢了3倍左右。</li>
+<li>究其原因还是字符匹配算法，我使用了最简单粗暴的memcmp来做逐4字节的比较，而python的in操作符显然是经过优化的。</li>
+<li>在网上搜索后发现了<a href="http://www.ruanyifeng.com/blog/2013/05/boyer-moore_string_search_algorithm.html">Boyer-Moore算法</a>，不知python用了哪种算法。</li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">ب_ب</p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

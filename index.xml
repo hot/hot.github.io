@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>另辟蹊径，next powof two新解法</title>
+      <title>另辟蹊径，next power of two新解法</title>
       <link>https://geekorz.com/post/next_pow_of_two/</link>
       <pubDate>Wed, 05 Jun 2019 00:00:00 +0000</pubDate>
       
@@ -22,8 +22,8 @@
 3 -&amp;gt;4
 5-&amp;gt;8
 19-&amp;gt;32
- 常规解法 unsigned int next_power_of_two_log(unsigned int v) { double next = pow(2, ceil(log2(v))); return (int)next; }   通俗易懂，但是慢。
- 快速解法 unsigned long upper_power_of_two(unsigned long v){ v--; v |= v &amp;gt;&amp;gt; 1; v |= v &amp;gt;&amp;gt; 2; v |= v &amp;gt;&amp;gt; 4; v |= v &amp;gt;&amp;gt; 8; v |= v &amp;gt;&amp;gt; 16; v++; return v; }   仅使用了位移和位操作， 巧妙 ，快速。</description>
+ 0x01 常规解法 unsigned int next_power_of_two_log(unsigned int v) { double next = pow(2, ceil(log2(v))); return (int)next; }   通俗易懂，但是慢。
+ 0x02 快速解法 unsigned long upper_power_of_two(unsigned long v){ v--; v |= v &amp;gt;&amp;gt; 1; v |= v &amp;gt;&amp;gt; 2; v |= v &amp;gt;&amp;gt; 4; v |= v &amp;gt;&amp;gt; 8; v |= v &amp;gt;&amp;gt; 16; v++; return v; }   仅使用了位移和位操作， 巧妙 ，快速。</description>
     </item>
     
     <item>
@@ -119,6 +119,19 @@ and much， much more嗯， 霸气侧漏的描述。
 后记
 千万不要执行来路不明的代码，刷来路不明的rom。
 参考：</description>
+    </item>
+    
+    <item>
+      <title>CISG2015 MISC.3解析</title>
+      <link>https://geekorz.com/post/cigs2015/</link>
+      <pubDate>Mon, 18 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://geekorz.com/post/cigs2015/</guid>
+      <description>引子 每个少年，也许都曾有过一个成为武林高手的梦。但随着时间流逝，还有多少热血存留在记忆的深处，多少人成为了茫茫红尘中的一个庸庸碌碌之辈。浮生若梦，弹指一挥间，青丝白发。
+我不是武林高手，但我希望我是。我希望你是。
+题目原文 藤原暮雨在一个月的观察行动中，机智地截获到了“三叶豆腐店”内部通讯的一段密文。面对密文藤原一头雾水，不过他知道明文中一定出现了flag这个单词。请你帮他解密出明文。
+http://game.sycsec.com/download/Misc3_new.zip（链接可能会失效）
+Misc3_new.zip文件内容  ciphertext 9.8MB crypt.py 806byte  #!/usr/bin/python from struct import pack from struct import unpack state = 0 def rand(): global state state = (state * 1103515425 + 54321) &amp;amp; 0x3fffffff return state def srand(seed): global state state = seed def encrypt(data,key): srand(key) cipher = &amp;quot;&amp;quot; for c in data: cipher += pack(&amp;quot;i&amp;quot;,(ord(c)&amp;lt;&amp;lt;22) + rand()) return cipher def decrypt(data,key): srand(key) plain = &amp;quot;&amp;quot; for i in range(0,len(data),4): temp = unpack(&amp;quot;i&amp;quot;,data[i:i+4])[0] - rand() plain += chr(temp &amp;gt;&amp;gt; 22) return plain def main(): f1 = open(&amp;quot;plaintext&amp;quot;,&amp;quot;rb&amp;quot;) f2 = open(&amp;quot;ciphertext&amp;quot;,&amp;quot;wb&amp;quot;) data = f1.</description>
     </item>
     
   </channel>
